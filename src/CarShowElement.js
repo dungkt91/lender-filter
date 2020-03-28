@@ -41,27 +41,11 @@ export default class CarShowElement extends React.Component{
                 value:"test style"
             },
             {
-                name:"ENGINE",
-                value:"test engine"
-            },
-            {
                 name:"FUEL",
                 value:"test fuel"
             },
             {
-                name:"CYLINDERS",
-                value:"test cylinders"
-            },
-            {
-                name:"TRANS.",
-                value:"test trans"
-            },
-            {
-                name:"DRIVETRAIN",
-                value:"test drivetrain"
-            },
-            {
-                name:"MILEAGE:",
+                name:"MILEAGE",
                 value:"test mileage"
             },
             {
@@ -69,20 +53,12 @@ export default class CarShowElement extends React.Component{
                 value:"test ext color"
             },
             {
-                name:"INT.COLOR",
-                value:"test int color"
-            },
-            {
-                name:"TYPE",
-                value:"test type"
+                name:"VIN",
+                value:"test vin"
             },
             {
                 name:"STATUS",
                 value:"test status"
-            },
-            {
-                name:"VIN",
-                value:"test vin"
             }
         ]
     }
