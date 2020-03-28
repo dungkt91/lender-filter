@@ -4,10 +4,6 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
 
 const PLEASE_SELECT_INDEX = 0;
 
@@ -26,14 +22,14 @@ export default class LenderFilter extends React.Component{
             tierMenuItems:[],
             selectedTierIndex:0,
             currencyFields:{
-                "payment":"",
-                "down payment":"",
-                "trade allowance":"",
-                "trade payoff":"",
-                "trace a.c.v":""
+                "Payment":"",
+                "Down Payment":"",
+                "Trade Allowance":"",
+                "Trade Payoff":"",
+                "Trace a.c.v":""
             },
             percentageFields:{
-                "tax":""
+                "Tax":""
             }
         };
 
@@ -144,7 +140,7 @@ export default class LenderFilter extends React.Component{
 
     render(){
         return (
-            <Grid container spacing={2}>
+            <Grid container spacing={5}>
                 <Grid item xs={12}>
                     <Select onChange={this.selectLenderEvent} value={this.state.selectedLenderValue} style={{width:'100%'}}>
                         {this.lenderMenuItems}
@@ -159,12 +155,12 @@ export default class LenderFilter extends React.Component{
                     </Select>
                 </Grid>
                 {Object.keys(this.state.currencyFields).map(currencyFieldLabel => (
-                    <Grid item sm={3} lg={12}><InputLabel>{currencyFieldLabel}</InputLabel><OutlinedInput onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)} value={this.state.currencyFields[currencyFieldLabel]} startAdornment={<InputAdornment position="start">$</InputAdornment>}/></Grid>
+                    <Grid item sm={3} lg={12}><TextField label={currencyFieldLabel} variant="outlined" onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)} value={this.state.currencyFields[currencyFieldLabel]} /></Grid>
                         )
                     )
                 }
                 {Object.keys(this.state.percentageFields).map(percentageFieldLabel => (
-                        <Grid item sm={3} lg={12}><InputLabel>{percentageFieldLabel}</InputLabel><OutlinedInput onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)} value={this.state.percentageFields[percentageFieldLabel]} startAdornment={<InputAdornment position="start">%</InputAdornment>}/></Grid>
+                        <Grid item sm={3} lg={12}><TextField label={percentageFieldLabel} variant="outlined" onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)} value={this.state.percentageFields[percentageFieldLabel]} /></Grid>
                     )
                 )
                 }

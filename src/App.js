@@ -11,6 +11,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Paper from "@material-ui/core/Paper";
 
 class App extends React.Component{
     constructor() {
@@ -21,23 +22,24 @@ class App extends React.Component{
 
     render() {
         return (
-            <Grid container spacing={4}>
+            <Grid container spacing={2} style={{backgroundColor:"rgb(247,248,248)"}}>
+                <Grid item xs={12}>
+                    <AppBar position="static">
+                        <Tabs>
+                            <Tab label="Home"/>
+                            <Tab label="Rate Sheet" disabled/>
+                            <Tab label="Quick Quote" disabled/>
+                            <Tab label="Lender Assist" disabled/>
+                        </Tabs>
+                    </AppBar>
+                </Grid>
                 <Grid item lg={3} sm={12}>
-                    <img style={{height: "100px"}}/>
-                    <LendersFilter carShowRef={this.carshowRef}/>
+                    <Paper style={{padding:"8px", height:"95vh"}}>
+                        <LendersFilter carShowRef={this.carshowRef}/>
+                    </Paper>
                 </Grid>
                 <Grid item lg={9} sm={12}>
-                    <Grid container spacing={4} style={{backgroundColor:"rgb(247,248,248)"}}>
-                        <Grid item xs={12}>
-                            <AppBar position="static" color={"default"}>
-                                <Tabs>
-                                    <Tab label="Home"/>
-                                    <Tab label="Rate Sheet" disabled/>
-                                    <Tab label="Quick Quote" disabled/>
-                                    <Tab label="Lender Assist" disabled/>
-                                </Tabs>
-                            </AppBar>
-                        </Grid>
+                    <Grid container spacing={4}>
                         <Grid item xs={12}>
                             <Select value={0}>
                                 <MenuItem value={0}>Sort by (choose)</MenuItem>
