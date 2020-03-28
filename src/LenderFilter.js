@@ -4,6 +4,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const PLEASE_SELECT_INDEX = 0;
 
@@ -173,12 +174,28 @@ export default class LenderFilter extends React.Component{
                     </Select>
                 </Grid>
                 {Object.keys(this.state.currencyFields).map(currencyFieldLabel => (
-                    <Grid item sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled} label={currencyFieldLabel} variant="outlined" onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)} value={this.state.currencyFields[currencyFieldLabel]} /></Grid>
+                    <Grid item sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled}
+                                                         label={currencyFieldLabel}
+                                                         variant="outlined"
+                                                         onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)}
+                                                         value={this.state.currencyFields[currencyFieldLabel]}
+                                                         InputProps={{
+                                                             startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                         }}
+                    /></Grid>
                         )
                     )
                 }
                 {Object.keys(this.state.percentageFields).map(percentageFieldLabel => (
-                        <Grid item sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled} label={percentageFieldLabel} variant="outlined" onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)} value={this.state.percentageFields[percentageFieldLabel]} /></Grid>
+                        <Grid item sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled}
+                                                             label={percentageFieldLabel}
+                                                             variant="outlined"
+                                                             onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)}
+                                                             value={this.state.percentageFields[percentageFieldLabel]}
+                                                             InputProps={{
+                                                                 startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                                             }}
+                        /></Grid>
                     )
                 )
                 }
