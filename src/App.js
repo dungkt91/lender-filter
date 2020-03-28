@@ -27,7 +27,7 @@ class App extends React.Component{
                     <LendersFilter carShowRef={this.carshowRef}/>
                 </Grid>
                 <Grid item lg={9} sm={12}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={4} style={{backgroundColor:"rgb(247,248,248)"}}>
                         <Grid item xs={12}>
                             <AppBar position="static" color={"default"}>
                                 <Tabs>
