@@ -7,6 +7,25 @@ import Paper from "@material-ui/core/Paper";
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Grid from "@material-ui/core/Grid";
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+
+const StyledTableCell = withStyles(theme => ({
+    head: {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.common.white,
+    },
+    body: {
+        fontSize: 14,
+    },
+}))(TableCell);
+
+const StyledTableRow = withStyles(theme => ({
+    root: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
+}))(TableRow);
 
 const CarCalculation = (props)=>{
     const theme = useTheme();
@@ -46,23 +65,23 @@ class CarCalculationClass extends React.Component{
                 <Paper style={{backgroundColor:"rgb(247, 248, 248)"}}>
                     <Table>
                         <TableHead>
-                                <TableRow>
+                                <StyledTableRow>
                                 {this.calculationDetailsColumnHeaders.map(header => (
-                                    <TableCell>{header}</TableCell>
+                                    <StyledTableCell>{header}</StyledTableCell>
                                 ))}
-                                </TableRow>
+                                </StyledTableRow>
                         </TableHead>
                         {
                             this.calculationDetailsValues.map(columnValues =>(
-                                <TableRow>
+                                <StyledTableRow>
                                     {
                                         columnValues.map(columnValue => (
-                                            <TableCell>
+                                            <StyledTableCell>
                                                 {columnValue}
-                                            </TableCell>
+                                            </StyledTableCell>
                                         ))
                                     }
-                                </TableRow>
+                                </StyledTableRow>
                             ))
                         }
                     </Table>
@@ -80,17 +99,17 @@ class CarCalculationClass extends React.Component{
                     <Paper style={{backgroundColor:"rgb(247, 248, 248)"}}>
                         <Table>
                             <TableHead>
-                                <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Value</TableCell>
-                                </TableRow>
+                                <StyledTableRow>
+                                    <StyledTableCell>Name</StyledTableCell>
+                                    <StyledTableCell>Value</StyledTableCell>
+                                </StyledTableRow>
                             </TableHead>
                             {
                                 lenderCalculationDetailsValues.map((row, index) => (
-                                    <TableRow>
-                                        <TableCell>{this.calculationDetailsColumnHeaders[index]}</TableCell>
-                                        <TableCell>{row}</TableCell>
-                                    </TableRow>
+                                    <StyledTableRow>
+                                        <StyledTableCell>{this.calculationDetailsColumnHeaders[index]}</StyledTableCell>
+                                        <StyledTableCell>{row}</StyledTableCell>
+                                    </StyledTableRow>
                                 ))
                             }
                         </Table>
