@@ -67,10 +67,10 @@ export default class CarShowElement extends React.Component{
            <Card style={{width:"100%"}}>
                <CardContent>
                    <Grid container spacing={2}>
-                       <Grid item xs={8}>
+                       <Grid item xs={12} lg={7}>
                             <CarImagesGallery />
                        </Grid>
-                       <Grid item xs={4}>
+                       <Grid item xs={12} lg={5}>
                            <CarDescription details={this.details}/>
                        </Grid>
                        <Grid item xs={12}>

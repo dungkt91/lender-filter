@@ -12,7 +12,7 @@ export default class CarShow extends React.Component{
 
         for(let i = 0; i < 20; i++){
             this.state.carShowElements.push(
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12}>
                     <CarShowElement />
                 </Grid>
             );
@@ -21,7 +21,7 @@ export default class CarShow extends React.Component{
 
     render(){
         return (
-            <Grid container spacing={4} style={{maxHeight:"94vh", overflow:"scroll"}}>
+            <Grid container spacing={4} style={{height:"90vh", overflow:"scroll"}}>
                 {this.state.carShowElements}
             </Grid>
         );
