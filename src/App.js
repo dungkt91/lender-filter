@@ -34,20 +34,24 @@ class App extends React.Component{
                     </AppBar>
                 </Grid>
                 <Grid item lg={3} sm={12}>
-                    <Paper style={{padding:"8px", height:"95vh"}}>
+                    <Paper style={{padding:"8px", height:"100%"}}>
                         <LendersFilter carShowRef={this.carshowRef}/>
                     </Paper>
                 </Grid>
-                <Grid item lg={9} sm={12}>
+                <Grid item lg={9} xs={12}>
                     <Grid container spacing={4}>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={4} style={{textAlign:"center"}}>
                             <Select value={0}>
                                 <MenuItem value={0}>Sort by (choose)</MenuItem>
                             </Select>
-                            <Select value={0} style={{marginLeft: "50px"}}>
+                        </Grid>
+                        <Grid item xs={12} sm={4} style={{textAlign:"center"}}>
+                            <Select value={0}>
                                 <MenuItem value={0}>Sort by (choose)</MenuItem>
                             </Select>
-                            <Select value={0} style={{marginLeft: "50px"}}>
+                        </Grid>
+                        <Grid item xs={12} sm={4} style={{textAlign:"center"}}>
+                            <Select value={0}>
                                 <MenuItem value={0}>Sort by (choose)</MenuItem>
                             </Select>
                         </Grid>
