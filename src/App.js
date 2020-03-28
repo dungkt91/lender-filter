@@ -47,7 +47,7 @@ class AppClass extends React.Component{
                         <LendersFilter carShowRef={this.carshowRef}/>
                     </Paper>
                 </Grid>
-                <Grid item lg={9} xs={12} style={{height:this.props.isBigScreen?"95vh":"100%", overflow:"scroll"}}>
+                <Grid item lg={9} xs={12} style={{height:this.props.isBigScreen?"95vh":"100%", overflowX:"hidden", overflowY:"scroll"}}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={4} style={{textAlign:"center"}}>
                             <Select value={0}>
