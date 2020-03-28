@@ -43,28 +43,30 @@ class CarCalculationClass extends React.Component{
 
         return (
             <React.Fragment>
-                <Table>
-                    <TableHead>
-                            <TableRow>
-                            {this.calculationDetailsColumnHeaders.map(header => (
-                                <TableCell>{header}</TableCell>
-                            ))}
-                            </TableRow>
-                    </TableHead>
-                    {
-                        this.calculationDetailsValues.map(columnValues =>(
-                            <TableRow>
-                                {
-                                    columnValues.map(columnValue => (
-                                        <TableCell>
-                                            {columnValue}
-                                        </TableCell>
-                                    ))
-                                }
-                            </TableRow>
-                        ))
-                    }
-                </Table>
+                <Paper style={{backgroundColor:"rgb(247, 248, 248)"}}>
+                    <Table>
+                        <TableHead>
+                                <TableRow>
+                                {this.calculationDetailsColumnHeaders.map(header => (
+                                    <TableCell>{header}</TableCell>
+                                ))}
+                                </TableRow>
+                        </TableHead>
+                        {
+                            this.calculationDetailsValues.map(columnValues =>(
+                                <TableRow>
+                                    {
+                                        columnValues.map(columnValue => (
+                                            <TableCell>
+                                                {columnValue}
+                                            </TableCell>
+                                        ))
+                                    }
+                                </TableRow>
+                            ))
+                        }
+                    </Table>
+                </Paper>
             </React.Fragment>
         )
     }

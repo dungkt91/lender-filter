@@ -31,7 +31,7 @@ class AppClass extends React.Component{
 
     render() {
         return (
-            <Grid container spacing={2} style={{backgroundColor:"rgb(247,248,248)"}}>
+            <Grid container spacing={3} style={{backgroundColor:"rgb(247,248,248)"}}>
                 <Grid item xs={12}>
                     <AppBar position="static">
                         <Tabs>
@@ -42,13 +42,13 @@ class AppClass extends React.Component{
                         </Tabs>
                     </AppBar>
                 </Grid>
-                <Grid item lg={3} sm={12}>
-                    <Paper style={{padding:"8px", height:"100%"}}>
+                <Grid item lg={3} sm={12} style={{height:this.props.isBigScreen?"96vh":"100%"}}>
+                    <Paper style={{height:"100%"}}>
                         <LendersFilter carShowRef={this.carshowRef}/>
                     </Paper>
                 </Grid>
-                <Grid item lg={9} xs={12}>
-                    <Grid container spacing={4} style={{height:this.props.isBigScreen?"90vh":"100%", overflow:"scroll"}}>
+                <Grid item lg={9} xs={12} style={{height:this.props.isBigScreen?"95vh":"100%", overflow:"scroll"}}>
+                    <Grid container spacing={2}>
                         <Grid item xs={12} sm={4} style={{textAlign:"center"}}>
                             <Select value={0}>
                                 <MenuItem value={0}>Sort by (choose)</MenuItem>
