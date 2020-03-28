@@ -12,8 +12,17 @@ import Tab from "@material-ui/core/Tab";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
+import {useTheme} from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-class App extends React.Component{
+const App = (props) => {
+    const theme = useTheme();
+    const mdUp = useMediaQuery(theme.breakpoints.up("md"));
+
+    return <AppClass isBigScreen={mdUp}/>
+}
+
+class AppClass extends React.Component{
     constructor() {
         super();
 
@@ -39,7 +48,7 @@ class App extends React.Component{
                     </Paper>
                 </Grid>
                 <Grid item lg={9} xs={12}>
-                    <Grid container spacing={4}>
+                    <Grid container spacing={4} style={{height:this.props.isBigScreen?"90vh":"100%", overflow:"scroll"}}>
                         <Grid item xs={12} sm={4} style={{textAlign:"center"}}>
                             <Select value={0}>
                                 <MenuItem value={0}>Sort by (choose)</MenuItem>
