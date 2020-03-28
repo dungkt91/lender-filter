@@ -15,11 +15,8 @@ export default class LenderFilter extends React.Component{
         this.selectTierEvent = this.selectTierEvent.bind(this);
     }
 
-    beginningState(){
-        let beginningState = {
-            selectedLenderValue: 0,
-            selectedLenderImage: null,
-            tierMenuItems:[],
+    textfieldsBeginningState(){
+        return {
             selectedTierIndex:0,
             currencyFields:{
                 "Payment":"",
@@ -31,6 +28,17 @@ export default class LenderFilter extends React.Component{
             percentageFields:{
                 "Tax":""
             }
+        }
+    }
+
+    filterBeginningState(){
+        let beginningState = {
+            selectedLenderValue: 0,
+            selectedLenderImage: null,
+            tierMenuItems:[],
+            ...this.textfieldsBeginningState(),
+            isTierSelectEnabled:false,
+            isTextFieldsEnabled:false,
         };
 
         beginningState.tierMenuItems.push(<MenuItem key={"tier_please_select_item"}value={PLEASE_SELECT_INDEX}>Please select tier</MenuItem>);
@@ -39,7 +47,7 @@ export default class LenderFilter extends React.Component{
     }
 
     createTestData(){
-        this.state = this.beginningState();
+        this.state = this.filterBeginningState();
 
         this.lenders = [
             {
@@ -101,8 +109,10 @@ export default class LenderFilter extends React.Component{
         // Update lender logo
         if (isPleaseSelectItemSelected){
             newState.selectedLenderImage = null;
+            newState.isTierSelectEnabled = false;
         }else{
             newState.selectedLenderImage = this.lenders[indexMinusOne].img;
+            newState.isTierSelectEnabled = true;
         }
 
         // Update tiers
@@ -127,15 +137,23 @@ export default class LenderFilter extends React.Component{
     }
 
     selectTierEvent(event){
-        let newState = {};
+        let newState = {...this.textfieldsBeginningState()};
 
         newState.selectedTierIndex = event.target.value;
+
+        let isPleaseSelectItemSelected = event.target.value == PLEASE_SELECT_INDEX;
+
+        if(isPleaseSelectItemSelected){
+            newState.isTextFieldsEnabled = false;
+        }else{
+            newState.isTextFieldsEnabled = true;
+        }
 
         this.setState(newState);
     }
 
-    reset(event){
-        this.setState(this.beginningState());
+    reset(){
+        this.setState(this.filterBeginningState());
     }
 
     render(){
@@ -150,17 +168,17 @@ export default class LenderFilter extends React.Component{
                     <img src={this.state.selectedLenderImage} {...this.state.selectedLenderImage == null? {style:{width:'150px', height:'150px', visibility:"hidden"}}:{style:{width:'150px', height:'150px'}}} />
                 </Grid>
                 <Grid item xs={12}>
-                    <Select style={{width:'100%'}} value={this.state.selectedTierIndex} onChange={this.selectTierEvent}>
+                    <Select style={{width:'100%'}} disabled={!this.state.isTierSelectEnabled} value={this.state.selectedTierIndex} onChange={this.selectTierEvent}>
                         {this.state.tierMenuItems}
                     </Select>
                 </Grid>
                 {Object.keys(this.state.currencyFields).map(currencyFieldLabel => (
-                    <Grid item sm={3} lg={12}><TextField label={currencyFieldLabel} variant="outlined" onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)} value={this.state.currencyFields[currencyFieldLabel]} /></Grid>
+                    <Grid item sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled} label={currencyFieldLabel} variant="outlined" onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)} value={this.state.currencyFields[currencyFieldLabel]} /></Grid>
                         )
                     )
                 }
                 {Object.keys(this.state.percentageFields).map(percentageFieldLabel => (
-                        <Grid item sm={3} lg={12}><TextField label={percentageFieldLabel} variant="outlined" onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)} value={this.state.percentageFields[percentageFieldLabel]} /></Grid>
+                        <Grid item sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled} label={percentageFieldLabel} variant="outlined" onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)} value={this.state.percentageFields[percentageFieldLabel]} /></Grid>
                     )
                 )
                 }
