@@ -23,7 +23,7 @@ export default class LendersFilter extends React.Component{
             <React.Fragment>
                 <Grid container direction={"row"} spacing={4}>
                     <Grid item xs={12} style={{textAlign:"center"}}>
-                        <Button variant="contained" style={{...styles.btnStyle}} onClick={this.clearFiltersOnClick}>Clear Filters</Button>
+                        <Button variant="contained" color={"secondary"} onClick={this.clearFiltersOnClick}>Clear Filters</Button>
                     </Grid>
                     <Grid item xs={12}>
                         Customer Name:
@@ -38,19 +38,10 @@ export default class LendersFilter extends React.Component{
                         <LenderFilter ref={this.lenderFilter3}/>
                     </Grid>
                     <Grid item xs={12} style={{textAlign:"center"}}>
-                        <Button variant="contained" color="primary" style={{...styles.btnStyle}}>Submit</Button>
+                        <Button variant="contained" color="primary">Submit</Button>
                     </Grid>
                 </Grid>
             </React.Fragment>
         )
     }
 }
-
-const styles =
-    {
-        btnStyle:{
-            width:'200px',
-            height:'60px',
-            fontSize:'1.3rem'
-        }
-    }

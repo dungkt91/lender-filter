@@ -7,16 +7,16 @@ export default class CarShowElementButtons extends React.Component{
         return <React.Fragment>
             <Grid container spacing={1}>
                 <Grid item xs={3}>
-                    <Button variant="contained" style={{width:"100%"}}>Save</Button>
+                    <Button variant="contained" color={"primary"} style={{width:"100%"}}>Save</Button>
                 </Grid>
                 <Grid item item xs={3}>
-                    <Button variant="contained" style={{width:"100%"}}>Pictures</Button>
+                    <Button variant="contained" color={"primary"} style={{width:"100%"}}>Pictures</Button>
                 </Grid>
                 <Grid item item xs={3}>
-                    <Button variant="contained" style={{width:"100%"}}>Breakdown</Button>
+                    <Button variant="contained" color={"primary"} style={{width:"100%"}}>Breakdown</Button>
                 </Grid>
                 <Grid item item xs={3}>
-                    <Button variant="contained" style={{width:"100%"}}>Send</Button>
+                    <Button variant="contained" color={"primary"} style={{width:"100%"}}>Send</Button>
                 </Grid>
             </Grid>
         </React.Fragment>
