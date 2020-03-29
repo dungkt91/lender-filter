@@ -95,15 +95,11 @@ class AppClass extends React.Component{
                                     </React.Fragment>
                                 ):null
                                 }
-                                {
-                                    this.state.displayFilters?(
-                                        <Grid item xs={12} style={{marginTop:"16px", marginBottom:"16px"}}>
-                                            <Paper style={{padding:"10px"}}>
-                                                <LendersFilter ref={this.lendersFilter} submitOnClick={this.submitOnclick}/>
-                                            </Paper>
-                                        </Grid>
-                                    ):null
-                                }
+                                <Grid item xs={12} style={{marginTop:"16px", marginBottom:"16px", display:this.state.displayFilters?"":"none"}}>
+                                      <Paper style={{padding:"10px"}}>
+                                            <LendersFilter ref={this.lendersFilter} submitOnClick={this.submitOnclick}/>
+                                      </Paper>
+                                </Grid>
                                 {
                                     this.state.displayCarShow?(
                                         <Grid item xs={12}>
