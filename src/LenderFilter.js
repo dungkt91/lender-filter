@@ -20,14 +20,32 @@ export default class LenderFilter extends React.Component{
         return {
             selectedTierIndex:0,
             currencyFields:{
-                "Payment":"",
-                "Down Payment":"",
-                "Trade Allowance":"",
-                "Trade Payoff":"",
-                "Trace a.c.v":""
+                "Payment":{
+                    value: "",
+                    error: false
+                },
+                "Down Payment":{
+                    value: "",
+                    error: false
+                },
+                "Trade Allowance":{
+                    value: "",
+                    error: false
+                },
+                "Trade Payoff":{
+                    value: "",
+                    error: false
+                },
+                "Trace a.c.v":{
+                    value: "",
+                    error: false
+                }
             },
             percentageFields:{
-                "Tax":""
+                "Tax":{
+                    value: null,
+                    error: false
+                }
             }
         }
     }
@@ -80,20 +98,23 @@ export default class LenderFilter extends React.Component{
 
     textboxOnChange(event, fieldLabel){
         let newValue = event.target.value;
-        console.log(fieldLabel);
-        console.log(this.state);
+        let isError = isNaN(newValue);
+        console.log(isError);
 
         if (fieldLabel in this.state.currencyFields){
-            this.state.currencyFields[fieldLabel] = newValue;
             let newCurrencyFields = {...this.state.currencyFields};
-            newCurrencyFields[fieldLabel] = newValue;
+            newCurrencyFields[fieldLabel] =  {
+                value:newValue,
+                error:isError
+            }
 
             this.setState({currencyFields:newCurrencyFields});
         }else if (fieldLabel in this.state.percentageFields){
-            this.state.percentageFields[fieldLabel] = newValue;
             let newPercentageFields = {...this.state.percentageFields};
-            newPercentageFields[fieldLabel] = newValue;
-
+            newPercentageFields[fieldLabel] = {
+                value:newValue,
+                error:isError
+            }
             this.setState({percentageFields:newPercentageFields})
         }
     }
@@ -178,7 +199,9 @@ export default class LenderFilter extends React.Component{
                                                          label={currencyFieldLabel}
                                                          variant="outlined"
                                                          onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)}
-                                                         value={this.state.currencyFields[currencyFieldLabel]}
+                                                               error = {this.state.currencyFields[currencyFieldLabel].error}
+                                                               helperText={this.state.currencyFields[currencyFieldLabel].error?"Invalid Value":""}
+                                                               value={this.state.currencyFields[currencyFieldLabel].value}
                                                          InputProps={{
                                                              startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                                          }
@@ -193,7 +216,9 @@ export default class LenderFilter extends React.Component{
                                                              label={percentageFieldLabel}
                                                              variant="outlined"
                                                              onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)}
-                                                             value={this.state.percentageFields[percentageFieldLabel]}
+                                                             error = {this.state.percentageFields[percentageFieldLabel].error}
+                                                                   helperText={this.state.percentageFields[percentageFieldLabel].error?"Invalid Value":""}
+                                                             value={this.state.percentageFields[percentageFieldLabel].value}
                                                              InputProps={{
                                                                  startAdornment: <InputAdornment position="start">%</InputAdornment>,
                                                              }}
