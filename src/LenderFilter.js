@@ -69,7 +69,7 @@ export default class LenderFilter extends React.Component{
         ];
 
         this.lenderMenuItems = [];
-        this.lenderMenuItems.push(<MenuItem key="please_select_item" value={PLEASE_SELECT_INDEX}>Please select</MenuItem>)
+        this.lenderMenuItems.push(<MenuItem key="please_select_item" value={PLEASE_SELECT_INDEX}>Please select lender</MenuItem>)
 
         for(let i = 0; i < this.lenders.length; i++){
             let lender = this.lenders[i];
