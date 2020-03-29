@@ -174,20 +174,22 @@ export default class LenderFilter extends React.Component{
                     </Select>
                 </Grid>
                 {Object.keys(this.state.currencyFields).map(currencyFieldLabel => (
-                    <Grid item sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled}
+                    <Grid item xs={6} sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled}
                                                          label={currencyFieldLabel}
                                                          variant="outlined"
                                                          onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)}
                                                          value={this.state.currencyFields[currencyFieldLabel]}
                                                          InputProps={{
                                                              startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                         }}
+                                                         }
+                                                         }
+                                                         size={"small"}
                     /></Grid>
                         )
                     )
                 }
                 {Object.keys(this.state.percentageFields).map(percentageFieldLabel => (
-                        <Grid item sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled}
+                        <Grid item xs={6} sm={3} lg={12}><TextField disabled={!this.state.isTextFieldsEnabled}
                                                              label={percentageFieldLabel}
                                                              variant="outlined"
                                                              onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)}
@@ -195,6 +197,7 @@ export default class LenderFilter extends React.Component{
                                                              InputProps={{
                                                                  startAdornment: <InputAdornment position="start">%</InputAdornment>,
                                                              }}
+                                                             size={"small"}
                         /></Grid>
                     )
                 )

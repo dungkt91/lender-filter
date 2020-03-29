@@ -14,6 +14,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import {useTheme} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Button from "@material-ui/core/Button";
+import {FaFilter} from "react-icons/all";
 
 const App = (props) => {
     const theme = useTheme();
@@ -27,6 +29,16 @@ class AppClass extends React.Component{
         super();
 
         this.carshowRef= React.createRef();
+        this.filterOnClick = this.filterOnClick.bind(this);
+
+        this.state = {
+            displayFilters:false
+        }
+    }
+
+    filterOnClick(event){
+        console.log('Filter')
+        this.setState({displayFilters:!this.state.displayFilters});
     }
 
     render() {
@@ -64,6 +76,16 @@ class AppClass extends React.Component{
                                         <MenuItem value={0}>Sort by (choose)</MenuItem>
                                     </Select>
                                 </Grid>
+                                <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
+                                    <Button variant={"outlined"} onClick={this.filterOnClick}><FaFilter/>  Filter</Button>
+                                </Grid>
+                                {
+                                    this.state.displayFilters?(
+                                        <Grid item xs={12}>
+                                            <LendersFilter />
+                                        </Grid>
+                                    ):null
+                                }
                                 <Grid item xs={12}>
                                     <CarShow ref={this.carshowRef}/>
                                 </Grid>
