@@ -14,7 +14,7 @@ class CarShow extends React.Component{
 
         for(let i = 0; i < 20; i++){
             this.state.carShowElements.push(
-                <Grid item xs={12} lg={6}>
+                <Grid item xs={12} xl={6}>
                     <CarShowElement />
                 </Grid>
             );

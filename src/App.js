@@ -55,8 +55,8 @@ class AppClass extends React.Component{
     render() {
         return (
             <Grid container style={{backgroundColor:"rgb(247,248,248)"}}>
-                <Grid item xl={2} xs={0} />
-                <Grid item xl={8} xs={12}>
+                <Grid item xl={1} xs={0} />
+                <Grid item xl={10} xs={12}>
                     <AppBar position="static">
                         <Tabs>
                             <Tab label="Home"/>
@@ -66,9 +66,9 @@ class AppClass extends React.Component{
                         </Tabs>
                     </AppBar>
                 </Grid>
-                <Grid item xl={2} xs={0}/>
-                <Grid item xl={2} xs={0}/>
-                <Grid item xl={8} xs={12}>
+                <Grid item xl={1} xs={0}/>
+                <Grid item xl={1} xs={0}/>
+                <Grid item xl={10} xs={12}>
                     <Grid container>
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2}>
@@ -115,7 +115,7 @@ class AppClass extends React.Component{
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xl={2} xs={0}/>
+                <Grid item xl={1} xs={0}/>
             </Grid>
         );
     }
