@@ -38,7 +38,7 @@ export default class LendersFilter extends React.Component{
                         <LenderFilter ref={this.lenderFilter3}/>
                     </Grid>
                     <Grid item xs={12} style={{textAlign:"center"}}>
-                        <Button variant="contained" color="primary">Submit</Button>
+                        <Button variant="contained" color="primary" onClick={this.props.submitOnClick}>Submit</Button>
                     </Grid>
                 </Grid>
             </React.Fragment>

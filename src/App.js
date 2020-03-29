@@ -29,16 +29,26 @@ class AppClass extends React.Component{
         super();
 
         this.carshowRef= React.createRef();
+        this.lendersFilter = React.createRef();
         this.filterOnClick = this.filterOnClick.bind(this);
+        this.submitOnclick = this.submitOnclick.bind(this);
 
         this.state = {
-            displayFilters:false
+            displayFilters:true,
+            displayCarShow:false
         }
     }
 
     filterOnClick(event){
         console.log('Filter')
         this.setState({displayFilters:!this.state.displayFilters});
+    }
+
+    submitOnclick(){
+        this.setState({
+            displayFilters:false,
+            displayCarShow:true
+        })
     }
 
     render() {
@@ -61,36 +71,45 @@ class AppClass extends React.Component{
                     <Grid container>
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                    <Select value={0}>
-                                        <MenuItem value={0}>Sort by (choose)</MenuItem>
-                                    </Select>
-                                </Grid>
-                                <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                    <Select value={0}>
-                                        <MenuItem value={0}>Sort by (choose)</MenuItem>
-                                    </Select>
-                                </Grid>
-                                <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                    <Select value={0}>
-                                        <MenuItem value={0}>Sort by (choose)</MenuItem>
-                                    </Select>
-                                </Grid>
-                                <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                    <ToggleButton onClick={this.filterOnClick} selected={this.state.displayFilters}><FaFilter/>  Filter</ToggleButton>
-                                </Grid>
+                                {this.state.displayCarShow?(
+                                    <React.Fragment>
+                                        <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
+                                            <Select value={0}>
+                                                <MenuItem value={0}>Sort by (choose)</MenuItem>
+                                            </Select>
+                                        </Grid>
+                                        <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
+                                            <Select value={0}>
+                                                <MenuItem value={0}>Sort by (choose)</MenuItem>
+                                            </Select>
+                                        </Grid>
+                                        <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
+                                            <Select value={0}>
+                                                <MenuItem value={0}>Sort by (choose)</MenuItem>
+                                            </Select>
+                                        </Grid>
+                                        <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
+                                            <ToggleButton onClick={this.filterOnClick} selected={this.state.displayFilters}><FaFilter/>  Filter</ToggleButton>
+                                        </Grid>
+                                    </React.Fragment>
+                                ):null
+                                }
                                 {
                                     this.state.displayFilters?(
                                         <Grid item xs={12} style={{marginTop:"16px", marginBottom:"16px"}}>
                                             <Paper style={{padding:"10px"}}>
-                                                <LendersFilter />
+                                                <LendersFilter ref={this.lendersFilter} submitOnClick={this.submitOnclick}/>
                                             </Paper>
                                         </Grid>
                                     ):null
                                 }
-                                <Grid item xs={12}>
-                                    <CarShow ref={this.carshowRef}/>
-                                </Grid>
+                                {
+                                    this.state.displayCarShow?(
+                                        <Grid item xs={12}>
+                                            <CarShow ref={this.carshowRef}/>
+                                        </Grid>
+                                    ):null
+                                }
                             </Grid>
                         </Grid>
                     </Grid>
