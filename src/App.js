@@ -49,6 +49,7 @@ class AppClass extends React.Component{
             displayFilters:false,
             displayCarShow:true
         })
+        window.scrollTo(0,0);
     }
 
     render() {
