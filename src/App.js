@@ -14,7 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import {useTheme} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import Button from "@material-ui/core/Button";
+import ToggleButton from "@material-ui/lab/ToggleButton";
 import {FaFilter} from "react-icons/all";
 
 const App = (props) => {
@@ -77,12 +77,14 @@ class AppClass extends React.Component{
                                     </Select>
                                 </Grid>
                                 <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                    <Button variant={"outlined"} onClick={this.filterOnClick}><FaFilter/>  Filter</Button>
+                                    <ToggleButton onClick={this.filterOnClick} selected={this.state.displayFilters}><FaFilter/>  Filter</ToggleButton>
                                 </Grid>
                                 {
                                     this.state.displayFilters?(
-                                        <Grid item xs={12}>
-                                            <LendersFilter />
+                                        <Grid item xs={12} style={{marginTop:"16px", marginBottom:"16px"}}>
+                                            <Paper style={{padding:"10px"}}>
+                                                <LendersFilter />
+                                            </Paper>
                                         </Grid>
                                     ):null
                                 }

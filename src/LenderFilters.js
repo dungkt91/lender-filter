@@ -21,7 +21,7 @@ export default class LendersFilter extends React.Component{
     render(){
         return (
             <React.Fragment>
-                <Grid container direction={"row"} spacing={4} style={{padding:"10px"}}>
+                <Grid container direction={"row"} spacing={4}>
                     <Grid item xs={12} style={{textAlign:"center"}}>
                         <Button variant="contained" color={"secondary"} onClick={this.clearFiltersOnClick}>Clear Filters</Button>
                     </Grid>
