@@ -45,7 +45,7 @@ const images = [
 export default class CarImagesGallery extends React.Component{
     render(){
         return (
-            <ImageGallery items={images} showPlayButton={false} showFullscreenButton={false} showNav={false}/>
+            <ImageGallery items={images} showPlayButton={false} showFullscreenButton={false}/>
         );
     }
 }

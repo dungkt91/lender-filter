@@ -51,7 +51,7 @@ class CarCalculationClass extends React.Component{
         ]
 
         this.calculationDetailsValues = [
-            ["lender_value", "tier_value", "1", "2", "3", "4", "5", "6", "7"],
+            ["lender name", "tier_value", "1", "2", "3", "4", "5", "6", "7"],
             ["lender_value1", "tier_value1", "1", "2", "3", "4", "5", "6", "7"],
             ["lender_value2", "tier_value2", "1", "2", "3", "4", "5", "6", "7"]
         ]
