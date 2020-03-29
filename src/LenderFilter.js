@@ -165,9 +165,9 @@ export default class LenderFilter extends React.Component{
                         {this.lenderMenuItems}
                     </Select>
                 </Grid>
-                <Grid item xs={12} style={{textAlign:"center"}}>
-                    <img src={this.state.selectedLenderImage} {...this.state.selectedLenderImage == null? {style:{width:'150px', height:'150px', visibility:"hidden"}}:{style:{width:'150px', height:'150px'}}} />
-                </Grid>
+                {/*<Grid item xs={12} style={{textAlign:"center"}}>*/}
+                {/*    <img src={this.state.selectedLenderImage} {...this.state.selectedLenderImage == null? {style:{width:'150px', height:'150px', visibility:"hidden"}}:{style:{width:'150px', height:'150px'}}} />*/}
+                {/*</Grid>*/}
                 <Grid item xs={12}>
                     <Select style={{width:'100%'}} disabled={!this.state.isTierSelectEnabled} value={this.state.selectedTierIndex} onChange={this.selectTierEvent}>
                         {this.state.tierMenuItems}
