@@ -16,6 +16,11 @@ import {useTheme} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import {FaFilter} from "react-icons/all";
+import MenuIcon from '@material-ui/icons/Menu';
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import {makeStyles} from "@material-ui/core/styles";
 
 const App = (props) => {
     const theme = useTheme();
@@ -32,10 +37,13 @@ class AppClass extends React.Component{
         this.lendersFilter = React.createRef();
         this.filterOnClick = this.filterOnClick.bind(this);
         this.submitOnclick = this.submitOnclick.bind(this);
+        this.menuBtnOnClick = this.menuBtnOnClick.bind(this);
+        this.closeMenu = this.closeMenu.bind(this);
 
         this.state = {
             displayFilters:true,
-            displayCarShow:false
+            displayCarShow:false,
+            anchorEl:null
         }
     }
 
@@ -52,18 +60,61 @@ class AppClass extends React.Component{
         window.scrollTo(0,0);
     }
 
+    menuBtnOnClick(event){
+        this.setState({anchorEl:event.currentTarget})    ;
+    }
+
+    closeMenu(){
+        this.setState({anchorEl:null});
+    }
+
     render() {
         return (
             <Grid container style={{backgroundColor:"rgb(247,248,248)"}}>
                 <Grid item xl={1} xs={0} />
                 <Grid item xl={10} xs={12}>
                     <AppBar position="static">
-                        <Tabs>
-                            <Tab label="Home"/>
-                            <Tab label="Rate Sheet" disabled/>
-                            <Tab label="Quick Quote" disabled/>
-                            <Tab label="Lender Assist" disabled/>
-                        </Tabs>
+                        {this.props.isBigScreen ? (
+                            <React.Fragment>
+                                <Tabs>
+                                    <Tab label="Home"/>
+                                    <Tab label="Rate Sheet" disabled/>
+                                    <Tab label="Quick Quote" disabled/>
+                                    <Tab label="Lender Assist" disabled/>
+                                </Tabs>
+                            </React.Fragment>) : (
+                                <Toolbar>
+                                    <IconButton
+                                        aria-label="menu"
+                                        aria-controls="menu-appbar"
+                                        aria-haspopup="true"
+                                        style={{"color":"white"}}
+                                        onClick={this.menuBtnOnClick}>
+                                        <MenuIcon />
+                                    </IconButton>
+                                    <Menu
+                                        id="menu-appbar"
+                                        anchorEl={this.state.anchorEl}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        open={Boolean(this.state.anchorEl)}
+                                        onClose={this.closeMenu}
+                                    >
+                                        <MenuItem>HOME</MenuItem>
+                                        <MenuItem>RATE SHEET</MenuItem>
+                                        <MenuItem>QUICK QUOTE</MenuItem>
+                                        <MenuItem>LENDER ASSIST</MenuItem>
+                                    </Menu>
+                                </Toolbar>
+                            )
+                        }
                     </AppBar>
                 </Grid>
                 <Grid item xl={1} xs={0}/>
