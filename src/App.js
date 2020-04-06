@@ -41,8 +41,8 @@ class AppClass extends React.Component{
         this.closeMenu = this.closeMenu.bind(this);
 
         this.state = {
-            displayFilters:true,
-            displayCarShow:false,
+            displayFilters:false,
+            displayCarShow:true,
             anchorEl:null
         }
     }
