@@ -11,15 +11,60 @@ class CarShow extends React.Component{
         this.state = {
             carShowElements:[]
         }
-
-        for(let i = 0; i < 20; i++){
-            this.state.carShowElements.push(
-                <Grid item xs={12} xl={6}>
-                    <CarShowElement />
-                </Grid>
-            );
-        }
     }
+
+    componentDidMount() {
+        fetch('https://lender-filter-backend-test.herokuapp.com/cars/')
+            .then(res => res.json())
+            .then(json => {
+                let carShowElements = []
+
+                for(let i = 0; i < json.length; i++){
+                    let car_details = this.convertToCarDetails(json[i])
+                    let car_images = this.getCarImages(json[i])
+
+                    carShowElements.push(
+                        <Grid item xs={12} xl={6}>
+                            <CarShowElement details={car_details} images={car_images}/>
+                        </Grid>
+                    );
+                }
+                this.setState({carShowElements:carShowElements})
+            });
+    }
+
+    getCarImages(carJson){
+        let result = [];
+
+        for(let i = 0; i < carJson["images"].length; i++){
+            let image = carJson["images"][i];
+
+            let imageSrc = image.src;
+            console.log(imageSrc);
+
+            result.push({
+                original:imageSrc,
+                thumbnail:imageSrc
+            });
+        }
+        return result;
+    }
+
+    convertToCarDetails(carJson){
+        let result = [];
+
+        for(let key in carJson){
+            if (key != "id" && key != "images"){
+                result.push({
+                    name:key.toUpperCase(),
+                    value:carJson[key]
+                });
+            }
+        }
+
+        return result;
+    }
+
 
     render(){
         return (

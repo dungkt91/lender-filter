@@ -11,7 +11,7 @@ export default class CarDescription extends React.Component{
             <Paper style={{padding:"20px", backgroundColor:"rgb(247, 248, 248)"}}>
                 <Table>
                     {this.props.details.map(row => (
-                        row.name == "title"?
+                        row.name == "TITLE"?
                             (
                                 <TableRow>
                                     <TableCell colSpan={2} style={{textAlign:"center"}}><b style={{fontSize:"1.2rem"}}>{row.value}</b></TableCell>
