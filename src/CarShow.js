@@ -1,19 +1,31 @@
 import * as React from "react";
 import CarShowElement from "./CarShowElement";
 import Grid from "@material-ui/core/Grid";
-import {useTheme} from "@material-ui/core/styles";
+import {styled, useTheme} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import {css} from "@emotion/core";
+import {ClipLoader} from "react-spinners";
+import './CarShow.css';
+
+const clipLoaderCss = css`
+    border-color:rgb(55,71,172);
+    position:absolute;
+    border-bottom-color:transparent;
+    top:50%;
+`;
 
 class CarShow extends React.Component{
     constructor() {
         super();
 
         this.state = {
-            carShowElements:[]
+            carShowElements:[],
+            isLoading:false
         }
     }
 
     componentDidMount() {
+        this.setState({isLoading:true});
         fetch('https://lender-filter-backend-test.herokuapp.com/cars/')
             .then(res => res.json())
             .then(json => {
@@ -29,7 +41,7 @@ class CarShow extends React.Component{
                         </Grid>
                     );
                 }
-                this.setState({carShowElements:carShowElements})
+                this.setState({carShowElements:carShowElements, isLoading:false});
             });
     }
 
@@ -68,8 +80,8 @@ class CarShow extends React.Component{
 
     render(){
         return (
-            <Grid container spacing={4}>
-                {this.state.carShowElements}
+            <Grid container spacing={4} className={`car-show-grid ${this.state.isLoading?"loading":""}`}>
+                {this.state.isLoading?<div className={"spinner"}><ClipLoader css={clipLoaderCss}/></div>:this.state.carShowElements}
             </Grid>
         );
     }
