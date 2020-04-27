@@ -41,9 +41,10 @@ class AppClass extends React.Component{
         this.closeMenu = this.closeMenu.bind(this);
 
         this.state = {
-            displayFilters:false,
-            displayCarShow:true,
-            anchorEl:null
+            displayFilters: false,
+            displayCarShow: true,
+            anchorEl: null,
+            filtersInputs: []
         }
     }
 
@@ -55,7 +56,9 @@ class AppClass extends React.Component{
     submitOnclick(){
         this.setState({
             displayFilters:false,
-            displayCarShow:true
+            displayCarShow:true,
+            filtersInputs:this.lendersFilter.current.getFiltersInputs(),
+            lenderData:this.lendersFilter.current.getLenderData()
         })
         window.scrollTo(0,0);
     }
@@ -154,7 +157,7 @@ class AppClass extends React.Component{
                                 {
                                     this.state.displayCarShow?(
                                         <Grid item xs={12}>
-                                            <CarShow ref={this.carshowRef}/>
+                                            <CarShow ref={this.carshowRef} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData}/>
                                         </Grid>
                                     ):null
                                 }

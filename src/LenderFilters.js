@@ -36,6 +36,14 @@ export default class LendersFilter extends React.Component{
         this.lenderFilter3.current.reset();
     }
 
+    getFiltersInputs(){
+        return [this.lenderFilter1.current.state, this.lenderFilter2.current.state, this.lenderFilter3.current.state];
+    }
+
+    getLenderData(){
+        return [this.state.lenders, this.state.lenderPrograms, this.state.lenderTerms];
+    }
+
     render(){
         return (
             <React.Fragment>

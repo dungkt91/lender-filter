@@ -26,7 +26,12 @@ class CarShow extends React.Component{
     }
 
     componentDidMount() {
+        this.updateCars(this.props.filtersInputs, null);
+    }
+
+    updateCars(filtersInputs, lenderData){
         this.setState({isLoading:true});
+
         fetchCars()
             .then(res => res.json())
             .then(json => {
@@ -38,12 +43,16 @@ class CarShow extends React.Component{
 
                     carShowElements.push(
                         <Grid item xs={12} xl={6}>
-                            <CarShowElement details={car_details} images={car_images}/>
+                            <CarShowElement details={car_details} images={car_images} filtersInputs={filtersInputs} lenderData={lenderData}/>
                         </Grid>
                     );
                 }
                 this.setState({carShowElements:carShowElements, isLoading:false});
             });
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.updateCars(nextProps.filtersInputs, nextProps.lenderData);
     }
 
     getCarImages(carJson){
@@ -63,11 +72,17 @@ class CarShow extends React.Component{
         return result;
     }
 
+    excludeCarDetailFields(fieldName){
+        let excludedFields = ['id', 'images', 'img_url', 'total_cost', 'x_clean', 'clean', 'average', 'rough'];
+
+        return excludedFields.includes(fieldName);
+    }
+
     convertToCarDetails(carJson){
         let result = [];
 
         for(let key in carJson){
-            if (key != "id" && key != "images"){
+            if (!this.excludeCarDetailFields(key)){
                 result.push({
                     name:key.toUpperCase(),
                     value:carJson[key]

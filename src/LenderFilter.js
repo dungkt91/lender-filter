@@ -53,13 +53,16 @@ export default class LenderFilter extends React.Component{
 
     filterBeginningState(){
         let beginningState = {
-            selectedLenderValue: 0,
+            selectedLenderIndex: 0,
             selectedLenderImage: null,
+            allLenderNames:[],
             tierMenuItems:[],
             ...this.textfieldsBeginningState(),
             isTierSelectEnabled:false,
             isTextFieldsEnabled:false,
-            lenderMenuItems:[]
+            lenderMenuItems:[],
+            selectedTierIndex:0,
+            allTierNames:[]
         };
 
         beginningState.tierMenuItems.push(<MenuItem key={"tier_please_select_item"}value={PLEASE_SELECT_INDEX}>Please select tier</MenuItem>);
@@ -69,14 +72,16 @@ export default class LenderFilter extends React.Component{
 
     componentWillReceiveProps(nextProps){
         let lenderMenuItems = [];
+        let allLenderNames = [];
 
         for(let i = 0; i < nextProps.lenders.length; i++){
             let lender = nextProps.lenders[i];
 
             lenderMenuItems.push(<MenuItem key={"lender_name_" + i} value={i+1}>{lender.name}</MenuItem>);
+            allLenderNames.push(lender.name);
         }
 
-        this.setState({lenderMenuItems:lenderMenuItems});
+        this.setState({lenderMenuItems:lenderMenuItems, allLenderNames:allLenderNames});
     }
 
     textboxOnChange(event, fieldLabel){
@@ -107,7 +112,7 @@ export default class LenderFilter extends React.Component{
         let indexMinusOne = index - 1;
 
         let newState = {};
-        newState.selectedLenderValue = index;
+        newState.selectedLenderIndex = index;
 
         let isPleaseSelectItemSelected = index == PLEASE_SELECT_INDEX;
 
@@ -135,6 +140,7 @@ export default class LenderFilter extends React.Component{
 
             newState.tierMenuItems = newTierMenuItems;
             newState.isTierSelectEnabled = true;
+            newState.allTierNames = allTierOfSelectedLender;
         }
 
         newState.selectedTierIndex = PLEASE_SELECT_INDEX;

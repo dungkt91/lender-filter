@@ -8,6 +8,8 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Grid from "@material-ui/core/Grid";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -31,7 +33,7 @@ const CarCalculation = (props)=>{
     const theme = useTheme();
     const mdUp = useMediaQuery(theme.breakpoints.up("md"));
 
-    return <CarCalculationClass isBigScreen={mdUp} />
+    return <CarCalculationClass isBigScreen={mdUp} {...props}/>
 }
 
 class CarCalculationClass extends React.Component{
@@ -50,16 +52,79 @@ class CarCalculationClass extends React.Component{
             "Profit"
         ]
 
-        this.calculationDetailsValues = [
-            ["lender name", "tier_value", "1", "2", "3", "4", "5", "6", "7"],
-            ["lender_value1", "tier_value1", "1", "2", "3", "4", "5", "6", "7"],
-            ["lender_value2", "tier_value2", "1", "2", "3", "4", "5", "6", "7"]
-        ]
+        this.state = {
+            calculationDetailsValues:[]
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        let newCalculationDetailsValues = [];
+
+        for(let i = 0; i < nextProps.filtersInputs.length; i++){
+            let filterInputs = nextProps.filtersInputs[i];
+
+            if(this.isValidFilterInputs(filterInputs))
+                newCalculationDetailsValues.push(this.createCalculationDetail(filterInputs, nextProps.lenderData));
+        }
+
+        this.setState({calculationDetailsValues:newCalculationDetailsValues});
+    }
+
+    isValidFilterInputs(filterInputs){
+        return filterInputs.selectedLenderIndex != 0 && filterInputs.selectedTierIndex != 0;
+    }
+
+    createCalculationDetail(filterInputs, lenderData){
+        let lenders = lenderData[0];
+        let lenderPrograms = lenderData[1];
+        let lenderTerms = lenderData[2];
+
+        let lenderName = filterInputs.allLenderNames[filterInputs.selectedLenderIndex - 1];
+        let tierName = filterInputs.allTierNames[filterInputs.selectedTierIndex - 1];
+
+        // Advance
+        let advance = 'NOT_FOUND';
+        let interest = 'NOT_FOUND';
+
+        let lenderId = this.getLenderId(lenderName, lenders);
+
+        if(lenderId != null){
+            for(let i = 0; i < lenderPrograms.length; i++){
+                let lenderProgram = lenderPrograms[i];
+
+                if (lenderProgram.lender_id == lenderId && lenderProgram.name == tierName){
+                    if(!isNaN(lenderProgram.advance)){
+                        advance = (parseFloat(lenderProgram.advance) * 100) + '%';
+                    }
+
+                    let rateMin = parseFloat(lenderProgram.rate_min);
+                    let rateMax = parseFloat(lenderProgram.rate_max);
+                    interest = '';
+
+                    for(let rate = rateMin; rate < rateMax; rate+=1){
+                        interest += rate + ',';
+                    }
+
+                    interest += rateMax;
+
+                    break;
+                }
+            }
+        }
+
+        return [lenderName, tierName, advance, interest];
+    }
+
+    getLenderId(lenderName, lenders){
+        for(let i = 0; i < lenders.length; i++){
+            if (lenderName == lenders[i].name)
+                return lenders[i].id;
+        }
+
+        return null;
     }
 
     renderWithOneTable(){
-        console.log('Test Arr ' + this.calculationDetailsColumnHeaders);
-
         return (
             <React.Fragment>
                 <Paper style={{backgroundColor:"rgb(247, 248, 248)"}}>
@@ -72,14 +137,34 @@ class CarCalculationClass extends React.Component{
                                 </StyledTableRow>
                         </TableHead>
                         {
-                            this.calculationDetailsValues.map(columnValues =>(
+                            this.state.calculationDetailsValues.map(columnValues =>(
                                 <StyledTableRow>
                                     {
-                                        columnValues.map(columnValue => (
-                                            <StyledTableCell>
-                                                {columnValue}
-                                            </StyledTableCell>
-                                        ))
+                                        columnValues.map((columnValue, index) => {
+                                            let interestColumnIndex = 3;
+
+                                            if (index == interestColumnIndex){
+                                                let interestMenuItems = [];
+
+                                                columnValue.split(',').forEach((interest, index) => {
+                                                    interestMenuItems.push(<MenuItem value={interest}>{interest} %</MenuItem>);
+                                                });
+
+                                                return (
+                                                    <StyledTableCell>
+                                                        <Select>
+                                                            {interestMenuItems}
+                                                        </Select>
+                                                    </StyledTableCell>
+                                                )
+                                            }
+                                            else
+                                            return (
+                                                <StyledTableCell>
+                                                    {columnValue}
+                                                </StyledTableCell>
+                                            )
+                                        })
                                     }
                                 </StyledTableRow>
                             ))
@@ -93,7 +178,7 @@ class CarCalculationClass extends React.Component{
     renderWithThreeTables(){
         let tables = [];
 
-        for(let lenderCalculationDetailsValues of this.calculationDetailsValues){
+        for(let lenderCalculationDetailsValues of this.state.calculationDetailsValues){
             tables.push(
                 <Grid item xs={12}>
                     <Paper style={{backgroundColor:"rgb(247, 248, 248)"}}>
@@ -129,10 +214,14 @@ class CarCalculationClass extends React.Component{
 
 
     render(){
-        if (this.props.isBigScreen){
-            return this.renderWithOneTable();
+        if (this.props.filtersInputs != undefined && this.props.filtersInputs.length > 0){
+            if (this.props.isBigScreen){
+                return this.renderWithOneTable();
+            }else{
+                return this.renderWithThreeTables();
+            }
         }else{
-            return this.renderWithThreeTables();
+            return null;
         }
     }
 }
