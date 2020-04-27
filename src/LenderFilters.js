@@ -2,6 +2,8 @@ import LenderFilter from "./LenderFilter";
 import * as React from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import {fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
+import MenuItem from "@material-ui/core/MenuItem";
 
 export default class LendersFilter extends React.Component{
     constructor() {
@@ -10,6 +12,22 @@ export default class LendersFilter extends React.Component{
         this.lenderFilter1 = React.createRef();
         this.lenderFilter2 = React.createRef();
         this.lenderFilter3 = React.createRef();
+
+        this.state = {
+            lenders: [],
+            lenderPrograms: [],
+            lenderTerms: []
+        }
+
+        Promise.all([fetchLenders(), fetchLenderPrograms(), fetchLenderTerms()]).then(async([lenders, lenderPrograms, lenderTerms]) => {
+            const lendersJson = await lenders.json();
+            const lenderProgramsJson = await lenderPrograms.json();
+            const lenderTermsJson = await lenderTerms.json();
+
+            return [lendersJson, lenderProgramsJson, lenderTermsJson];
+        }).then(([lenders, lenderPrograms, lenderTerms]) => {
+            this.setState({lenders:lenders, lenderPrograms:lenderPrograms, lenderTerms:lenderTerms});
+        });
     }
 
     clearFiltersOnClick(event){
@@ -29,13 +47,13 @@ export default class LendersFilter extends React.Component{
                         Customer Name:
                     </Grid>
                     <Grid item xl={4}>
-                        <LenderFilter ref={this.lenderFilter1}/>
+                        <LenderFilter ref={this.lenderFilter1} lenders={this.state.lenders} lenderPrograms={this.state.lenderPrograms} lenderTerms={this.state.lenderTerms}/>
                     </Grid>
                     <Grid item xl={4}>
-                        <LenderFilter ref={this.lenderFilter2}/>
+                        <LenderFilter ref={this.lenderFilter2} lenders={this.state.lenders} lenderPrograms={this.state.lenderPrograms} lenderTerms={this.state.lenderTerms}/>
                     </Grid>
                     <Grid item xl={4}>
-                        <LenderFilter ref={this.lenderFilter3}/>
+                        <LenderFilter ref={this.lenderFilter3} lenders={this.state.lenders} lenderPrograms={this.state.lenderPrograms} lenderTerms={this.state.lenderTerms}/>
                     </Grid>
                     <Grid item xs={12} style={{textAlign:"center"}}>
                         <Button variant="contained" color="primary" onClick={this.props.submitOnClick}>Submit</Button>

@@ -6,6 +6,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {css} from "@emotion/core";
 import {ClipLoader} from "react-spinners";
 import './CarShow.css';
+import {fetchCars} from "./Api";
 
 const clipLoaderCss = css`
     border-color:rgb(55,71,172);
@@ -26,7 +27,7 @@ class CarShow extends React.Component{
 
     componentDidMount() {
         this.setState({isLoading:true});
-        fetch('https://lender-filter-backend-test.herokuapp.com/cars/')
+        fetchCars()
             .then(res => res.json())
             .then(json => {
                 let carShowElements = []

@@ -5,15 +5,16 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import {fetchCars, fetchLenders, fetchLenderPrograms, fetchLenderTerms} from "./Api";
 
 const PLEASE_SELECT_INDEX = 0;
 
 export default class LenderFilter extends React.Component{
     constructor() {
         super();
-        this.createTestData();
         this.selectLenderEvent = this.selectLenderEvent.bind(this);
         this.selectTierEvent = this.selectTierEvent.bind(this);
+        this.state = this.filterBeginningState();
     }
 
     textfieldsBeginningState(){
@@ -58,6 +59,7 @@ export default class LenderFilter extends React.Component{
             ...this.textfieldsBeginningState(),
             isTierSelectEnabled:false,
             isTextFieldsEnabled:false,
+            lenderMenuItems:[]
         };
 
         beginningState.tierMenuItems.push(<MenuItem key={"tier_please_select_item"}value={PLEASE_SELECT_INDEX}>Please select tier</MenuItem>);
@@ -65,35 +67,16 @@ export default class LenderFilter extends React.Component{
         return beginningState;
     }
 
-    createTestData(){
-        this.state = this.filterBeginningState();
+    componentWillReceiveProps(nextProps){
+        let lenderMenuItems = [];
 
-        this.lenders = [
-            {
-                "name":"Axis Auto Leasing",
-                "img":"https://mma.prnewswire.com/media/969479/Axis_Auto_Finance_Inc__Axis_Auto_Finance_Enters_Into_a_Strategic.jpg",
-                "tiers":["TIER 1","TIER 2","TIER 3", "TIER4"]
-            },
-            {
-                "name":"iA Auto Finance",
-                "img":"https://cdn.shortpixel.ai/client/to_webp,q_glossy,ret_img/https://loanscanada.ca/wp-content/uploads/2020/03/iA-Auto-Finance.png",
-                "tiers":["1ST GEAR","2ND GEAR","3RD GEAR","4TH GEAR","5TH GEAR","6TH GEAR"]
-            },
-            {
-                "name":"CARFINCO",
-                "img":"https://images.squarespace-cdn.com/content/59b814e6cd0f68f94fd5bed9/1511197285297-ER8U6EX93C27S751M4VX/carfinco-logo.png",
-                "tiers":["TIER 1", "TIER 2", "TIER 3", "TIER 4", "TIER 5", "TIER 6", "TIER 7", "TIER 8"]
-            }
-        ];
+        for(let i = 0; i < nextProps.lenders.length; i++){
+            let lender = nextProps.lenders[i];
 
-        this.lenderMenuItems = [];
-        this.lenderMenuItems.push(<MenuItem key="please_select_item" value={PLEASE_SELECT_INDEX}>Please select lender</MenuItem>)
-
-        for(let i = 0; i < this.lenders.length; i++){
-            let lender = this.lenders[i];
-
-            this.lenderMenuItems.push(<MenuItem key={"lender_name_" + i} value={i+1}>{lender.name}</MenuItem>);
+            lenderMenuItems.push(<MenuItem key={"lender_name_" + i} value={i+1}>{lender.name}</MenuItem>);
         }
+
+        this.setState({lenderMenuItems:lenderMenuItems});
     }
 
     textboxOnChange(event, fieldLabel){
@@ -128,29 +111,30 @@ export default class LenderFilter extends React.Component{
 
         let isPleaseSelectItemSelected = index == PLEASE_SELECT_INDEX;
 
-        // Update lender logo
-        if (isPleaseSelectItemSelected){
-            newState.selectedLenderImage = null;
-            newState.isTierSelectEnabled = false;
-        }else{
-            newState.selectedLenderImage = this.lenders[indexMinusOne].img;
-            newState.isTierSelectEnabled = true;
-        }
+        // // Update lender logo
+        // if (isPleaseSelectItemSelected){
+        //     newState.selectedLenderImage = null;
+        //     newState.isTierSelectEnabled = false;
+        // }else{
+        //     newState.selectedLenderImage = this.lenders[indexMinusOne].img_url;
+        //     newState.isTierSelectEnabled = true;
+        // }
 
         // Update tiers
         if (!isPleaseSelectItemSelected){
+            let selectedLenderId = this.props.lenders[indexMinusOne].id;
+            let allTierOfSelectedLender = this.props.lenderPrograms.filter(lenderProgram  => lenderProgram.lender_id == selectedLenderId).map(lenderProgram => lenderProgram.name);
             let newTierMenuItems = [];
-            let lenderTiers = this.lenders[indexMinusOne].tiers;
-
             newTierMenuItems.push(<MenuItem value={PLEASE_SELECT_INDEX}>Please select tier</MenuItem>);
 
-            for (let i = 0; i < lenderTiers.length; i++) {
+            for (let i = 0; i < allTierOfSelectedLender.length; i++) {
                 let itemValue = i + 1;
 
-                newTierMenuItems.push(<MenuItem value={itemValue}>{lenderTiers[i]}</MenuItem>)
+                newTierMenuItems.push(<MenuItem value={itemValue}>{allTierOfSelectedLender[i]}</MenuItem>)
             }
 
             newState.tierMenuItems = newTierMenuItems;
+            newState.isTierSelectEnabled = true;
         }
 
         newState.selectedTierIndex = PLEASE_SELECT_INDEX;
@@ -183,7 +167,7 @@ export default class LenderFilter extends React.Component{
             <Grid container spacing={5}>
                 <Grid item xs={12}>
                     <Select onChange={this.selectLenderEvent} value={this.state.selectedLenderValue} style={{width:'100%'}}>
-                        {this.lenderMenuItems}
+                        {this.state.lenderMenuItems}
                     </Select>
                 </Grid>
                 {/*<Grid item xs={12} style={{textAlign:"center"}}>*/}
