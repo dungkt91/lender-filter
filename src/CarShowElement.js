@@ -8,6 +8,27 @@ import CarShowElementButtons from "./CarShowElementButtons";
 import Grid from "@material-ui/core/Grid";
 
 export default class CarShowElement extends React.Component{
+    excludeCarDetailFields(fieldName){
+        let excludedFields = ['id', 'images', 'img_url', 'total_cost', 'x_clean', 'clean', 'average', 'rough'];
+
+        return excludedFields.includes(fieldName);
+    }
+
+    convertToCarDetails(carJson){
+        let result = [];
+
+        for(let key in carJson){
+            if (!this.excludeCarDetailFields(key)){
+                result.push({
+                    name:key.toUpperCase(),
+                    value:carJson[key]
+                });
+            }
+        }
+
+        return result;
+    }
+
     render() {
         return (
            <Card style={{width:"100%"}}>
@@ -17,10 +38,10 @@ export default class CarShowElement extends React.Component{
                             <CarImagesGallery images={this.props.images}/>
                        </Grid>
                        <Grid item xs={12} lg={5}>
-                           <CarDescription details={this.props.details}/>
+                           <CarDescription details={this.convertToCarDetails(this.props.details)}/>
                        </Grid>
                        <Grid item xs={12}>
-                           <CarCalculation filtersInputs={this.props.filtersInputs} lenderData={this.props.lenderData}/>
+                           <CarCalculation filtersInputs={this.props.filtersInputs} lenderData={this.props.lenderData} details={this.props.details}/>
                        </Grid>
                        <Grid item xs={12}>
                            <CarShowElementButtons />

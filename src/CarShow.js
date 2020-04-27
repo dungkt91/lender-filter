@@ -38,7 +38,7 @@ class CarShow extends React.Component{
                 let carShowElements = []
 
                 for(let i = 0; i < json.length; i++){
-                    let car_details = this.convertToCarDetails(json[i])
+                    let car_details = json[i]
                     let car_images = this.getCarImages(json[i])
 
                     carShowElements.push(
@@ -71,28 +71,6 @@ class CarShow extends React.Component{
         }
         return result;
     }
-
-    excludeCarDetailFields(fieldName){
-        let excludedFields = ['id', 'images', 'img_url', 'total_cost', 'x_clean', 'clean', 'average', 'rough'];
-
-        return excludedFields.includes(fieldName);
-    }
-
-    convertToCarDetails(carJson){
-        let result = [];
-
-        for(let key in carJson){
-            if (!this.excludeCarDetailFields(key)){
-                result.push({
-                    name:key.toUpperCase(),
-                    value:carJson[key]
-                });
-            }
-        }
-
-        return result;
-    }
-
 
     render(){
         return (
