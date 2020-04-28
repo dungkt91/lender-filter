@@ -340,8 +340,6 @@ class CarCalculationClass extends React.Component{
         if (index == interestColumnIndex){
             let interestMenuItems = [];
 
-            interestMenuItems.push(<MenuItem value={-1}>Please select interest</MenuItem>);
-
             value.split(',').forEach((interest, index) => {
                 interestMenuItems.push(<MenuItem value={interest}>{interest} %</MenuItem>);
             });
