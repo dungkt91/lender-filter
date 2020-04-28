@@ -75,13 +75,25 @@ class CarCalculationClass extends React.Component{
         return filterInputs.selectedLenderIndex != 0 && filterInputs.selectedTierIndex != 0;
     }
 
+    mileageToKms(mileage){
+        return mileage * 1.60934;
+    }
+
     createCalculationDetail(selectedInterest, filterInputs, lenderData, carDetails){
+        console.log('createCalculationDetail()');
+        console.log(selectedInterest);
+        console.log(filterInputs);
+        console.log(lenderData);
+        console.log(carDetails);
+
         let lenders = lenderData[0];
         let lenderPrograms = lenderData[1];
         let lenderTerms = lenderData[2];
 
         let lenderName = filterInputs.allLenderNames[filterInputs.selectedLenderIndex - 1];
         let tierName = filterInputs.allTierNames[filterInputs.selectedTierIndex - 1];
+        console.log('lenderName = ' + lenderName);
+        console.log('tierName = ' + tierName);
 
         // Advance
         let advance = 'NOT_FOUND';
@@ -89,17 +101,20 @@ class CarCalculationClass extends React.Component{
         let term = 'NOT_FOUND';
         let foundLenderTerm = null;
         let foundLenderProgram = null;
-
         let lenderId = this.getLenderId(lenderName, lenders);
+        console.log('lenderId = ' + lenderId);
 
         if(lenderId != null){
             for(let lenderProgram of lenderPrograms){
                 if (lenderProgram.lender_id == lenderId && lenderProgram.name == tierName){
                     foundLenderProgram = lenderProgram;
+
+                    // Advance
                     if(!isNaN(lenderProgram.advance)){
                         advance = parseFloat(lenderProgram.advance);
                     }
 
+                    // Interest
                     let rateMin = parseFloat(lenderProgram.rate_min);
                     let rateMax = parseFloat(lenderProgram.rate_max);
                     interest = '';
@@ -114,17 +129,22 @@ class CarCalculationClass extends React.Component{
                 }
             }
 
-            let carKms = parseFloat(carDetails.mileage) * 1.60934;
+            let carKms = this.mileageToKms(parseFloat(carDetails.mileage));
+            console.log('carKms = ' + carKms);
 
             for(let lenderTerm of lenderTerms){
                 if (lenderTerm.lender_id == lenderId && lenderTerm.min_kms <= carKms && lenderTerm.max_kms >= carKms && lenderTerm.year == parseInt(carDetails.year)){
+                    // Term
                     term = lenderTerm.term;
                     foundLenderTerm = lenderTerm;
                     break;
                 }
             }
-
         }
+
+        console.log('advance = ' + advance);
+        console.log('interest = ' + interest);
+        console.log('term = ' + term);
 
         let payment = parseFloat(filterInputs.currencyFields.Payment.value);
         let back = '0';
@@ -134,6 +154,7 @@ class CarCalculationClass extends React.Component{
 
         if (foundLenderTerm !=null && advance != "NOT_FOUND"){
             let termType = foundLenderTerm.type.replace(/\s/g, '');
+            console.log('termType = ' + termType);
 
             switch(termType.toLowerCase()){
                 case 'x-clean':
@@ -149,7 +170,11 @@ class CarCalculationClass extends React.Component{
                     maxFront = carDetails.rough  * advance - carDetails.total_cost;
                     break;
             }
+
+            maxFront = Math.round(maxFront);
         }
+
+        console.log('maxFront = ' + maxFront);
 
         // Calculate max profit
         let maxProfit = 'NOT_FOUND';
@@ -160,41 +185,68 @@ class CarCalculationClass extends React.Component{
             let financed = this.pv((selectedInterest/100 + discount + tax)/12, term, -payment, 0);
             let holdBack = foundLenderProgram.hold_back;
             let funded = financed*(1-holdBack);
+
+            console.log('financed = ' + financed);
+            console.log('holdBack = ' + holdBack);
+            console.log('funded = ' + funded);
+
             let lender = 0;
             let ppsa = 0;
 
             let tradeAllowance = 0;
-            if (!isNaN(filterInputs.currencyFields["Trade Allowance"].value)){
+            if (filterInputs.currencyFields["Trade Allowance"].value != '' && !isNaN(filterInputs.currencyFields["Trade Allowance"].value)){
                 tradeAllowance = parseFloat(filterInputs.currencyFields["Trade Allowance"].value);
             }
 
             let tradePayOff = 0;
-            if (!isNaN(filterInputs.currencyFields["Trade Payoff"].value)){
+            if (filterInputs.currencyFields["Trade Payoff"].value != '' && !isNaN(filterInputs.currencyFields["Trade Payoff"].value)){
                 tradePayOff = parseFloat(filterInputs.currencyFields["Trade Payoff"].value)
             }
 
             let downPayment = 0;
-            if (!isNaN(filterInputs.currencyFields["Down Payment"].value)){
+            if (filterInputs.currencyFields["Down Payment"].value != '' && !isNaN(filterInputs.currencyFields["Down Payment"].value)){
                 downPayment = parseFloat(filterInputs.currencyFields["Down Payment"].value);
             }
 
-            let paidOut = funded - lender - ppsa + tradeAllowance - tradePayOff + downPayment;
-            let userInputTax = parseFloat(filterInputs.percentageFields.Tax.value)/100;
-
             let tradeAcv = 0;
-            if (!isNaN(filterInputs.currencyFields["Trace a.c.v"].value)){
+            if (filterInputs.currencyFields["Trace a.c.v"].value != '' && !isNaN(filterInputs.currencyFields["Trace a.c.v"].value)){
                 tradeAcv = parseFloat(filterInputs.currencyFields["Trace a.c.v"].value)
             }
 
+            console.log('tradeAllowance = ' + tradeAllowance);
+            console.log('tradePayOff = ' + tradePayOff);
+            console.log('downPayment = ' + downPayment);
+            console.log('tradeAcv = ' + tradeAcv);
+
+            let paidOut = funded - lender - ppsa + tradeAllowance - tradePayOff + downPayment;
+            console.log('paidOut = ' + paidOut);
+
+            let userInputTax = parseFloat(filterInputs.percentageFields.Tax.value)/100;
+            console.log('userInputTax = ' + userInputTax);
+
             let netPaid = paidOut*(1-userInputTax) + tradeAcv;
+            console.log('netPaid = ' + netPaid);
 
             if (netPaid - carDetails.total_cost < maxFront){
                 maxProfit = netPaid - carDetails.total_cost;
             }else {
                 maxProfit = maxFront;
             }
+
+            maxProfit = Math.round(maxProfit);
         }
 
+        console.log('maxProfit = ' + maxProfit);
+
+        if (maxFront != 'NOT_FOUND'){
+            maxFront = '$' + maxFront;
+        }
+
+        if (maxProfit != 'NOT_FOUND'){
+            maxProfit = '$' + maxProfit;
+        }
+
+        console.log('End createCalculationDetail()');
         return [lenderName, tierName, (advance * 100) + '%', interest, term, '$' + payment, back, maxFront, maxProfit];
     }
 
@@ -252,8 +304,6 @@ class CarCalculationClass extends React.Component{
 
                                             if (index == interestColumnIndex){
                                                 let interestMenuItems = [];
-
-                                                interestMenuItems.push(<MenuItem value={-1}>Please select interest</MenuItem>);
 
                                                 columnValue.split(',').forEach((interest, index) => {
                                                     interestMenuItems.push(<MenuItem value={interest}>{interest} %</MenuItem>);
