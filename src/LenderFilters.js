@@ -40,6 +40,10 @@ export default class LendersFilter extends React.Component{
         return [this.lenderFilter1.current.state, this.lenderFilter2.current.state, this.lenderFilter3.current.state];
     }
 
+    hasError(){
+        return this.lenderFilter1.current.hasError() || this.lenderFilter2.current.hasError() || this.lenderFilter3.current.hasError();
+    }
+
     getLenderData(){
         return [this.state.lenders, this.state.lenderPrograms, this.state.lenderTerms];
     }

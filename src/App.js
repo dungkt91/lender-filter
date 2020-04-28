@@ -54,13 +54,15 @@ class AppClass extends React.Component{
     }
 
     submitOnclick(){
-        this.setState({
-            displayFilters:false,
-            displayCarShow:true,
-            filtersInputs:this.lendersFilter.current.getFiltersInputs(),
-            lenderData:this.lendersFilter.current.getLenderData()
-        })
-        window.scrollTo(0,0);
+        if(!this.lendersFilter.current.hasError()) {
+            this.setState({
+                displayFilters: false,
+                displayCarShow: true,
+                filtersInputs: this.lendersFilter.current.getFiltersInputs(),
+                lenderData: this.lendersFilter.current.getLenderData()
+            })
+            window.scrollTo(0, 0);
+        }
     }
 
     menuBtnOnClick(event){

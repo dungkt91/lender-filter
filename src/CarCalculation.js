@@ -50,7 +50,7 @@ class CarCalculationClass extends React.Component{
             "Back",
             "Front",
             "Profit"
-        ]
+        ];
 
         this.state = {
             calculationDetailsValues:[],
@@ -60,22 +60,10 @@ class CarCalculationClass extends React.Component{
         this.selectInterestEvent = this.selectInterestEvent.bind(this);
     }
 
-    componentWillReceiveProps(nextProps){
-        let selectedInterests = [];
-
-        for(let i = 0; i < nextProps.filtersInputs.length; i++){
-            selectedInterests.push(-1);
-        }
-
-        this.setState({calculationDetailsValues:this.createCalculationDetails(selectedInterests, nextProps.filtersInputs, nextProps.lenderData, nextProps.details)});
-    }
-
     createCalculationDetails(selectedInterests, filtersInputs, lenderData, details){
         let newCalculationDetailsValues = [];
 
-        for(let i = 0; i < filtersInputs.length; i++){
-            let filterInputs = filtersInputs[i];
-
+        for(let [i, filterInputs] of filtersInputs.entries()){
             if(this.isValidFilterInputs(filterInputs))
                 newCalculationDetailsValues.push(this.createCalculationDetail(selectedInterests[i], filterInputs, lenderData, details));
         }
@@ -88,17 +76,12 @@ class CarCalculationClass extends React.Component{
     }
 
     createCalculationDetail(selectedInterest, filterInputs, lenderData, carDetails){
-        console.log(filterInputs);
-        console.log(carDetails);
-
         let lenders = lenderData[0];
         let lenderPrograms = lenderData[1];
         let lenderTerms = lenderData[2];
 
         let lenderName = filterInputs.allLenderNames[filterInputs.selectedLenderIndex - 1];
         let tierName = filterInputs.allTierNames[filterInputs.selectedTierIndex - 1];
-
-        console.log('lenderName=' + lenderName);
 
         // Advance
         let advance = 'NOT_FOUND';
@@ -108,12 +91,9 @@ class CarCalculationClass extends React.Component{
         let foundLenderProgram = null;
 
         let lenderId = this.getLenderId(lenderName, lenders);
-        console.log('lenderId=' + lenderId);
 
         if(lenderId != null){
-            for(let i = 0; i < lenderPrograms.length; i++){
-                let lenderProgram = lenderPrograms[i];
-
+            for(let lenderProgram of lenderPrograms){
                 if (lenderProgram.lender_id == lenderId && lenderProgram.name == tierName){
                     foundLenderProgram = lenderProgram;
                     if(!isNaN(lenderProgram.advance)){
@@ -135,15 +115,9 @@ class CarCalculationClass extends React.Component{
             }
 
             let carKms = parseFloat(carDetails.mileage) * 1.60934;
-            console.log('carKms=' + carKms);
 
-            for(let i = 0; i < lenderTerms.length; i++){
-                let lenderTerm = lenderTerms[i];
-
+            for(let lenderTerm of lenderTerms){
                 if (lenderTerm.lender_id == lenderId && lenderTerm.min_kms <= carKms && lenderTerm.max_kms >= carKms && lenderTerm.year == parseInt(carDetails.year)){
-                    console.log('min_kms=' + lenderTerm.min_kms);
-                    console.log('max_kms=' + lenderTerm.max_kms);
-
                     term = lenderTerm.term;
                     foundLenderTerm = lenderTerm;
                     break;
@@ -203,15 +177,9 @@ class CarCalculationClass extends React.Component{
             if (!isNaN(filterInputs.currencyFields["Down Payment"].value)){
                 downPayment = parseFloat(filterInputs.currencyFields["Down Payment"].value);
             }
-            //
-            // console.log(tradeAllowance);
-            // console.log(tradePayOff);
-            // console.log(downPayment);
 
             let paidOut = funded - lender - ppsa + tradeAllowance - tradePayOff + downPayment;
-            console.log('paidOut = ' + paidOut);
             let userInputTax = parseFloat(filterInputs.percentageFields.Tax.value)/100;
-            console.log('userInputTax = ' + userInputTax);
 
             let tradeAcv = 0;
             if (!isNaN(filterInputs.currencyFields["Trace a.c.v"].value)){
@@ -225,8 +193,6 @@ class CarCalculationClass extends React.Component{
             }else {
                 maxProfit = maxFront;
             }
-
-            console.log('netPaid = ' + netPaid);
         }
 
         return [lenderName, tierName, (advance * 100) + '%', interest, term, '$' + payment, back, maxFront, maxProfit];
@@ -262,10 +228,10 @@ class CarCalculationClass extends React.Component{
         let interests = this.state.interests;
         interests[lenderIndex] = newInterest;
 
-        this.setState({interests:interests, calculationDetailsValues:this.createCalculationDetails(interests, this.props.filtersInputs, this.props.lenderData, this.props.details)});
+        this.setState({interests:interests});
     }
 
-    renderWithOneTable(){
+    renderWithOneTable(calculationDetailsValues){
         return (
             <React.Fragment>
                 <Paper style={{backgroundColor:"rgb(247, 248, 248)"}}>
@@ -278,7 +244,7 @@ class CarCalculationClass extends React.Component{
                                 </StyledTableRow>
                         </TableHead>
                         {
-                            this.state.calculationDetailsValues.map((columnValues, lenderIndex) =>(
+                            calculationDetailsValues.map((columnValues, lenderIndex) =>(
                                 <StyledTableRow>
                                     {
                                         columnValues.map((columnValue, index) => {
@@ -318,10 +284,34 @@ class CarCalculationClass extends React.Component{
         )
     }
 
-    renderWithThreeTables(){
+    createCell(value, index, lenderIndex){
+        let interestColumnIndex = 3;
+
+        if (index == interestColumnIndex){
+            let interestMenuItems = [];
+
+            interestMenuItems.push(<MenuItem value={-1}>Please select interest</MenuItem>);
+
+            value.split(',').forEach((interest, index) => {
+                interestMenuItems.push(<MenuItem value={interest}>{interest} %</MenuItem>);
+            });
+
+            return (
+                    <Select onChange={(event) => this.selectInterestEvent(event, lenderIndex)} value={this.state.interests[lenderIndex]}>
+                        {interestMenuItems}
+                    </Select>
+            )
+        }
+        else
+            return <React.Fragment>
+                {value}
+            </React.Fragment>
+    }
+
+    renderWithThreeTables(calculationDetailsValues){
         let tables = [];
 
-        for(let lenderCalculationDetailsValues of this.state.calculationDetailsValues){
+        for(let [lenderIndex, lenderCalculationDetailsValues] of calculationDetailsValues.entries()){
             tables.push(
                 <Grid item xs={12}>
                     <Paper style={{backgroundColor:"rgb(247, 248, 248)"}}>
@@ -336,7 +326,7 @@ class CarCalculationClass extends React.Component{
                                 lenderCalculationDetailsValues.map((row, index) => (
                                     <StyledTableRow>
                                         <StyledTableCell>{this.calculationDetailsColumnHeaders[index]}</StyledTableCell>
-                                        <StyledTableCell>{row}</StyledTableCell>
+                                        <StyledTableCell>{this.createCell(row, index, lenderIndex)}</StyledTableCell>
                                     </StyledTableRow>
                                 ))
                             }
@@ -357,11 +347,14 @@ class CarCalculationClass extends React.Component{
 
 
     render(){
-        if (this.props.filtersInputs != undefined && this.props.filtersInputs.length > 0){
+        let userInputsFilterData = this.props.filtersInputs != undefined && this.props.filtersInputs.length > 0;
+        let calculationDetailsValues = this.createCalculationDetails(this.state.interests, this.props.filtersInputs, this.props.lenderData, this.props.details);
+
+        if (userInputsFilterData){
             if (this.props.isBigScreen){
-                return this.renderWithOneTable();
+                return this.renderWithOneTable(calculationDetailsValues);
             }else{
-                return this.renderWithThreeTables();
+                return this.renderWithThreeTables(calculationDetailsValues);
             }
         }else{
             return null;

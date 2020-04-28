@@ -51,6 +51,13 @@ export default class LenderFilter extends React.Component{
         }
     }
 
+    hasError(){
+        let currencyFields = this.state.currencyFields;
+        let percentageFields = this.state.percentageFields;
+
+        return currencyFields["Payment"].error || currencyFields["Down Payment"].error || currencyFields["Trade Allowance"].error || currencyFields["Trade Payoff"].error || currencyFields["Trace a.c.v"].error || percentageFields["Tax"].error;
+    }
+
     filterBeginningState(){
         let beginningState = {
             selectedLenderIndex: 0,
