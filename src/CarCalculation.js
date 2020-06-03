@@ -179,7 +179,7 @@ class CarCalculationClass extends React.Component{
         // Calculate max profit
         let maxProfit = 'NOT_FOUND';
 
-        if (selectedInterest != -1){
+        if (selectedInterest != -1 && term!='NOT_FOUND'){
             let discount = 0;
             let tax = 0;
             let financed = this.pv((selectedInterest/100 + discount + tax)/12, term, -payment, 0);
