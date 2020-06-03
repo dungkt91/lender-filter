@@ -179,12 +179,12 @@ class CarCalculationClass extends React.Component{
         // Calculate max profit
         let maxProfit = 'NOT_FOUND';
 
-        if (selectedInterest != -1 && term!='NOT_FOUND'){
+        if (selectedInterest != -1 && term!='NOT_FOUND') {
             let discount = 0;
             let tax = 0;
-            let financed = this.pv((selectedInterest/100 + discount + tax)/12, term, -payment, 0);
+            let financed = this.pv((selectedInterest / 100 + discount + tax) / 12, term, -payment, 0);
             let holdBack = foundLenderProgram.hold_back;
-            let funded = financed*(1-holdBack);
+            let funded = financed * (1 - holdBack);
 
             console.log('financed = ' + financed);
             console.log('holdBack = ' + holdBack);
@@ -194,22 +194,22 @@ class CarCalculationClass extends React.Component{
             let ppsa = 0;
 
             let tradeAllowance = 0;
-            if (filterInputs.currencyFields["Trade Allowance"].value != '' && !isNaN(filterInputs.currencyFields["Trade Allowance"].value)){
+            if (filterInputs.currencyFields["Trade Allowance"].value != '' && !isNaN(filterInputs.currencyFields["Trade Allowance"].value)) {
                 tradeAllowance = parseFloat(filterInputs.currencyFields["Trade Allowance"].value);
             }
 
             let tradePayOff = 0;
-            if (filterInputs.currencyFields["Trade Payoff"].value != '' && !isNaN(filterInputs.currencyFields["Trade Payoff"].value)){
+            if (filterInputs.currencyFields["Trade Payoff"].value != '' && !isNaN(filterInputs.currencyFields["Trade Payoff"].value)) {
                 tradePayOff = parseFloat(filterInputs.currencyFields["Trade Payoff"].value)
             }
 
             let downPayment = 0;
-            if (filterInputs.currencyFields["Down Payment"].value != '' && !isNaN(filterInputs.currencyFields["Down Payment"].value)){
+            if (filterInputs.currencyFields["Down Payment"].value != '' && !isNaN(filterInputs.currencyFields["Down Payment"].value)) {
                 downPayment = parseFloat(filterInputs.currencyFields["Down Payment"].value);
             }
 
             let tradeAcv = 0;
-            if (filterInputs.currencyFields["Trace a.c.v"].value != '' && !isNaN(filterInputs.currencyFields["Trace a.c.v"].value)){
+            if (filterInputs.currencyFields["Trace a.c.v"].value != '' && !isNaN(filterInputs.currencyFields["Trace a.c.v"].value)) {
                 tradeAcv = parseFloat(filterInputs.currencyFields["Trace a.c.v"].value)
             }
 
@@ -221,7 +221,12 @@ class CarCalculationClass extends React.Component{
             let paidOut = funded - lender - ppsa + tradeAllowance - tradePayOff + downPayment;
             console.log('paidOut = ' + paidOut);
 
-            let userInputTax = parseFloat(filterInputs.percentageFields.Tax.value)/100;
+            let userInputTax = 0;
+
+            if (filterInputs.percentageFields.Tax.value != '' && !isNaN(filterInputs.percentageFields.Tax.value)) {
+                userInputTax = parseFloat(filterInputs.percentageFields.Tax.value) / 100;
+            }
+
             console.log('userInputTax = ' + userInputTax);
 
             let netPaid = paidOut*(1-userInputTax) + tradeAcv;
