@@ -44,7 +44,7 @@ export default class LenderFilter extends React.Component{
             },
             percentageFields:{
                 "Tax":{
-                    value: null,
+                    value: "",
                     error: false
                 }
             }

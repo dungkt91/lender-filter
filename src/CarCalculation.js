@@ -224,6 +224,7 @@ class CarCalculationClass extends React.Component{
             let userInputTax = 0;
 
             if (filterInputs.percentageFields.Tax.value != '' && !isNaN(filterInputs.percentageFields.Tax.value)) {
+                console.log(filterInputs.percentageFields.Tax.value);
                 userInputTax = parseFloat(filterInputs.percentageFields.Tax.value) / 100;
             }
 
@@ -244,15 +245,23 @@ class CarCalculationClass extends React.Component{
         console.log('maxProfit = ' + maxProfit);
 
         if (maxFront != 'NOT_FOUND'){
-            maxFront = '$' + maxFront;
+            maxFront = this.addCurrencySymbol(maxFront);
         }
 
         if (maxProfit != 'NOT_FOUND'){
-            maxProfit = '$' + maxProfit;
+            maxProfit = this.addCurrencySymbol(maxProfit);
         }
 
         console.log('End createCalculationDetail()');
         return [lenderName, tierName, (advance * 100) + '%', interest, term, '$' + payment, back, maxFront, maxProfit];
+    }
+
+    addCurrencySymbol(value){
+        if (value < 0){
+            return `-$${Math.abs(value)}`
+        }else{
+            return `$${value}`
+        }
     }
 
     pv(rate, periods, payment, future, type) {
