@@ -69,7 +69,7 @@ class CarShow extends React.Component {
                         break;
                     case 4:
                         // Model
-                        carDetailsList.sort((carDetail1, carDetail2) => this.reverseNumberSign(carDetail1.model.localeCompare(carDetail2.model)));
+                        carDetailsList.sort((carDetail1, carDetail2) => carDetail1.model.localeCompare(carDetail2.model));
                         break;
                     case 5:
                         // Mileage
