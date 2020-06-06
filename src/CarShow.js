@@ -7,6 +7,7 @@ import {css} from "@emotion/core";
 import {ClipLoader} from "react-spinners";
 import './CarShow.css';
 import {fetchCars} from "./Api";
+import InfiniteScroll from "react-infinite-scroller";
 
 const clipLoaderCss = css`
     border-color:rgb(55,71,172);
@@ -15,13 +16,18 @@ const clipLoaderCss = css`
     top:50%;
 `;
 
-class CarShow extends React.Component{
+class CarShow extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            carShowElements:[],
-            isLoading:false
+            carShowElements: [],
+            carDetailsList: [],
+            carImagesList: [],
+            isLoading: false,
+            hasMoreItems: false,
+            filtersInputs: null,
+            lenderData: null
         }
     }
 
@@ -29,54 +35,102 @@ class CarShow extends React.Component{
         this.updateCars(this.props.filtersInputs, null);
     }
 
-    updateCars(filtersInputs, lenderData){
-        this.setState({isLoading:true});
+    updateCars(filtersInputs, lenderData) {
+        this.setState({isLoading: true, carDetailsList: [], carImagesList: [], carShowElements: [], filtersInputs: filtersInputs, lenderData: lenderData});
 
         fetchCars()
             .then(res => res.json())
             .then(json => {
-                let carShowElements = []
+                let carDetailsList = []
+                let carImagesList = []
 
-                for(let i = 0; i < json.length; i++){
+                for (let i = 0; i < json.length; i++) {
                     let car_details = json[i]
                     let car_images = this.getCarImages(json[i])
 
+                    carDetailsList.push(car_details);
+                    carImagesList.push(car_images);
+                }
+
+                let carShowElements = [];
+
+                for (let i = 0; i < 10 && i < carDetailsList.length; i++) {
+                    let carDetails = carDetailsList[i];
+                    let carImages = carImagesList[i];
+
                     carShowElements.push(
                         <Grid item xs={12} xl={6}>
-                            <CarShowElement details={car_details} images={car_images} filtersInputs={filtersInputs} lenderData={lenderData}/>
+                            <CarShowElement details={carDetails} images={carImages} filtersInputs={filtersInputs}
+                                            lenderData={lenderData}/>
                         </Grid>
-                    );
+                    )
                 }
-                this.setState({carShowElements:carShowElements, isLoading:false});
+
+                this.setState({
+                    carDetailsList: carDetailsList,
+                    carImagesList: carImagesList,
+                    isLoading: false,
+                    carShowElements: carShowElements,
+                    hasMoreItems: carDetailsList.length > 10
+                });
             });
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         this.updateCars(nextProps.filtersInputs, nextProps.lenderData);
     }
 
-    getCarImages(carJson){
+    getCarImages(carJson) {
         let result = [];
 
-        for(let i = 0; i < carJson["images"].length; i++){
+        for (let i = 0; i < carJson["images"].length; i++) {
             let image = carJson["images"][i];
 
             let imageSrc = image.src;
-            console.log(imageSrc);
+            // console.log(imageSrc);
 
             result.push({
-                original:imageSrc,
-                thumbnail:imageSrc
+                original: imageSrc,
+                thumbnail: imageSrc
             });
         }
         return result;
     }
 
-    render(){
+    loadItems(page) {
+        let numLoadItems = 10;
+        let newCarShowElements = this.state.carShowElements;
+        let originalLength = this.state.carShowElements.length;
+
+        if (this.state.carShowElements.length < this.state.carDetailsList.length){
+            while(newCarShowElements.length < originalLength + numLoadItems && newCarShowElements.length < this.state.carDetailsList.length){
+                newCarShowElements.push(
+                    <Grid item xs={12} xl={6}>
+                        <CarShowElement details={this.state.carDetailsList[newCarShowElements.length]} images={this.state.carImagesList[newCarShowElements.length]} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData}/>
+                    </Grid>
+                )
+            }
+        }
+
+        let hasMoreItems = (newCarShowElements.length + numLoadItems) < this.state.carDetailsList.length;
+
+        this.setState({hasMoreItems:hasMoreItems, carShowElements:newCarShowElements});
+    }
+
+    render() {
+        const loader = <div className="loader">Loading ...</div>;
+
         return (
-            <Grid container spacing={4} className={`car-show-grid ${this.state.isLoading?"loading":""}`}>
-                {this.state.isLoading?<div className={"spinner"}><ClipLoader css={clipLoaderCss}/></div>:this.state.carShowElements}
-            </Grid>
+            <InfiniteScroll
+                pageStart={0}
+                loadMore={this.loadItems.bind(this)}
+                hasMore={this.state.hasMoreItems}
+                loader={loader}>
+                <Grid container spacing={4} className={`car-show-grid ${this.state.isLoading ? "loading" : ""}`}>
+                    {this.state.isLoading ?
+                        <div className={"spinner"}><ClipLoader css={clipLoaderCss}/></div> : this.state.carShowElements}
+                </Grid>
+            </InfiniteScroll>
         );
     }
 }
