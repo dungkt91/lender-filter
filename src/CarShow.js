@@ -32,23 +32,58 @@ class CarShow extends React.Component {
     }
 
     componentDidMount() {
-        this.updateCars(this.props.carJson, this.props.filtersInputs, null);
+        this.updateCars(this.props.carJson, this.props.filtersInputs, null, 0);
     }
 
-    updateCars(carJson, filtersInputs, lenderData) {
+    updateCars(carJson, filtersInputs, lenderData, sortBy) {
         this.setState({isLoading: true, carDetailsList: [], carImagesList: [], carShowElements: [], filtersInputs: filtersInputs, lenderData: lenderData});
 
         if(carJson != ''){
             let json = carJson;
             let carDetailsList = []
-            let carImagesList = []
+            let carImagesDict = {}
 
             for (let i = 0; i < json.length; i++) {
                 let car_details = json[i]
                 let car_images = this.getCarImages(json[i])
 
                 carDetailsList.push(car_details);
-                carImagesList.push(car_images);
+                carImagesDict[car_details['id']] = car_images;
+            }
+
+            if (sortBy != 0){
+                console.log('sort');
+                switch(sortBy){
+                    case 1:
+                        // Year
+                        carDetailsList.sort((carDetail1, carDetail2) => parseInt(carDetail1.year) - parseInt(carDetail2.year));
+                        break;
+                    case 2:
+                        // Make
+                        carDetailsList.sort((carDetail1, carDetail2) => carDetail1.make.localeCompare(carDetail2.make));
+                        break;
+                    case 3:
+                        // Model
+                        carDetailsList.sort((carDetail1, carDetail2) => carDetail1.model.localeCompare(carDetail2.model));
+                        break;
+                    case 4:
+                        // Mileage
+                        carDetailsList.sort((carDetail1, carDetail2) => parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage));
+                        break;
+                    case 5:
+                        // Cost
+                        carDetailsList.sort((carDetail1, carDetail2) => parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost));
+                        break;
+                    case 6:
+                        // Profit
+                        break;
+                }
+            }
+
+            let carImagesList = [];
+
+            for (let i = 0; i < carDetailsList.length;i++){
+                carImagesList.push(carImagesDict[carDetailsList[i]['id']]);
             }
 
             let carShowElements = [];
@@ -76,7 +111,7 @@ class CarShow extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.updateCars(nextProps.carJson, nextProps.filtersInputs, nextProps.lenderData);
+        this.updateCars(nextProps.carJson, nextProps.filtersInputs, nextProps.lenderData, nextProps.sortCriteria);
     }
 
     getCarImages(carJson) {

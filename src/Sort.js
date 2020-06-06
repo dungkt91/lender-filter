@@ -10,7 +10,7 @@ class Sort extends React.Component {
             selectedCriteriaIndex: 0
         }
 
-        this.sortCriteriaList = ["Sort by (choose)", "Year", "Model", "Mileage", "Cost", "Profit"]
+        this.sortCriteriaList = ["Sort by (choose)", "Year", "Make", "Model", "Mileage", "Cost", "Profit"]
     }
 
     selectCriteriaAtIndex(index){

@@ -40,22 +40,22 @@ class AppClass extends React.Component{
         this.carshowRef= React.createRef();
         this.lendersFilter = React.createRef();
         this.sortRef = React.createRef();
-        this.sortRef1 = React.createRef();
-        this.sortRef2 = React.createRef();
+        // this.sortRef1 = React.createRef();
+        // this.sortRef2 = React.createRef();
         this.filterOnClick = this.filterOnClick.bind(this);
         this.submitOnclick = this.submitOnclick.bind(this);
         this.menuBtnOnClick = this.menuBtnOnClick.bind(this);
         this.closeMenu = this.closeMenu.bind(this);
         this.sortSelect = this.sortSelect.bind(this);
-        this.sortSelect1 = this.sortSelect1.bind(this);
-        this.sortSelect2 = this.sortSelect2.bind(this);
+        // this.sortSelect1 = this.sortSelect1.bind(this);
+        // this.sortSelect2 = this.sortSelect2.bind(this);
 
         this.state = {
             displayFilters: false,
             displayCarShow: true,
             anchorEl: null,
             filtersInputs: [],
-            sort:[0,0,0],
+            sort:0,
             carJson:'',
         }
 
@@ -97,29 +97,27 @@ class AppClass extends React.Component{
     sortSelect(event){
         let criteriaIndex = event.target.value;
         this.sortRef.current.selectCriteriaAtIndex(criteriaIndex);
-        let newSort = this.state.sort;
-        newSort[0] = criteriaIndex;
 
-        this.setState({sort:newSort});
+        this.setState({sort:criteriaIndex});
     }
 
-    sortSelect1(event){
-        let criteriaIndex = event.target.value;
-        this.sortRef1.current.selectCriteriaAtIndex(criteriaIndex);
-        let newSort = this.state.sort;
-        newSort[1] = criteriaIndex;
-
-        this.setState({sort:newSort});
-    }
-
-    sortSelect2(event){
-        let criteriaIndex = event.target.value;
-        this.sortRef2.current.selectCriteriaAtIndex(criteriaIndex);
-        let newSort = this.state.sort;
-        newSort[2] = criteriaIndex;
-
-        this.setState({sort:newSort});
-    }
+    // sortSelect1(event){
+    //     let criteriaIndex = event.target.value;
+    //     this.sortRef1.current.selectCriteriaAtIndex(criteriaIndex);
+    //     let newSort = this.state.sort;
+    //     newSort[1] = criteriaIndex;
+    //
+    //     this.setState({sort:newSort});
+    // }
+    //
+    // sortSelect2(event){
+    //     let criteriaIndex = event.target.value;
+    //     this.sortRef2.current.selectCriteriaAtIndex(criteriaIndex);
+    //     let newSort = this.state.sort;
+    //     newSort[2] = criteriaIndex;
+    //
+    //     this.setState({sort:newSort});
+    // }
 
     render() {
         return (
@@ -183,12 +181,12 @@ class AppClass extends React.Component{
                                         <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
                                             <Sort ref={this.sortRef} onSelect={this.sortSelect}/>
                                         </Grid>
-                                        <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                            <Sort ref={this.sortRef1} onSelect={this.sortSelect1}/>
-                                        </Grid>
-                                        <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                            <Sort ref={this.sortRef2} onSelect={this.sortSelect2}/>
-                                        </Grid>
+                                        {/*<Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>*/}
+                                        {/*    <Sort ref={this.sortRef1} onSelect={this.sortSelect1}/>*/}
+                                        {/*</Grid>*/}
+                                        {/*<Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>*/}
+                                        {/*    <Sort ref={this.sortRef2} onSelect={this.sortSelect2}/>*/}
+                                        {/*</Grid>*/}
                                         <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
                                             <ToggleButton onClick={this.filterOnClick} selected={this.state.displayFilters}><FaFilter/>  Filter</ToggleButton>
                                         </Grid>
@@ -203,7 +201,7 @@ class AppClass extends React.Component{
                                 {
                                     this.state.displayCarShow?(
                                         <Grid item xs={12}>
-                                            <CarShow ref={this.carshowRef} carJson={this.state.carJson} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData} sortCriterias={this.state.sort}/>
+                                            <CarShow ref={this.carshowRef} carJson={this.state.carJson} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData} sortCriteria={this.state.sort}/>
                                         </Grid>
                                     ):null
                                 }
