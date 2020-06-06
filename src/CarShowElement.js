@@ -26,14 +26,25 @@ export default class CarShowElement extends React.Component{
         return fieldName
     }
 
+    isCurrencyField(fieldName){
+        return ['total_cost'].includes(fieldName);
+    }
     convertToCarDetails(carJson){
         let result = [];
+        let currencySymbol = '$';
 
         for(let key in carJson){
             if (!this.excludeCarDetailFields(key)){
+                let name = this.convertFieldNameToLabel(key).toUpperCase();
+                let value = carJson[key];
+
+                if (this.isCurrencyField(key)){
+                    value = currencySymbol + value;
+                }
+
                 result.push({
-                    name:this.convertFieldNameToLabel(key).toUpperCase(),
-                    value:carJson[key]
+                    name: name,
+                    value: value
                 });
             }
         }
