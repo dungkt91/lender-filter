@@ -3,6 +3,7 @@ import * as React from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import {fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
+import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 
 export default class LendersFilter extends React.Component{
@@ -56,7 +57,7 @@ export default class LendersFilter extends React.Component{
                         <Button variant="contained" color={"secondary"} onClick={this.clearFiltersOnClick}>Clear Filters</Button>
                     </Grid>
                     <Grid item xs={12}>
-                        Customer Name:
+                        Customer Name: <TextField variant="outlined" size={"small"}/>
                     </Grid>
                     <Grid item xl={4}>
                         <LenderFilter ref={this.lenderFilter1} lenders={this.state.lenders} lenderPrograms={this.state.lenderPrograms} lenderTerms={this.state.lenderTerms}/>
