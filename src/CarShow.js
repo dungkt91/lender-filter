@@ -80,19 +80,35 @@ class CarShow extends React.Component {
     }
 
     getCarImages(carJson) {
-        let result = [];
+        let dict = [];
+        let imageNames = [];
 
         for (let i = 0; i < carJson["images"].length; i++) {
             let image = carJson["images"][i];
 
             let imageSrc = image.src;
+            let imageName = image.name;
             // console.log(imageSrc);
 
-            result.push({
+            imageNames.push(imageName);
+            if (imageName in imageNames){
+                console.warn(imageName + ' is already in dicationary');
+            }
+
+            dict[imageName] = {
                 original: imageSrc,
                 thumbnail: imageSrc
-            });
+            };
         }
+
+        // Sort image names
+        imageNames.sort();
+        let result = [];
+
+        for (let i = 0; i < imageNames.length;i++){
+            result.push(dict[imageNames[i]]);
+        }
+
         return result;
     }
 
