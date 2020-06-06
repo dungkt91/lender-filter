@@ -21,6 +21,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import {makeStyles} from "@material-ui/core/styles";
+import ScrollToTop from "react-scroll-to-top";
+import "react-scroll-to-top/lib/index.css";
 
 const App = (props) => {
     const theme = useTheme();
@@ -75,6 +77,8 @@ class AppClass extends React.Component{
 
     render() {
         return (
+            <React.Fragment>
+            <ScrollToTop smooth />
             <Grid container style={{backgroundColor:"rgb(247,248,248)"}}>
                 <Grid item xl={1} xs={0} />
                 <Grid item xl={10} xs={12}>
@@ -169,6 +173,7 @@ class AppClass extends React.Component{
                 </Grid>
                 <Grid item xl={1} xs={0}/>
             </Grid>
+            </React.Fragment>
         );
     }
 }
