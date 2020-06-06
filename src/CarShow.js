@@ -32,52 +32,51 @@ class CarShow extends React.Component {
     }
 
     componentDidMount() {
-        this.updateCars(this.props.filtersInputs, null);
+        this.updateCars(this.props.carJson, this.props.filtersInputs, null);
     }
 
-    updateCars(filtersInputs, lenderData) {
+    updateCars(carJson, filtersInputs, lenderData) {
         this.setState({isLoading: true, carDetailsList: [], carImagesList: [], carShowElements: [], filtersInputs: filtersInputs, lenderData: lenderData});
 
-        fetchCars()
-            .then(res => res.json())
-            .then(json => {
-                let carDetailsList = []
-                let carImagesList = []
+        if(carJson != ''){
+            let json = carJson;
+            let carDetailsList = []
+            let carImagesList = []
 
-                for (let i = 0; i < json.length; i++) {
-                    let car_details = json[i]
-                    let car_images = this.getCarImages(json[i])
+            for (let i = 0; i < json.length; i++) {
+                let car_details = json[i]
+                let car_images = this.getCarImages(json[i])
 
-                    carDetailsList.push(car_details);
-                    carImagesList.push(car_images);
-                }
+                carDetailsList.push(car_details);
+                carImagesList.push(car_images);
+            }
 
-                let carShowElements = [];
+            let carShowElements = [];
 
-                for (let i = 0; i < 10 && i < carDetailsList.length; i++) {
-                    let carDetails = carDetailsList[i];
-                    let carImages = carImagesList[i];
+            for (let i = 0; i < 10 && i < carDetailsList.length; i++) {
+                let carDetails = carDetailsList[i];
+                let carImages = carImagesList[i];
 
-                    carShowElements.push(
-                        <Grid item xs={12} xl={6}>
-                            <CarShowElement details={carDetails} images={carImages} filtersInputs={filtersInputs}
-                                            lenderData={lenderData}/>
-                        </Grid>
-                    )
-                }
+                carShowElements.push(
+                    <Grid item xs={12} xl={6}>
+                        <CarShowElement details={carDetails} images={carImages} filtersInputs={filtersInputs}
+                                        lenderData={lenderData}/>
+                    </Grid>
+                )
+            }
 
-                this.setState({
-                    carDetailsList: carDetailsList,
-                    carImagesList: carImagesList,
-                    isLoading: false,
-                    carShowElements: carShowElements,
-                    hasMoreItems: carDetailsList.length > 10
-                });
+            this.setState({
+                carDetailsList: carDetailsList,
+                carImagesList: carImagesList,
+                isLoading: false,
+                carShowElements: carShowElements,
+                hasMoreItems: carDetailsList.length > 10
             });
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        this.updateCars(nextProps.filtersInputs, nextProps.lenderData);
+        this.updateCars(nextProps.carJson, nextProps.filtersInputs, nextProps.lenderData);
     }
 
     getCarImages(carJson) {

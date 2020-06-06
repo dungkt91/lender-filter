@@ -23,6 +23,8 @@ import Menu from "@material-ui/core/Menu";
 import {makeStyles} from "@material-ui/core/styles";
 import ScrollToTop from "react-scroll-to-top";
 import "react-scroll-to-top/lib/index.css";
+import Sort from "./Sort";
+import {fetchCars} from "./Api";
 
 const App = (props) => {
     const theme = useTheme();
@@ -37,18 +39,35 @@ class AppClass extends React.Component{
 
         this.carshowRef= React.createRef();
         this.lendersFilter = React.createRef();
+        this.sortRef = React.createRef();
+        this.sortRef1 = React.createRef();
+        this.sortRef2 = React.createRef();
         this.filterOnClick = this.filterOnClick.bind(this);
         this.submitOnclick = this.submitOnclick.bind(this);
         this.menuBtnOnClick = this.menuBtnOnClick.bind(this);
         this.closeMenu = this.closeMenu.bind(this);
+        this.sortSelect = this.sortSelect.bind(this);
+        this.sortSelect1 = this.sortSelect1.bind(this);
+        this.sortSelect2 = this.sortSelect2.bind(this);
 
         this.state = {
             displayFilters: false,
             displayCarShow: true,
             anchorEl: null,
-            filtersInputs: []
+            filtersInputs: [],
+            sort:[0,0,0],
+            carJson:'',
         }
+
+        fetchCars()
+            .then(res => res.json())
+            .then(json => {
+                this.setState(
+                    { carJson:json }
+                )
+            });
     }
+
 
     filterOnClick(event){
         console.log('Filter')
@@ -73,6 +92,33 @@ class AppClass extends React.Component{
 
     closeMenu(){
         this.setState({anchorEl:null});
+    }
+
+    sortSelect(event){
+        let criteriaIndex = event.target.value;
+        this.sortRef.current.selectCriteriaAtIndex(criteriaIndex);
+        let newSort = this.state.sort;
+        newSort[0] = criteriaIndex;
+
+        this.setState({sort:newSort});
+    }
+
+    sortSelect1(event){
+        let criteriaIndex = event.target.value;
+        this.sortRef1.current.selectCriteriaAtIndex(criteriaIndex);
+        let newSort = this.state.sort;
+        newSort[1] = criteriaIndex;
+
+        this.setState({sort:newSort});
+    }
+
+    sortSelect2(event){
+        let criteriaIndex = event.target.value;
+        this.sortRef2.current.selectCriteriaAtIndex(criteriaIndex);
+        let newSort = this.state.sort;
+        newSort[2] = criteriaIndex;
+
+        this.setState({sort:newSort});
     }
 
     render() {
@@ -135,19 +181,13 @@ class AppClass extends React.Component{
                                 {this.state.displayCarShow?(
                                     <React.Fragment>
                                         <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                            <Select value={0}>
-                                                <MenuItem value={0}>Sort by (choose)</MenuItem>
-                                            </Select>
+                                            <Sort ref={this.sortRef} onSelect={this.sortSelect}/>
                                         </Grid>
                                         <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                            <Select value={0}>
-                                                <MenuItem value={0}>Sort by (choose)</MenuItem>
-                                            </Select>
+                                            <Sort ref={this.sortRef1} onSelect={this.sortSelect1}/>
                                         </Grid>
                                         <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                            <Select value={0}>
-                                                <MenuItem value={0}>Sort by (choose)</MenuItem>
-                                            </Select>
+                                            <Sort ref={this.sortRef2} onSelect={this.sortSelect2}/>
                                         </Grid>
                                         <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
                                             <ToggleButton onClick={this.filterOnClick} selected={this.state.displayFilters}><FaFilter/>  Filter</ToggleButton>
@@ -163,7 +203,7 @@ class AppClass extends React.Component{
                                 {
                                     this.state.displayCarShow?(
                                         <Grid item xs={12}>
-                                            <CarShow ref={this.carshowRef} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData}/>
+                                            <CarShow ref={this.carshowRef} carJson={this.state.carJson} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData} sortCriterias={this.state.sort}/>
                                         </Grid>
                                     ):null
                                 }
