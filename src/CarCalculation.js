@@ -64,8 +64,26 @@ class CarCalculationClass extends React.Component{
         let newCalculationDetailsValues = [];
 
         for(let [i, filterInputs] of filtersInputs.entries()){
-            if(this.isValidFilterInputs(filterInputs))
-                newCalculationDetailsValues.push(this.createCalculationDetail(selectedInterests[i], filterInputs, lenderData, details));
+            if(this.isValidFilterInputs(filterInputs)) {
+                if (selectedInterests[i] == -1){
+                    let calculationDetails = this.createCalculationDetail(-1, filterInputs, lenderData, details);
+                    let interestColumnIndex = 3;
+                    let interests = calculationDetails[interestColumnIndex].split(',');
+
+                    if (interests.length > 0) {
+                        // Select first interest as default
+                        let firstInterest = interests[0];
+                        this.state.interests[i] = firstInterest;
+
+                        newCalculationDetailsValues.push(this.createCalculationDetail(firstInterest, filterInputs, lenderData, details));
+                    }else{
+                        newCalculationDetailsValues.push(calculationDetails);
+                    }
+                }
+                else{
+                    newCalculationDetailsValues.push(this.createCalculationDetail(selectedInterests[i], filterInputs, lenderData, details));
+                }
+            }
         }
 
         return newCalculationDetailsValues;
