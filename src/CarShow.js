@@ -8,6 +8,7 @@ import {ClipLoader} from "react-spinners";
 import './CarShow.css';
 import {fetchCars} from "./Api";
 import InfiniteScroll from "react-infinite-scroller";
+import {calculateProfitFirstInterest} from "./CarCalculation";
 
 const clipLoaderCss = css`
     border-color:rgb(55,71,172);
@@ -86,8 +87,13 @@ class CarShow extends React.Component {
                         // Cost
                         carDetailsList.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost)));
                         break;
-                    case 6:
+                    case 9:
                         // Profit
+                        //carDetailsList.sort((carDetail1, carDetail2) => parseFloat(calculateProfitFirstInterest(filtersInputs, lenderData, carDetail1)) - parseFloat(calculateProfitFirstInterest(filtersInputs, lenderData, carDetail2)));
+                        break;
+                    case 8:
+                        // Profit
+                        //carDetailsList.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseFloat(calculateProfitFirstInterest(filtersInputs, lenderData, carDetail1)) - parseFloat(calculateProfitFirstInterest(filtersInputs, lenderData, carDetail2))));
                         break;
                 }
             }
