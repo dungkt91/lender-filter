@@ -10,7 +10,17 @@ class Sort extends React.Component {
             selectedCriteriaIndex: 0
         }
 
-        this.sortCriteriaList = ["Sort by (choose)", "Year", "Make", "Model", "Mileage", "Cost", "Profit"]
+        this.sortCriteriaList = ["Sort by (choose)",
+                                "Year (Latest -> Newest)",
+                                "Year (Newest -> Latest)",
+                                "Make",
+                                "Model",
+                                "Mileage (Lowest -> Highest)",
+                                "Mileage (Highest -> Lowest)",
+                                "Cost (Lowest -> Highest)",
+                                "Cost (Highest -> Lowest)",
+                                "Profit (Lowest -> Highest)",
+                                "Profit (Highest -> Lowest)"]
     }
 
     selectCriteriaAtIndex(index){
@@ -34,7 +44,7 @@ class Sort extends React.Component {
                     this.sortCriteriaList.map((sortCriteria, index) =>
                         <MenuItem value={index}>{sortCriteria}</MenuItem>
                     )
-                }=
+                }
             </Select>
         );
     }

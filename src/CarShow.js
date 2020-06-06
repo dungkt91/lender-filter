@@ -59,20 +59,32 @@ class CarShow extends React.Component {
                         carDetailsList.sort((carDetail1, carDetail2) => parseInt(carDetail1.year) - parseInt(carDetail2.year));
                         break;
                     case 2:
+                        // Year
+                        carDetailsList.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseInt(carDetail1.year) - parseInt(carDetail2.year)));
+                        break;
+                    case 3:
                         // Make
                         carDetailsList.sort((carDetail1, carDetail2) => carDetail1.make.localeCompare(carDetail2.make));
                         break;
-                    case 3:
-                        // Model
-                        carDetailsList.sort((carDetail1, carDetail2) => carDetail1.model.localeCompare(carDetail2.model));
-                        break;
                     case 4:
+                        // Model
+                        carDetailsList.sort((carDetail1, carDetail2) => this.reverseNumberSign(carDetail1.model.localeCompare(carDetail2.model)));
+                        break;
+                    case 5:
                         // Mileage
                         carDetailsList.sort((carDetail1, carDetail2) => parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage));
                         break;
-                    case 5:
+                    case 6:
+                        // Mileage
+                        carDetailsList.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage)));
+                        break;
+                    case 7:
                         // Cost
                         carDetailsList.sort((carDetail1, carDetail2) => parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost));
+                        break;
+                    case 8:
+                        // Cost
+                        carDetailsList.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost)));
                         break;
                     case 6:
                         // Profit
@@ -108,6 +120,10 @@ class CarShow extends React.Component {
                 hasMoreItems: carDetailsList.length > 10
             });
         }
+    }
+
+    reverseNumberSign(number){
+        return -number;
     }
 
     componentWillReceiveProps(nextProps) {
