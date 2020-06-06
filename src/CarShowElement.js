@@ -9,9 +9,21 @@ import Grid from "@material-ui/core/Grid";
 
 export default class CarShowElement extends React.Component{
     excludeCarDetailFields(fieldName){
-        let excludedFields = ['id', 'images', 'img_url', 'total_cost', 'x_clean', 'clean', 'average', 'rough', 'series'];
+        let excludedFields = ['id', 'images', 'img_url', 'x_clean', 'clean', 'average', 'rough', 'series'];
 
         return excludedFields.includes(fieldName);
+    }
+
+    convertFieldNameToLabel(fieldName){
+        let convertDict = {
+            'total_cost': 'TOTAL COST'
+        }
+
+        if (fieldName in convertDict){
+            return convertDict[fieldName];
+        }
+
+        return fieldName
     }
 
     convertToCarDetails(carJson){
@@ -20,7 +32,7 @@ export default class CarShowElement extends React.Component{
         for(let key in carJson){
             if (!this.excludeCarDetailFields(key)){
                 result.push({
-                    name:key.toUpperCase(),
+                    name:this.convertFieldNameToLabel(key).toUpperCase(),
                     value:carJson[key]
                 });
             }
