@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 
 export default class CarShowElement extends React.Component{
     excludeCarDetailFields(fieldName){
-        let excludedFields = ['id', 'images', 'img_url', 'total_cost', 'x_clean', 'clean', 'average', 'rough'];
+        let excludedFields = ['id', 'images', 'img_url', 'total_cost', 'x_clean', 'clean', 'average', 'rough', 'series'];
 
         return excludedFields.includes(fieldName);
     }
