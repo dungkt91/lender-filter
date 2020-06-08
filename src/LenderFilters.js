@@ -53,9 +53,6 @@ export default class LendersFilter extends React.Component{
         return (
             <React.Fragment>
                 <Grid container direction={"row"} spacing={4}>
-                    <Grid item xs={12} style={{textAlign:"center"}}>
-                        <Button variant="contained" color={"secondary"} onClick={this.clearFiltersOnClick}>Clear Filters</Button>
-                    </Grid>
                     <Grid item xs={12}>
                         Customer Name: <TextField variant="outlined" size={"small"}/>
                     </Grid>
@@ -70,6 +67,7 @@ export default class LendersFilter extends React.Component{
                     </Grid>
                     <Grid item xs={12} style={{textAlign:"center"}}>
                         <Button variant="contained" color="primary" onClick={this.props.submitOnClick}>Submit</Button>
+                        <Button variant="contained" color={"secondary"} onClick={this.clearFiltersOnClick} style={{marginLeft:10}}>Reset</Button>
                     </Grid>
                 </Grid>
             </React.Fragment>
