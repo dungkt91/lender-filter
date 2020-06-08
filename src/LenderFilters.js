@@ -56,13 +56,13 @@ export default class LendersFilter extends React.Component{
                     <Grid item xs={12}>
                         Customer Name: <TextField variant="outlined" size={"small"}/>
                     </Grid>
-                    <Grid item xl={4}>
+                    <Grid item md={4}>
                         <LenderFilter ref={this.lenderFilter1} lenders={this.state.lenders} lenderPrograms={this.state.lenderPrograms} lenderTerms={this.state.lenderTerms}/>
                     </Grid>
-                    <Grid item xl={4}>
+                    <Grid item md={4}>
                         <LenderFilter ref={this.lenderFilter2} lenders={this.state.lenders} lenderPrograms={this.state.lenderPrograms} lenderTerms={this.state.lenderTerms}/>
                     </Grid>
-                    <Grid item xl={4}>
+                    <Grid item md={4}>
                         <LenderFilter ref={this.lenderFilter3} lenders={this.state.lenders} lenderPrograms={this.state.lenderPrograms} lenderTerms={this.state.lenderTerms}/>
                     </Grid>
                     <Grid item xs={12} style={{textAlign:"center"}}>

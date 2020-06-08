@@ -192,7 +192,7 @@ export default class LenderFilter extends React.Component{
                     </Select>
                 </Grid>
                 {Object.keys(this.state.currencyFields).map(currencyFieldLabel => (
-                    <Grid item xs={6} sm={3} md={6}><TextField disabled={!this.state.isTextFieldsEnabled}
+                    <Grid item xs={6} sm={3} md={6} style={{padding:10}}><TextField disabled={!this.state.isTextFieldsEnabled}
                                                          label={currencyFieldLabel}
                                                          variant="outlined"
                                                          onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)}
@@ -209,7 +209,7 @@ export default class LenderFilter extends React.Component{
                     )
                 }
                 {Object.keys(this.state.percentageFields).map(percentageFieldLabel => (
-                        <Grid item xs={6} sm={3} md={6}><TextField disabled={!this.state.isTextFieldsEnabled}
+                        <Grid item xs={6} sm={3} md={6} style={{padding:10}}><TextField disabled={!this.state.isTextFieldsEnabled}
                                                              label={percentageFieldLabel}
                                                              variant="outlined"
                                                              onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)}
