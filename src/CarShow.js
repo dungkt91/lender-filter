@@ -9,6 +9,7 @@ import './CarShow.css';
 import {fetchCars} from "./Api";
 import InfiniteScroll from "react-infinite-scroller";
 import {calculateProfitFirstInterest} from "./CarCalculation";
+import NewCar from "./NewCar";
 
 const clipLoaderCss = css`
     border-color:rgb(55,71,172);
@@ -112,8 +113,9 @@ class CarShow extends React.Component {
 
                 carShowElements.push(
                     <Grid item xs={12} xl={6}>
-                        <CarShowElement details={carDetails} images={carImages} filtersInputs={filtersInputs}
-                                        lenderData={lenderData}/>
+                        {/*<CarShowElement details={carDetails} images={carImages} filtersInputs={filtersInputs}*/}
+                        {/*                lenderData={lenderData}/>*/}
+                        <NewCar details={carDetails} images={carImages} filtersInputs={filtersInputs} lenderData={lenderData}/>
                     </Grid>
                 )
             }
@@ -178,7 +180,8 @@ class CarShow extends React.Component {
             while(newCarShowElements.length < originalLength + numLoadItems && newCarShowElements.length < this.state.carDetailsList.length){
                 newCarShowElements.push(
                     <Grid item xs={12} xl={6}>
-                        <CarShowElement details={this.state.carDetailsList[newCarShowElements.length]} images={this.state.carImagesList[newCarShowElements.length]} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData}/>
+                        {/*<CarShowElement details={this.state.carDetailsList[newCarShowElements.length]} images={this.state.carImagesList[newCarShowElements.length]} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData}/>*/}
+                        <NewCar details={this.state.carDetailsList[newCarShowElements.length]} images={this.state.carImagesList[newCarShowElements.length]} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData}/>
                     </Grid>
                 )
             }

@@ -25,6 +25,7 @@ import ScrollToTop from "react-scroll-to-top";
 import "react-scroll-to-top/lib/index.css";
 import Sort from "./Sort";
 import {fetchCars} from "./Api";
+import NewCar from "./NewCar";
 
 const App = (props) => {
     const theme = useTheme();
@@ -171,8 +172,9 @@ class AppClass extends React.Component{
                     </AppBar>
                 </Grid>
                 <Grid item xl={1} xs={0}/>
-                <Grid item xl={1} xs={0}/>
-                <Grid item xl={10} xs={12}>
+                <Grid item sm={1} xs={0}/>
+                <Grid item sm={2} xs={0}/>
+                <Grid item sm={8} xs={12}>
                     <Grid container>
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2}>
@@ -209,7 +211,7 @@ class AppClass extends React.Component{
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xl={1} xs={0}/>
+                <Grid item sm={1} xs={0}/>
             </Grid>
             </React.Fragment>
         );
