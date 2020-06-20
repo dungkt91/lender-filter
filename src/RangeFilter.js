@@ -29,15 +29,30 @@ class RangeFilter extends React.Component {
         return this.state.max;
     }
 
+    getMinTitle(){
+        return this.props.minTitle == undefined?"Min":this.props.minTitle;
+    }
+
+    getMaxTitle(){
+        return this.props.maxTitle == undefined?"Max":this.props.maxTitle;
+    }
+
+    getToText(){
+        return this.props.toText == undefined?"To":this.props.toText;
+    }
+
     render(){
         return (
             <Grid container>
-                <Grid item xs={6}>
-                    <TextField value={this.state["min"]} label={this.props.minTitle}
+                <Grid item xs={4}>
+                    <TextField value={this.state["min"]} label={this.getMinTitle()}
                                variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "min")}/>
                 </Grid>
-                <Grid item xs={6}>
-                    <TextField value={this.state["max"]} label={this.props.maxTitle}
+                <Grid item xs={4}>
+                    {this.getToText()}
+                </Grid>
+                <Grid item xs={4}>
+                    <TextField value={this.state["max"]} label={this.getMaxTitle()}
                                variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "max")}/>
                 </Grid>
             </Grid>
