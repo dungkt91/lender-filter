@@ -3,6 +3,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Filter from './Filter';
 import './LeftPanel.css';
+import Lender from './Lender';
 
 class LeftPanel extends React.Component{
     constructor(props) {
@@ -57,6 +58,7 @@ class LeftPanel extends React.Component{
                         "maxTitle":"Max"
                     }
             ]} />:null}
+            {this.state.selectedTabIndex == 1?<Lender lenders={['Lender 1', 'Lender 2']} />:null}
         </React.Fragment>
         );
     }
