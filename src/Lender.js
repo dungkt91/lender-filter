@@ -45,8 +45,7 @@ class Lender extends React.Component {
                     error: false
                 }
             },
-            isTextFieldsEnabled:false,
-            lenderInputs:[]
+            isTextFieldsEnabled:false
         }
     }
 
@@ -64,7 +63,8 @@ class Lender extends React.Component {
 
         this.state = {
             lenderMenuItems:lenderMenuItems,
-            ...this.beginningState()
+            ...this.beginningState(),
+            lenderInputs:[]
         }
 
         this.selectLender = this.selectLender.bind(this);
