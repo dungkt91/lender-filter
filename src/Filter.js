@@ -25,10 +25,12 @@ class Filter extends React.Component {
 
 
     render(){
+        let lastFilterIndex = this.props.filters.length - 1;
+
         return (
-            <Grid container>
+            <Grid container className={"filter_main_content"}>
                 {
-                    this.props.filters.map(filter => {
+                    this.props.filters.map((filter, filterIndex) => {
                         let filterType = filter["type"];
                         let filterComponent = undefined;
 
@@ -40,7 +42,7 @@ class Filter extends React.Component {
 
                         return (
                             <React.Fragment>
-                                <Grid item xs={12}>
+                                <Grid item xs={12} className={"padding10"}>
                                     <Grid container>
                                         <Grid item xs={10}>
                                             <span className={'filter_title'}>{filter["title"]}</span>
@@ -51,12 +53,18 @@ class Filter extends React.Component {
                                             </IconButton>
                                         </Grid>
                                     </Grid>
-                                </Grid>
-                                <Grid item xs={12}>
                                     <Collapse in={this.state[filter["title"] + "_expand"]}>
                                     {filterComponent}
                                     </Collapse>
                                 </Grid>
+                                {
+                                    filterIndex != lastFilterIndex ?
+                                    (
+                                        <Grid item xs={12}>
+                                            <hr className={"line_seperator"}/>
+                                        </Grid>
+                                    ) : null
+                                }
                             </React.Fragment>
                         );
                     })

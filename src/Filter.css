@@ -1,3 +1,16 @@
+.filter_main_content{
+    background-color:white;
+}
+
+.padding10{
+    padding:10px;
+}
+
 .filter_title{
     font-size:1.2rem;
+}
+
+.line_seperator{
+    background:gray;
+    height:1px;
 }

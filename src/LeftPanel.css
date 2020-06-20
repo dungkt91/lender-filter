@@ -1,0 +1,7 @@
+.tab_selected{
+    background-color:white !important;
+}
+
+.tab_deselected{
+    background-color:darkgray !important;
+}
