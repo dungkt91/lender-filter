@@ -125,22 +125,43 @@ class Lender extends React.Component {
         })
     }
 
+    hasAnyErrorsInLenderInput(){
+        let hasAnyErrors = false;
+
+        Object.keys(this.state.currencyFields).forEach((key) => {
+            if (this.state.currencyFields[key].error){
+                hasAnyErrors = true;
+            }
+        });
+
+        Object.keys(this.state.percentageFields).forEach((key) => {
+            if (this.state.percentageFields[key].error){
+                hasAnyErrors = true;
+            }
+        });
+
+        return hasAnyErrors;
+    }
+
     addLender(event){
         let lenderInput = {};
+        let hasAnyErrors = this.hasAnyErrorsInLenderInput();
 
-        lenderInput["lender"] = this.props.lenders[this.state.lenderSelectedIndex - 1];
-        lenderInput["tier"] = 'Test Tier';
-        lenderInput["payment"] = this.state.currencyFields["Payment"].value;
-        lenderInput["down payment"] = this.state.currencyFields["Down Payment"].value;
-        lenderInput["trade allowance"] = this.state.currencyFields["Trade Allowance"].value;
-        lenderInput["trade payoff"] = this.state.currencyFields["Trade Payoff"].value;
-        lenderInput["trade a.c.v"] = this.state.currencyFields["Trace a.c.v"].value;
-        lenderInput["tax"] = this.state.percentageFields["Tax"].value;
+        if (!hasAnyErrors) {
+            lenderInput["lender"] = this.props.lenders[this.state.lenderSelectedIndex - 1];
+            lenderInput["tier"] = 'Test Tier';
+            lenderInput["payment"] = this.state.currencyFields["Payment"].value;
+            lenderInput["down payment"] = this.state.currencyFields["Down Payment"].value;
+            lenderInput["trade allowance"] = this.state.currencyFields["Trade Allowance"].value;
+            lenderInput["trade payoff"] = this.state.currencyFields["Trade Payoff"].value;
+            lenderInput["trade a.c.v"] = this.state.currencyFields["Trace a.c.v"].value;
+            lenderInput["tax"] = this.state.percentageFields["Tax"].value;
 
-        let newLenderInputs = this.state.lenderInputs;
-        newLenderInputs.push(lenderInput);
+            let newLenderInputs = this.state.lenderInputs;
+            newLenderInputs.push(lenderInput);
 
-        this.setState({lenderInputs:newLenderInputs});
+            this.setState({lenderInputs: newLenderInputs});
+        }
     }
 
     reset(event){
