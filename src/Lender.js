@@ -5,6 +5,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
+import LenderInputs from "./LenderInputs";
 
 class Lender extends React.Component {
     constructor(props) {
@@ -58,11 +59,26 @@ class Lender extends React.Component {
                     error: false
                 }
             },
-            isTextFieldsEnabled:false
+            isTextFieldsEnabled:false,
+            lenderInputs:[
+                {
+                    "name":"Lender Name",
+                    "tier":"Tier Name",
+                    "payment": 1500,
+                    "down payment": 1500,
+                    "trade allowance": 0,
+                    "trade payoff": 0,
+                    "trade a.c.v": 0,
+                    "tax": 10
+                }
+            ]
         }
 
         this.selectLender = this.selectLender.bind(this);
         this.selectTier = this.selectTier.bind(this);
+        this.addLender = this.addLender.bind(this);
+        this.reset = this.reset.bind(this);
+        this.deleteLenderInput = this.deleteLenderInput.bind(this);
     }
 
     textboxOnChange(event, fieldLabel){
@@ -115,6 +131,22 @@ class Lender extends React.Component {
         })
     }
 
+    addLender(event){
+        console.log('Add Lender');
+    }
+
+    reset(event){
+        console.log('Reset');
+    }
+
+    deleteLenderInput(event, lenderInputIndex){
+        let newLenderInputs = this.state.lenderInputs;
+
+        newLenderInputs.splice(lenderInputIndex, 1);
+
+        this.setState({lenderInputs:newLenderInputs});
+    }
+
     render(){
         return (
           <Grid container className={"lender_main_content padding10"}>
@@ -162,9 +194,15 @@ class Lender extends React.Component {
               )
               }
               <Grid item xs={12} style={{textAlign:"center"}}>
-                  <Button variant="contained" color={"primary"}>Add</Button>
-                  <Button variant="contained" color={"secondary"} style={{marginLeft:10}}>Reset</Button>
+                  <Button variant="contained" color={"primary"} onClick={this.addLender}>Add</Button>
+                  <Button variant="contained" color={"secondary"} onClick={this.reset()} style={{marginLeft:10}}>Reset</Button>
               </Grid>
+              {
+                  this.state.lenderInputs.map((lenderInput, lenderInputIndex) =>
+                      <Grid item xs={12}>
+                          <LenderInputs inputs={lenderInput} handleDeleteBtnClick={(event) => this.deleteLenderInput(lenderInputIndex)}/>
+                      </Grid>)
+              }
           </Grid>
         );
     }
