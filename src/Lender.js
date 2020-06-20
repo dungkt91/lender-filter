@@ -8,28 +8,14 @@ import Button from "@material-ui/core/Button";
 import LenderInputs from "./LenderInputs";
 
 class Lender extends React.Component {
-    constructor(props) {
-        super(props);
-
-        let lenderMenuItems = [];
-
-        lenderMenuItems.push(<MenuItem value={0}>Please select lender</MenuItem>);
-        for (let i = 0; i < this.props.lenders.length; i++){
-            let lenderName = this.props.lenders[i];
-
-            lenderMenuItems.push(<MenuItem value={i + 1}>{lenderName}</MenuItem>);
-        }
-
-        this.state = {
-            // Lender
-            lenderSelectDisabled:false,
-            lenderMenuItems:lenderMenuItems,
-            lenderSelectedIndex:0,
-
-            // Tier
-            tierSelectDisabled:true,
-            tierMenuItems:[],
+    beginningState(){
+        return {
             tierSelectedIndex:0,
+            tierMenuItems:[],
+            tierSelectDisabled:true,
+
+            lenderSelectedIndex:0,
+            lenderSelectDisabled:false,
 
             currencyFields:{
                 "Payment":{
@@ -61,6 +47,24 @@ class Lender extends React.Component {
             },
             isTextFieldsEnabled:false,
             lenderInputs:[]
+        }
+    }
+
+    constructor(props) {
+        super(props);
+
+        let lenderMenuItems = [];
+
+        lenderMenuItems.push(<MenuItem value={0}>Please select lender</MenuItem>);
+        for (let i = 0; i < this.props.lenders.length; i++){
+            let lenderName = this.props.lenders[i];
+
+            lenderMenuItems.push(<MenuItem value={i + 1}>{lenderName}</MenuItem>);
+        }
+
+        this.state = {
+            lenderMenuItems:lenderMenuItems,
+            ...this.beginningState()
         }
 
         this.selectLender = this.selectLender.bind(this);
@@ -165,7 +169,7 @@ class Lender extends React.Component {
     }
 
     reset(event){
-        console.log('Reset');
+        this.setState({...this.beginningState()});
     }
 
     deleteLenderInput(event, lenderInputIndex){
