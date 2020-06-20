@@ -37,15 +37,19 @@ class ListFilter extends React.Component{
     }
 
     componentWillReceiveProps(nextProps){
-        let newState = {};
+        let optionsChanged = nextProps.options.length != this.props.options.length;
 
-        newState['Select All'] = true;
+        if(optionsChanged) {
+            let newState = {};
 
-        for(let option of nextProps.options){
-            newState[option] = true;
+            newState['Select All'] = true;
+
+            for (let option of nextProps.options) {
+                newState[option] = true;
+            }
+
+            this.setState({...newState});
         }
-
-        this.setState({...newState});
     }
 
     selectAll(event){
