@@ -60,18 +60,7 @@ class Lender extends React.Component {
                 }
             },
             isTextFieldsEnabled:false,
-            lenderInputs:[
-                {
-                    "name":"Lender Name",
-                    "tier":"Tier Name",
-                    "payment": 1500,
-                    "down payment": 1500,
-                    "trade allowance": 0,
-                    "trade payoff": 0,
-                    "trade a.c.v": 0,
-                    "tax": 10
-                }
-            ]
+            lenderInputs:[]
         }
 
         this.selectLender = this.selectLender.bind(this);
@@ -106,6 +95,9 @@ class Lender extends React.Component {
 
     selectLender(event){
         let selectIndex = event.target.value;
+
+
+        console.log(event.target);
         let tierSelectDisabled = true;
 
         if (selectIndex != 0){
@@ -114,6 +106,8 @@ class Lender extends React.Component {
 
         let tierMenuItems = [];
         tierMenuItems.push(<MenuItem value={0}>Please select tier</MenuItem>);
+        tierMenuItems.push(<MenuItem value={1}>Tier 1</MenuItem>);
+        tierMenuItems.push(<MenuItem value={2}>Tier 2</MenuItem>);
 
         this.setState({
             lenderSelectedIndex:selectIndex,
@@ -132,7 +126,21 @@ class Lender extends React.Component {
     }
 
     addLender(event){
-        console.log('Add Lender');
+        let lenderInput = {};
+
+        lenderInput["lender"] = this.props.lenders[this.state.lenderSelectedIndex - 1];
+        lenderInput["tier"] = 'Test Tier';
+        lenderInput["payment"] = this.state.currencyFields["Payment"].value;
+        lenderInput["down payment"] = this.state.currencyFields["Down Payment"].value;
+        lenderInput["trade allowance"] = this.state.currencyFields["Trade Allowance"].value;
+        lenderInput["trade payoff"] = this.state.currencyFields["Trade Payoff"].value;
+        lenderInput["trade a.c.v"] = this.state.currencyFields["Trace a.c.v"].value;
+        lenderInput["tax"] = this.state.percentageFields["Tax"].value;
+
+        let newLenderInputs = this.state.lenderInputs;
+        newLenderInputs.push(lenderInput);
+
+        this.setState({lenderInputs:newLenderInputs});
     }
 
     reset(event){
@@ -149,7 +157,7 @@ class Lender extends React.Component {
 
     render(){
         return (
-          <Grid container className={"lender_main_content padding10"}>
+          <Grid container className={"lender_main_content padding10"} spacing={2}>
               <Grid item xs={12}>
                   <Select onChange={this.selectLender} value={this.state.lenderSelectedIndex} disabled={this.state.lenderSelectDisabled} style={{width:'100%'}}>
                       {this.state.lenderMenuItems}
@@ -195,7 +203,7 @@ class Lender extends React.Component {
               }
               <Grid item xs={12} style={{textAlign:"center"}}>
                   <Button variant="contained" color={"primary"} onClick={this.addLender}>Add</Button>
-                  <Button variant="contained" color={"secondary"} onClick={this.reset()} style={{marginLeft:10}}>Reset</Button>
+                  <Button variant="contained" color={"secondary"} onClick={this.reset} style={{marginLeft:10}}>Reset</Button>
               </Grid>
               {
                   this.state.lenderInputs.map((lenderInput, lenderInputIndex) =>
