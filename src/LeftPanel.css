@@ -5,3 +5,7 @@
 .tab_deselected{
     background-color:darkgray !important;
 }
+
+.hide{
+    display:none;
+}

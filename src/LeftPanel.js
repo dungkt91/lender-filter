@@ -10,8 +10,9 @@ class LeftPanel extends React.Component{
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
+        let filter =
         this.state = {
-            selectedTabIndex:0
+            selectedTabIndex:0,
         }
     }
 
@@ -26,39 +27,42 @@ class LeftPanel extends React.Component{
                 <Tab label={"Filter"} className={this.state.selectedTabIndex==0?"tab_selected":"tab_deselected"}/>
                 <Tab label={"Lender"} className={this.state.selectedTabIndex==1?"tab_selected":"tab_deselected"} />
             </Tabs>
-            {this.state.selectedTabIndex == 0?
+            <div className={this.state.selectedTabIndex==0?'':'hide'}>
                 <Filter
-                filters={[
-                    {
-                        "title":"Make",
-                        "type":"list",
-                        "options":["Make 1", "Make 2"]
-                    },
-                    {
-                        "title":"Model",
-                        "type":"list",
-                        "options":["Model 1", "Model 2"]
-                    },
-                    {
-                        "title":"Year",
-                        "type":"range",
-                        "minTitle":"Min",
-                        "maxTitle":"Max"
-                    },
-                    {
-                        "title":"Mileage",
-                        "type":"range",
-                        "minTitle":"Min",
-                        "maxTitle":"Max"
-                    },
-                    {
-                        "title":"Total cost",
-                        "type":"range",
-                        "minTitle":"Min",
-                        "maxTitle":"Max"
-                    }
-            ]} />:null}
-            {this.state.selectedTabIndex == 1?<Lender lenders={['Lender 1', 'Lender 2']} />:null}
+                    filters={[
+                        {
+                            "title":"Make",
+                            "type":"list",
+                            "options":["Make 1", "Make 2"]
+                        },
+                        {
+                            "title":"Model",
+                            "type":"list",
+                            "options":["Model 1", "Model 2"]
+                        },
+                        {
+                            "title":"Year",
+                            "type":"range",
+                            "minTitle":"Min",
+                            "maxTitle":"Max"
+                        },
+                        {
+                            "title":"Mileage",
+                            "type":"range",
+                            "minTitle":"Min",
+                            "maxTitle":"Max"
+                        },
+                        {
+                            "title":"Total cost",
+                            "type":"range",
+                            "minTitle":"Min",
+                            "maxTitle":"Max"
+                        }]}
+                        />
+            </div>
+            <div className={this.state.selectedTabIndex==1?'':'hide'}>
+                <Lender lenders={['Lender 1', 'Lender 2']} />
+            </div>
         </React.Fragment>
         );
     }
