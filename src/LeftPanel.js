@@ -13,11 +13,57 @@ class LeftPanel extends React.Component{
         let filter =
         this.state = {
             selectedTabIndex:0,
+            filters:[]
         }
     }
 
     handleChange(event, newSelectedTabIndex){
         this.setState({selectedTabIndex:newSelectedTabIndex});
+    }
+
+    componentWillReceiveProps(nextProps){
+        let makes = new Set();
+        let models = new Set();
+
+        for(let i = 0; i < nextProps.carDetails.length; i++){
+            let carDetail = nextProps.carDetails[i];
+
+            makes.add(carDetail["make"]);
+            models.add(carDetail["model"]);
+        }
+
+        let filters = [
+                {
+                    "title":"Make",
+                    "type":"list",
+                    "options":Array.from(makes)
+                },
+                {
+                    "title":"Model",
+                    "type":"list",
+                    "options":Array.from(models)
+                },
+                {
+                    "title":"Year",
+                    "type":"range",
+                    "minTitle":"Min",
+                    "maxTitle":"Max"
+                },
+                {
+                    "title":"Mileage",
+                    "type":"range",
+                    "minTitle":"Min",
+                    "maxTitle":"Max"
+                },
+                {
+                    "title":"Total cost",
+                    "type":"range",
+                    "minTitle":"Min",
+                    "maxTitle":"Max"
+                }
+        ];
+
+        this.setState({filters:filters});
     }
 
     render(){
@@ -28,37 +74,7 @@ class LeftPanel extends React.Component{
                 <Tab label={"Lender"} className={this.state.selectedTabIndex==1?"tab_selected":"tab_deselected"} />
             </Tabs>
             <div className={this.state.selectedTabIndex==0?'':'hide'}>
-                <Filter
-                    filters={[
-                        {
-                            "title":"Make",
-                            "type":"list",
-                            "options":["Make 1", "Make 2"]
-                        },
-                        {
-                            "title":"Model",
-                            "type":"list",
-                            "options":["Model 1", "Model 2"]
-                        },
-                        {
-                            "title":"Year",
-                            "type":"range",
-                            "minTitle":"Min",
-                            "maxTitle":"Max"
-                        },
-                        {
-                            "title":"Mileage",
-                            "type":"range",
-                            "minTitle":"Min",
-                            "maxTitle":"Max"
-                        },
-                        {
-                            "title":"Total cost",
-                            "type":"range",
-                            "minTitle":"Min",
-                            "maxTitle":"Max"
-                        }]}
-                        />
+                <Filter filters={this.state.filters}/>
             </div>
             <div className={this.state.selectedTabIndex==1?'':'hide'}>
                 <Lender lenders={['Lender 1', 'Lender 2']} />

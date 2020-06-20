@@ -4,8 +4,7 @@ import Grid from '@material-ui/core/Grid';
 
 class ListFilter extends React.Component{
     constructor(props) {
-        super(props)
-
+        super(props);
         let optionCheckedDict = {};
 
         for(let option of this.props.options){
@@ -37,6 +36,17 @@ class ListFilter extends React.Component{
         return selectedOptions;
     }
 
+    componentWillReceiveProps(nextProps){
+        let newState = {};
+
+        newState['Select All'] = true;
+
+        for(let option of nextProps.options){
+            newState[option] = true;
+        }
+
+        this.setState({...newState});
+    }
 
     selectAll(event){
         console.log('Select all');
@@ -84,7 +94,8 @@ class ListFilter extends React.Component{
                 {
                     this.props.options.map(item => (
                         <Grid item xs={12}>
-                            <Checkbox checked={this.state[item]} color={"primary"} onChange={(event) => this.optionOnchange(event,item)}/>{item}
+                            <Checkbox checked={this.state[item]} color={"primary"}
+                                      onChange={(event) => this.optionOnchange(event, item)}/>{item}
                         </Grid>
                     ))
                 }
