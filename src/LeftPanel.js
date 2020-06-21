@@ -13,7 +13,8 @@ class LeftPanel extends React.Component{
         let filter =
         this.state = {
             selectedTabIndex:0,
-            filters:[]
+            filters:[],
+            lenderToPrograms:{}
         }
     }
 
@@ -72,7 +73,23 @@ class LeftPanel extends React.Component{
                 }
         ];
 
-        this.setState({filters:filters});
+        let lenderToPrograms = {};
+        let lenderIdToLenderName = {};
+        nextProps.lenders.forEach(lender => {
+            lenderIdToLenderName[lender["id"]] = lender["name"];
+        });
+
+        nextProps.lenderPrograms.forEach(lenderProgram => {
+           let lenderName = lenderIdToLenderName[lenderProgram["lender_id"]];
+
+           if (!(lenderName in lenderToPrograms)){
+               lenderToPrograms[lenderName] = [];
+           }
+
+            lenderToPrograms[lenderName].push(lenderProgram["name"]);
+        });
+
+        this.setState({filters:filters, lenderToPrograms:lenderToPrograms});
     }
 
     render(){
@@ -86,7 +103,7 @@ class LeftPanel extends React.Component{
                 <Filter filters={this.state.filters}/>
             </div>
             <div className={this.state.selectedTabIndex==1?'':'hide'}>
-                <Lender lenders={['Lender 1', 'Lender 2']} />
+                <Lender lenderToPrograms={this.state.lenderToPrograms} />
             </div>
         </React.Fragment>
         );

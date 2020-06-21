@@ -10,11 +10,11 @@ import LenderInputs from "./LenderInputs";
 class Lender extends React.Component {
     beginningState(){
         return {
-            tierSelectedIndex:0,
+            selectedTier:'NONE',
             tierMenuItems:[],
             tierSelectDisabled:true,
 
-            lenderSelectedIndex:0,
+            selectedLender:'NONE',
             lenderSelectDisabled:false,
 
             currencyFields:{
@@ -52,17 +52,8 @@ class Lender extends React.Component {
     constructor(props) {
         super(props);
 
-        let lenderMenuItems = [];
-
-        lenderMenuItems.push(<MenuItem value={0}>Please select lender</MenuItem>);
-        for (let i = 0; i < this.props.lenders.length; i++){
-            let lenderName = this.props.lenders[i];
-
-            lenderMenuItems.push(<MenuItem value={i + 1}>{lenderName}</MenuItem>);
-        }
-
         this.state = {
-            lenderMenuItems:lenderMenuItems,
+            lenderMenuItems:[],
             ...this.beginningState(),
             lenderInputs:[]
         }
@@ -72,6 +63,18 @@ class Lender extends React.Component {
         this.addLender = this.addLender.bind(this);
         this.reset = this.reset.bind(this);
         this.deleteLenderInput = this.deleteLenderInput.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let lenderMenuItems = [];
+
+        lenderMenuItems.push(<MenuItem value={'NONE'}>Please select lender</MenuItem>);
+
+        for (let lenderName in nextProps.lenderToPrograms){
+            lenderMenuItems.push(<MenuItem value={lenderName}>{lenderName}</MenuItem>);
+        }
+
+        this.setState({lenderMenuItems:lenderMenuItems});
     }
 
     textboxOnChange(event, fieldLabel){
@@ -98,23 +101,24 @@ class Lender extends React.Component {
     }
 
     selectLender(event){
-        let selectIndex = event.target.value;
+        let selectLenderName = event.target.value;
 
-
-        console.log(event.target);
         let tierSelectDisabled = true;
 
-        if (selectIndex != 0){
+        if (selectLenderName != 'NONE'){
             tierSelectDisabled = false;
         }
 
         let tierMenuItems = [];
-        tierMenuItems.push(<MenuItem value={0}>Please select tier</MenuItem>);
-        tierMenuItems.push(<MenuItem value={1}>Tier 1</MenuItem>);
-        tierMenuItems.push(<MenuItem value={2}>Tier 2</MenuItem>);
+        tierMenuItems.push(<MenuItem value={'NONE'}>Please select tier</MenuItem>);
+
+        for(let tierName of this.props.lenderToPrograms[selectLenderName]) {
+            tierMenuItems.push(<MenuItem value={tierName}>{tierName}</MenuItem>);
+        }
 
         this.setState({
-            lenderSelectedIndex:selectIndex,
+            selectedLender:selectLenderName,
+            selectedTier:'NONE',
             tierSelectDisabled: tierSelectDisabled,
             tierMenuItems:tierMenuItems
         });
@@ -124,7 +128,7 @@ class Lender extends React.Component {
         let selectIndex = event.target.value;
 
         this.setState({
-            tierSelectedIndex : selectIndex,
+            selectedTier : selectIndex,
             isTextFieldsEnabled:true
         })
     }
@@ -152,8 +156,8 @@ class Lender extends React.Component {
         let hasAnyErrors = this.hasAnyErrorsInLenderInput();
 
         if (!hasAnyErrors) {
-            lenderInput["lender"] = this.props.lenders[this.state.lenderSelectedIndex - 1];
-            lenderInput["tier"] = 'Test Tier';
+            lenderInput["lender"] = this.state.selectedLender;
+            lenderInput["tier"] = this.state.selectedTier;
             lenderInput["payment"] = this.state.currencyFields["Payment"].value;
             lenderInput["down payment"] = this.state.currencyFields["Down Payment"].value;
             lenderInput["trade allowance"] = this.state.currencyFields["Trade Allowance"].value;
@@ -184,12 +188,12 @@ class Lender extends React.Component {
         return (
           <Grid container className={"lender_main_content padding10"} spacing={2}>
               <Grid item xs={12}>
-                  <Select onChange={this.selectLender} value={this.state.lenderSelectedIndex} disabled={this.state.lenderSelectDisabled} style={{width:'100%'}}>
+                  <Select onChange={this.selectLender} value={this.state.selectedLender} disabled={this.state.lenderSelectDisabled} style={{width:'100%'}}>
                       {this.state.lenderMenuItems}
                   </Select>
               </Grid>
               <Grid item xs={12}>
-                  <Select onChange={this.selectTier} value={this.state.tierSelectedIndex} disabled={this.state.tierSelectDisabled} style={{width:'100%'}}>
+                  <Select onChange={this.selectTier} value={this.state.selectedTier} disabled={this.state.tierSelectDisabled} style={{width:'100%'}}>
                       {this.state.tierMenuItems}
                   </Select>
               </Grid>
