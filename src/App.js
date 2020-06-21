@@ -24,8 +24,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import ScrollToTop from "react-scroll-to-top";
 import "react-scroll-to-top/lib/index.css";
 import Sort from "./Sort";
-import {fetchCars} from "./Api";
-import NewCar from "./NewCar";
+import LeftPanel from "./LeftPanel";
+import {fetchCars, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
 
 const App = (props) => {
     const theme = useTheme();
@@ -38,87 +38,31 @@ class AppClass extends React.Component{
     constructor() {
         super();
 
-        this.carshowRef= React.createRef();
-        this.lendersFilter = React.createRef();
-        this.sortRef = React.createRef();
-        // this.sortRef1 = React.createRef();
-        // this.sortRef2 = React.createRef();
-        this.filterOnClick = this.filterOnClick.bind(this);
-        this.submitOnclick = this.submitOnclick.bind(this);
-        this.menuBtnOnClick = this.menuBtnOnClick.bind(this);
-        this.closeMenu = this.closeMenu.bind(this);
-        this.sortSelect = this.sortSelect.bind(this);
-        // this.sortSelect1 = this.sortSelect1.bind(this);
-        // this.sortSelect2 = this.sortSelect2.bind(this);
+        this.leftPanelRef = React.createRef();
 
         this.state = {
-            displayFilters: false,
-            displayCarShow: true,
-            anchorEl: null,
-            filtersInputs: [],
-            sort:0,
-            carJson:'',
+            carJson:[],
+            lendersJson:[],
+            lenderTermsJson:[],
+            lenderProgramsJson:[],
+            isLoading: true,
+            filterValues: {}
         }
 
-        fetchCars()
-            .then(res => res.json())
-            .then(json => {
-                this.setState(
-                    { carJson:json }
-                )
-            });
+        Promise.all([fetchCars(), fetchLenders(), fetchLenderTerms(), fetchLenderPrograms()]).then(responses => Promise.all(responses.map(response => response.json()))).then(jsons => {
+           let carJson = jsons[0];
+           let lendersJson = jsons[1];
+           let lenderTermsJson = jsons[2];
+           let lenderProgramsJson = jsons[3];
+
+           this.setState({carJson:carJson, lendersJson:lendersJson, lenderTermsJson:lenderTermsJson, lenderProgramsJson:lenderProgramsJson, isLoading:false});
+        });
+        this.filterOnChange = this.filterOnChange.bind(this);
     }
 
-
-    filterOnClick(event){
-        console.log('Filter')
-        this.setState({displayFilters:!this.state.displayFilters});
+    filterOnChange(){
+        this.setState({filterValues:this.leftPanelRef.current.getFilterValues()});
     }
-
-    submitOnclick(){
-        if(!this.lendersFilter.current.hasError()) {
-            this.setState({
-                displayFilters: false,
-                displayCarShow: true,
-                filtersInputs: this.lendersFilter.current.getFiltersInputs(),
-                lenderData: this.lendersFilter.current.getLenderData()
-            })
-            window.scrollTo(0, 0);
-        }
-    }
-
-    menuBtnOnClick(event){
-        this.setState({anchorEl:event.currentTarget})    ;
-    }
-
-    closeMenu(){
-        this.setState({anchorEl:null});
-    }
-
-    sortSelect(event){
-        let criteriaIndex = event.target.value;
-        this.sortRef.current.selectCriteriaAtIndex(criteriaIndex);
-
-        this.setState({sort:criteriaIndex});
-    }
-
-    // sortSelect1(event){
-    //     let criteriaIndex = event.target.value;
-    //     this.sortRef1.current.selectCriteriaAtIndex(criteriaIndex);
-    //     let newSort = this.state.sort;
-    //     newSort[1] = criteriaIndex;
-    //
-    //     this.setState({sort:newSort});
-    // }
-    //
-    // sortSelect2(event){
-    //     let criteriaIndex = event.target.value;
-    //     this.sortRef2.current.selectCriteriaAtIndex(criteriaIndex);
-    //     let newSort = this.state.sort;
-    //     newSort[2] = criteriaIndex;
-    //
-    //     this.setState({sort:newSort});
-    // }
 
     render() {
         return (
@@ -173,43 +117,11 @@ class AppClass extends React.Component{
                 </Grid>
                 <Grid item xl={1} xs={0}/>
                 <Grid item sm={1} xs={0}/>
-                <Grid item sm={2} xs={0}/>
-                <Grid item sm={8} xs={12}>
-                    <Grid container>
-                        <Grid item lg={12} xs={12}>
-                            <Grid container spacing={2}>
-                                {this.state.displayCarShow?(
-                                    <React.Fragment>
-                                        <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                            <Sort ref={this.sortRef} onSelect={this.sortSelect}/>
-                                        </Grid>
-                                        {/*<Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>*/}
-                                        {/*    <Sort ref={this.sortRef1} onSelect={this.sortSelect1}/>*/}
-                                        {/*</Grid>*/}
-                                        {/*<Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>*/}
-                                        {/*    <Sort ref={this.sortRef2} onSelect={this.sortSelect2}/>*/}
-                                        {/*</Grid>*/}
-                                        <Grid item xs={12} sm={4} lg={2} style={{textAlign:"center"}}>
-                                            <ToggleButton onClick={this.filterOnClick} selected={this.state.displayFilters}><FaFilter/>  Filter</ToggleButton>
-                                        </Grid>
-                                    </React.Fragment>
-                                ):null
-                                }
-                                <Grid item xs={12} style={{marginTop:"16px", marginBottom:"16px", display:this.state.displayFilters?"":"none"}}>
-                                      <Paper style={{padding:"10px"}}>
-                                            <LendersFilter ref={this.lendersFilter} submitOnClick={this.submitOnclick}/>
-                                      </Paper>
-                                </Grid>
-                                {
-                                    this.state.displayCarShow?(
-                                        <Grid item xs={12}>
-                                            <CarShow ref={this.carshowRef} carJson={this.state.carJson} filtersInputs={this.state.filtersInputs} lenderData={this.state.lenderData} sortCriteria={this.state.sort}/>
-                                        </Grid>
-                                    ):null
-                                }
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                <Grid item md={2} sm={3} xs={12}>
+                   <LeftPanel ref={this.leftPanelRef} carDetails={this.state.carJson} lenders={this.state.lendersJson} lenderPrograms={this.state.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
+                </Grid>
+                <Grid item md={8} sm={7} xs={12}>
+                    <CarShow carDetails={this.state.carJson} filterValues={this.state.filterValues}/>
                 </Grid>
                 <Grid item sm={1} xs={0}/>
             </Grid>
