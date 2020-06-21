@@ -47,6 +47,9 @@ class CarShow extends React.Component {
 
     render() {
         return (<Grid container spacing={2}>
+            <Grid item xs={12}>
+                {this.state.carDetails.length + " matches"}
+            </Grid>
             {this.state.carDetails.map(carDetail => (
                <Grid item xs={3}>
                    <Car details={carDetail}/>
