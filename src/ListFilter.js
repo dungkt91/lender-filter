@@ -90,14 +90,19 @@ class ListFilter extends React.Component{
     }
 
     render(){
+        let sortedOptions = [...this.props.options];
+        sortedOptions.sort();
+
+        let manyOptions = sortedOptions.length > 10;
+
         return (
             <Grid container>
                 <Grid item xs={12}>
                     <Checkbox checked={this.state['Select All']} color={"primary"} onChange={this.selectAll} />All
                 </Grid>
                 {
-                    this.props.options.map(item => (
-                        <Grid item xs={12}>
+                    sortedOptions.map(item => (
+                        <Grid item xs={manyOptions?6:12}>
                             <Checkbox checked={this.state[item]} color={"primary"}
                                       onChange={(event) => this.optionOnchange(event, item)}/>{item}
                         </Grid>
