@@ -53,7 +53,6 @@ class ListFilter extends React.Component{
     }
 
     selectAll(event){
-        console.log('Select all');
         let selectAllCheckbox = event.target;
         let selectedCheckboxState = selectAllCheckbox.checked;
         let newState = {...this.state};
@@ -67,10 +66,11 @@ class ListFilter extends React.Component{
         }
 
         newState['Select All'] = selectedCheckboxState;
-        this.setState({...newState});
+        this.setState(newState, this.props.onChange);
     }
 
     optionOnchange(event, name){
+
         let checkbox = event.target;
         let newState = {...this.state};
         newState[name] = checkbox.checked;
@@ -85,7 +85,7 @@ class ListFilter extends React.Component{
 
         newState['Select All'] = selectAll;
 
-        this.setState(newState);
+        this.setState(newState, this.props.onChange);
         console.log((checkbox.checked?'Check ':'Unchecked ') + name);
     }
 

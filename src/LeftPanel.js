@@ -23,13 +23,18 @@ class LeftPanel extends React.Component{
 
     componentWillReceiveProps(nextProps){
         let makes = new Set();
-        let models = new Set();
+        let models = {}
 
         for(let i = 0; i < nextProps.carDetails.length; i++){
             let carDetail = nextProps.carDetails[i];
+            let make = carDetail["make"];
+            let model = carDetail["model"];
 
-            makes.add(carDetail["make"]);
-            models.add(carDetail["model"]);
+            makes.add(make);
+            if (!(make in models)){
+                models[make] = new Set();
+                models[make].add(model);
+            }
         }
 
         let filters = [
@@ -41,7 +46,9 @@ class LeftPanel extends React.Component{
                 {
                     "title":"Model",
                     "type":"list",
-                    "options":Array.from(models)
+                    "dependent_filter":"Make",
+                    "dependent_list": models,
+                    "options":[]
                 },
                 {
                     "title":"Year",

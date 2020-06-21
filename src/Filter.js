@@ -12,7 +12,10 @@ class Filter extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {filters:[]};
+        this.filterOnChange = this.filterOnChange.bind(this);
+        this.createFilter = this.createFilter.bind(this);
+
     }
 
     expandBtnOnClick(event, filterTitle) {
@@ -23,51 +26,79 @@ class Filter extends React.Component {
         this.setState(newState);
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({filters:nextProps.filters});
+    }
+
+    filterOnChange(event, filterTitle){
+        for(let filter of this.state.filters){
+            let isDependentList = filter["type"] == "list" && "dependent_filter" in filter && "dependent_list" in filter;
+
+            if (isDependentList){
+                let dependentFilter = filter["dependent_filter"];
+                let dependentList = filter["dependent_list"];
+
+                let selectedOptions = this.refsDict[dependentFilter].getSelectedOptions();
+                let newOptions = new Set();
+
+                for(let selectedOption of selectedOptions){
+                    dependentList[selectedOption].forEach(newOptions.add, newOptions);
+                }
+
+                filter["options"] = Array.from(newOptions);
+            }
+        }
+
+        this.forceUpdate();
+    }
+
+    createFilter(filter, filterIndex){
+        let lastFilterIndex = this.state.filters.length - 1;
+        let filterType = filter["type"];
+        let filterComponent = undefined;
+
+        if (filterType == "list"){
+            filterComponent = <ListFilter {...filter} ref={curFilter => this.refsDict[filter["title"]] = curFilter} onChange={(event) => this.filterOnChange(event, filter["title"])}/>;
+        }else if (filterType == "range"){
+            filterComponent = <RangeFilter {...filter} ref={curFilter => this.refsDict[filter["title"]] = curFilter} />
+        }
+
+        return (
+            <React.Fragment>
+                <Grid item xs={12} className={"padding10"}>
+                    <Grid container>
+                        <Grid item xs={10}>
+                            <span className={'filter_title'}>{filter["title"]}</span>
+                        </Grid>
+                        <Grid item xs={2} align='right'>
+                            <IconButton onClick={(event) => this.expandBtnOnClick(event, filter["title"])}>
+                                {this.state[filter["title"] + "_expand"]?(<ExpandLess/>):(<ExpandMore />)}
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                    <Collapse in={this.state[filter["title"] + "_expand"]}>
+                        {filterComponent}
+                    </Collapse>
+                </Grid>
+                {
+                    filterIndex != lastFilterIndex ?
+                        (
+                            <Grid item xs={12}>
+                                <hr className={"line_seperator"}/>
+                            </Grid>
+                        ) : null
+                }
+            </React.Fragment>
+        );
+    }
 
     render(){
-        let lastFilterIndex = this.props.filters.length - 1;
+        this.refsDict = {};
 
         return (
             <Grid container className={"filter_main_content"}>
                 {
-                    this.props.filters.map((filter, filterIndex) => {
-                        let filterType = filter["type"];
-                        let filterComponent = undefined;
-
-                        if (filterType == "list"){
-                            filterComponent = <ListFilter {...filter} />;
-                        }else if (filterType == "range"){
-                            filterComponent = <RangeFilter {...filter} />
-                        }
-
-                        return (
-                            <React.Fragment>
-                                <Grid item xs={12} className={"padding10"}>
-                                    <Grid container>
-                                        <Grid item xs={10}>
-                                            <span className={'filter_title'}>{filter["title"]}</span>
-                                        </Grid>
-                                        <Grid item xs={2} align='right'>
-                                            <IconButton onClick={(event) => this.expandBtnOnClick(event, filter["title"])}>
-                                                {this.state[filter["title"] + "_expand"]?(<ExpandLess/>):(<ExpandMore />)}
-                                            </IconButton>
-                                        </Grid>
-                                    </Grid>
-                                    <Collapse in={this.state[filter["title"] + "_expand"]}>
-                                    {filterComponent}
-                                    </Collapse>
-                                </Grid>
-                                {
-                                    filterIndex != lastFilterIndex ?
-                                    (
-                                        <Grid item xs={12}>
-                                            <hr className={"line_seperator"}/>
-                                        </Grid>
-                                    ) : null
-                                }
-                            </React.Fragment>
-                        );
-                    })
+                    this.state.filters.map(this.createFilter)
                 }
             </Grid>
         )
