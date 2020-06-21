@@ -23,7 +23,8 @@ class LeftPanel extends React.Component{
 
     componentWillReceiveProps(nextProps){
         let makes = new Set();
-        let models = {}
+        let makeToModelsDict = {}
+        let models = new Set();
 
         for(let i = 0; i < nextProps.carDetails.length; i++){
             let carDetail = nextProps.carDetails[i];
@@ -31,9 +32,10 @@ class LeftPanel extends React.Component{
             let model = carDetail["model"];
 
             makes.add(make);
-            if (!(make in models)){
-                models[make] = new Set();
-                models[make].add(model);
+            models.add(model);
+            if (!(make in makeToModelsDict)){
+                makeToModelsDict[make] = new Set();
+                makeToModelsDict[make].add(model);
             }
         }
 
@@ -47,8 +49,8 @@ class LeftPanel extends React.Component{
                     "title":"Model",
                     "type":"list",
                     "dependent_filter":"Make",
-                    "dependent_list": models,
-                    "options":[]
+                    "dependent_list": makeToModelsDict,
+                    "options":Array.from(models)
                 },
                 {
                     "title":"Year",
