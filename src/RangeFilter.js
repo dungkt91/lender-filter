@@ -18,15 +18,11 @@ class RangeFilter extends React.Component {
 
         newState[textFieldName] = event.target.value;
 
-        this.setState(newState);
+        this.setState(newState, this.props.onChange);
     }
 
-    getMin(){
-        return this.state.min;
-    }
-
-    getMax(){
-        return this.state.max;
+    getValues(){
+        return {"min":this.state.min, "max":this.state.max};
     }
 
     getMinTitle(){

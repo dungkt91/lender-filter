@@ -10,11 +10,13 @@ class LeftPanel extends React.Component{
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
+        this.filterRef = React.createRef();
         let filter =
         this.state = {
             selectedTabIndex:0,
             filters:[],
-            lenderToPrograms:{}
+            lenderToPrograms:{},
+            carDetails:[]
         }
     }
 
@@ -23,73 +25,81 @@ class LeftPanel extends React.Component{
     }
 
     componentWillReceiveProps(nextProps){
-        let makes = new Set();
-        let makeToModelsDict = {}
-        let models = new Set();
+        let hasUpdate = this.state.carDetails.length != nextProps.carDetails.length;
 
-        for(let i = 0; i < nextProps.carDetails.length; i++){
-            let carDetail = nextProps.carDetails[i];
-            let make = carDetail["make"];
-            let model = carDetail["model"];
+        if (hasUpdate) {
+            let makes = new Set();
+            let makeToModelsDict = {}
+            let models = new Set();
 
-            makes.add(make);
-            models.add(model);
-            if (!(make in makeToModelsDict)){
-                makeToModelsDict[make] = new Set();
-                makeToModelsDict[make].add(model);
-            }
-        }
+            for (let i = 0; i < nextProps.carDetails.length; i++) {
+                let carDetail = nextProps.carDetails[i];
+                let make = carDetail["make"];
+                let model = carDetail["model"];
 
-        let filters = [
-                {
-                    "title":"Make",
-                    "type":"list",
-                    "options":Array.from(makes)
-                },
-                {
-                    "title":"Model",
-                    "type":"list",
-                    "dependent_filter":"Make",
-                    "dependent_list": makeToModelsDict,
-                    "options":Array.from(models)
-                },
-                {
-                    "title":"Year",
-                    "type":"range",
-                    "minTitle":"Min",
-                    "maxTitle":"Max"
-                },
-                {
-                    "title":"Mileage",
-                    "type":"range",
-                    "minTitle":"Min",
-                    "maxTitle":"Max"
-                },
-                {
-                    "title":"Total cost",
-                    "type":"range",
-                    "minTitle":"Min",
-                    "maxTitle":"Max"
+                makes.add(make);
+                models.add(model);
+                if (!(make in makeToModelsDict)) {
+                    makeToModelsDict[make] = new Set();
+                    makeToModelsDict[make].add(model);
                 }
-        ];
+            }
 
-        let lenderToPrograms = {};
-        let lenderIdToLenderName = {};
-        nextProps.lenders.forEach(lender => {
-            lenderIdToLenderName[lender["id"]] = lender["name"];
-        });
+            let filters = [
+                {
+                    "title": "Make",
+                    "type": "list",
+                    "options": Array.from(makes)
+                },
+                {
+                    "title": "Model",
+                    "type": "list",
+                    "dependent_filter": "Make",
+                    "dependent_list": makeToModelsDict,
+                    "options": Array.from(models)
+                },
+                {
+                    "title": "Year",
+                    "type": "range",
+                    "minTitle": "Min",
+                    "maxTitle": "Max"
+                },
+                {
+                    "title": "Mileage",
+                    "type": "range",
+                    "minTitle": "Min",
+                    "maxTitle": "Max"
+                },
+                {
+                    "title": "Total cost",
+                    "type": "range",
+                    "minTitle": "Min",
+                    "maxTitle": "Max"
+                }
+            ];
 
-        nextProps.lenderPrograms.forEach(lenderProgram => {
-           let lenderName = lenderIdToLenderName[lenderProgram["lender_id"]];
+            let lenderToPrograms = {};
+            let lenderIdToLenderName = {};
+            nextProps.lenders.forEach(lender => {
+                lenderIdToLenderName[lender["id"]] = lender["name"];
+            });
 
-           if (!(lenderName in lenderToPrograms)){
-               lenderToPrograms[lenderName] = [];
-           }
+            nextProps.lenderPrograms.forEach(lenderProgram => {
+                let lenderName = lenderIdToLenderName[lenderProgram["lender_id"]];
 
-            lenderToPrograms[lenderName].push(lenderProgram["name"]);
-        });
+                if (!(lenderName in lenderToPrograms)) {
+                    lenderToPrograms[lenderName] = [];
+                }
 
-        this.setState({filters:filters, lenderToPrograms:lenderToPrograms});
+                lenderToPrograms[lenderName].push(lenderProgram["name"]);
+            });
+
+            this.setState({filters: filters, lenderToPrograms: lenderToPrograms, carDetails:nextProps.carDetails});
+        }
+    }
+
+    getFilterValues(){
+        return this.filterRef.current.getFilterValues();
     }
 
     render(){
@@ -100,7 +110,9 @@ class LeftPanel extends React.Component{
                 <Tab label={"Lender"} className={this.state.selectedTabIndex==1?"tab_selected":"tab_deselected"} />
             </Tabs>
             <div className={this.state.selectedTabIndex==0?'':'hide'}>
-                <Filter filters={this.state.filters}/>
+                <Filter ref={this.filterRef} filters={this.state.filters}
+                        onChange={this.props.filterOnChange}
+                />
             </div>
             <div className={this.state.selectedTabIndex==1?'':'hide'}>
                 <Lender lenderToPrograms={this.state.lenderToPrograms} />

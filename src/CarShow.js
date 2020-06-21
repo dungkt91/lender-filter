@@ -21,12 +21,33 @@ const clipLoaderCss = css`
 class CarShow extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            carDetails:[]
+        }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if ("Make" in nextProps.filterValues && "Model" in nextProps.filterValues) {
+            console.log('Filter');
+            let carDetails = [];
+
+            for (let carDetail of nextProps.carDetails) {
+                if (nextProps.filterValues["Make"].includes(carDetail["make"])) {
+                    if (nextProps.filterValues["Model"].includes(carDetail["model"]))
+                        carDetails.push(carDetail);
+                }
+            }
+
+            this.setState({carDetails: carDetails});
+        }else{
+            this.setState({carDetails:nextProps.carDetails});
+        }
+    }
 
     render() {
         return (<Grid container spacing={2}>
-            {this.props.carDetails.map(carDetail => (
+            {this.state.carDetails.map(carDetail => (
                <Grid item xs={3}>
                    <Car details={carDetail}/>
                </Grid>

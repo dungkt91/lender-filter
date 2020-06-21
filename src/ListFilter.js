@@ -24,7 +24,7 @@ class ListFilter extends React.Component{
         return this.props.title;
     }
 
-    getSelectedOptions(){
+    getValues(){
         let selectedOptions = [];
 
         for (let option of this.props.options){

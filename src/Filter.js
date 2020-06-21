@@ -31,14 +31,17 @@ class Filter extends React.Component {
     }
 
     filterOnChange(event, filterTitle){
-        for(let filter of this.state.filters){
+        console.log("filterOnChange");
+        let newState = {...this.state};
+
+        for(let filter of newState.filters){
             let isDependentList = filter["type"] == "list" && "dependent_filter" in filter && "dependent_list" in filter;
 
             if (isDependentList){
                 let dependentFilter = filter["dependent_filter"];
                 let dependentList = filter["dependent_list"];
 
-                let selectedOptions = this.refsDict[dependentFilter].getSelectedOptions();
+                let selectedOptions = this.refsDict[dependentFilter].getValues();
                 let newOptions = new Set();
 
                 for(let selectedOption of selectedOptions){
@@ -49,7 +52,17 @@ class Filter extends React.Component {
             }
         }
 
-        this.forceUpdate();
+        this.setState(newState, this.props.onChange);
+    }
+
+    getFilterValues(){
+        let values = {};
+
+        for(let title in this.refsDict){
+            values[title] = this.refsDict[title].getValues();
+        }
+
+        return values;
     }
 
     createFilter(filter, filterIndex){
@@ -60,7 +73,7 @@ class Filter extends React.Component {
         if (filterType == "list"){
             filterComponent = <ListFilter {...filter} ref={curFilter => this.refsDict[filter["title"]] = curFilter} onChange={(event) => this.filterOnChange(event, filter["title"])}/>;
         }else if (filterType == "range"){
-            filterComponent = <RangeFilter {...filter} ref={curFilter => this.refsDict[filter["title"]] = curFilter} />
+            filterComponent = <RangeFilter {...filter} ref={curFilter => this.refsDict[filter["title"]] = curFilter} onChange={(event) => this.filterOnChange(event, filter["title"])}/>
         }
 
         return (
@@ -93,6 +106,8 @@ class Filter extends React.Component {
     }
 
     render(){
+        console.log('render');
+        console.log(this.state);
         this.refsDict = {};
 
         return (
