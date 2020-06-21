@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from "@material-ui/core/Grid";
+import ImageGallery from "react-image-gallery";
 
 class Car extends React.Component {
     getCarTitle(){
@@ -19,7 +20,7 @@ class Car extends React.Component {
                 <CardContent>
                     <Grid container>
                         <Grid item xs={12}>
-                            Images
+                            <ImageGallery items={[{original:"https://drive.google.com/uc?export=view&id=1PNPS_e8i8a_m2Owox2ncuuFWNotAbYh6"}]} showPlayButton={false} showFullscreenButton={false} showThumbnails={false}/>
                         </Grid>
                         <Grid item xs={12}>
                             {this.getCarTitle()}
