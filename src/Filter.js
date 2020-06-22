@@ -15,7 +15,7 @@ class Filter extends React.Component {
         this.state = {filters:[]};
         this.filterOnChange = this.filterOnChange.bind(this);
         this.createFilter = this.createFilter.bind(this);
-
+        this.expandOrCollapse = this.expandOrCollapse.bind(this);
     }
 
     expandBtnOnClick(event, filterTitle) {
@@ -65,6 +65,14 @@ class Filter extends React.Component {
         return values;
     }
 
+    expandOrCollapse(event, filterTitle){
+        let stateName = filterTitle + '_expand';
+        let newState = {};
+
+        newState[stateName] = !this.state[stateName];
+        this.setState(newState);
+    }
+
     createFilter(filter, filterIndex){
         let lastFilterIndex = this.state.filters.length - 1;
         let filterType = filter["type"];
@@ -79,14 +87,12 @@ class Filter extends React.Component {
         return (
             <React.Fragment>
                 <Grid item xs={12} className={"padding10"}>
-                    <Grid container>
+                    <Grid container className={"expandable"} onClick={(event) => this.expandOrCollapse(event, filter["title"])}>
                         <Grid item xs={10}>
                             <span className={'filter_title'}>{filter["title"]}</span>
                         </Grid>
                         <Grid item xs={2} align='right'>
-                            <IconButton onClick={(event) => this.expandBtnOnClick(event, filter["title"])}>
-                                {this.state[filter["title"] + "_expand"]?(<ExpandLess/>):(<ExpandMore />)}
-                            </IconButton>
+                            {this.state[filter["title"] + "_expand"]?(<ExpandLess/>):(<ExpandMore />)}
                         </Grid>
                     </Grid>
                     <Collapse in={this.state[filter["title"] + "_expand"]}>

@@ -14,3 +14,7 @@
     background:gray;
     height:1px;
 }
+
+.expandable{
+    cursor:pointer;
+}
