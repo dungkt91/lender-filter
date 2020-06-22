@@ -10,6 +10,8 @@ import {fetchCars} from "./Api";
 import InfiniteScroll from "react-infinite-scroller";
 import {calculateProfitFirstInterest} from "./CarCalculation";
 import Car from './Car.js';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const clipLoaderCss = css`
     border-color:rgb(55,71,172);
@@ -47,11 +49,22 @@ class CarShow extends React.Component {
 
     render() {
         return (<Grid container spacing={2}>
-            <Grid item xs={12}>
-                {this.state.carDetails.length + " matches"}
+            <Grid item xs={6}>
+                <span class={"matches"}>{this.state.carDetails.length + " matches"}</span>
+            </Grid>
+            <Grid item xs={6} align={"right"}>
+                <span className={"sortBy"}>Sort by</span>
+                <Select>
+                    <MenuItem>Lowest Price</MenuItem>
+                    <MenuItem>Highest Price</MenuItem>
+                    <MenuItem>Lowest Mileage</MenuItem>
+                    <MenuItem>Highest Mileage</MenuItem>
+                    <MenuItem>Newest Year</MenuItem>
+                    <MenuItem>Oldest Year</MenuItem>
+                </Select>
             </Grid>
             {this.state.carDetails.map(carDetail => (
-               <Grid item xs={3}>
+               <Grid item xs={12} md={4} lg={3}>
                    <Car details={carDetail}/>
                </Grid>
             ))}
