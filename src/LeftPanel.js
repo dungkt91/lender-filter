@@ -41,8 +41,9 @@ class LeftPanel extends React.Component{
                 models.add(model);
                 if (!(make in makeToModelsDict)) {
                     makeToModelsDict[make] = new Set();
-                    makeToModelsDict[make].add(model);
                 }
+
+                makeToModelsDict[make].add(model);
             }
 
             let filters = [
