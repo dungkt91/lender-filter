@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import LenderInputs from "./LenderInputs";
+import './Lender.css';
 
 class Lender extends React.Component {
     beginningState(){
