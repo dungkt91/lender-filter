@@ -155,7 +155,7 @@ class Lender extends React.Component {
         let lenderInput = {};
         let hasAnyErrors = this.hasAnyErrorsInLenderInput();
 
-        if (!hasAnyErrors) {
+        if (this.state.selectedLender != 'NONE' && this.state.selectedTier != 'NONE' && !hasAnyErrors) {
             lenderInput["lender"] = this.state.selectedLender;
             lenderInput["tier"] = this.state.selectedTier;
             lenderInput["payment"] = this.state.currencyFields["Payment"].value;
