@@ -4,6 +4,7 @@ import ScrollToTop from "react-scroll-to-top";
 import Grid from "@material-ui/core/Grid";
 import Menubar from "./Menubar";
 import { BsArrowLeft } from "react-icons/bs";
+import CarShowElement from "./CarShowElement";
 
 class CarPage extends React.Component {
     constructor(props) {
@@ -38,7 +39,7 @@ class CarPage extends React.Component {
                                 <BsArrowLeft /> <a href={"#"} onClick={this.goBack}>Search Results</a>
                             </Grid>
                         </Grid>
-                        {carDetailsAvailable?'Found':'Not found'}
+                        {carDetailsAvailable?<CarShowElement details={location.state.carDetails}/>:'Not found'}
                     </Grid>
                     <Grid item xl={1} xs={0}/>
                 </Grid>
