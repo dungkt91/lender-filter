@@ -45,7 +45,7 @@ class AppClass extends React.Component{
 
     render(){
         return (
-            <Router>
+            <Router basename={process.env.PUBLIC_URL}>
                 <Switch>
                     <Route path="/car">
                         <CarPage isBigScreen={this.props.isBigScreen} />
