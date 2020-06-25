@@ -3,8 +3,15 @@ import { Card } from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from "@material-ui/core/Grid";
 import ImageGallery from "react-image-gallery";
+import { withRouter } from "react-router";
 
 class Car extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.cardOnClick = this.cardOnClick.bind(this);
+    }
+
     getCarTitle(){
         let carYear = this.props.details['year'];
         let carMake = this.props.details['make'];
@@ -14,9 +21,15 @@ class Car extends React.Component {
         return `${carYear} ${carMake} ${carModel} ${carTrim}`;
     }
 
+    cardOnClick(){
+        const {history} = this.props;
+
+        history.push('/car', {'test':'abc'})
+    }
+
     render(){
         return (
-            <Card className={"car"}>
+            <Card className={"car"} onClick={this.cardOnClick}>
                 <CardContent>
                     <Grid container>
                         <Grid item xs={12}>
@@ -38,4 +51,4 @@ class Car extends React.Component {
     }
 }
 
-export default Car;
+export default withRouter(Car);

@@ -43,3 +43,8 @@
   transform: scale(1.005);
   box-shadow: 0 5px 15px gray;
 }
+
+.car_title{
+  font-weight: bold;
+  font-size:1.2rem;
+}
