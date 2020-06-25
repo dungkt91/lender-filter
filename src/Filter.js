@@ -41,7 +41,7 @@ class Filter extends React.Component {
                 let dependentFilter = filter["dependent_filter"];
                 let dependentList = filter["dependent_list"];
 
-                let selectedOptions = this.refsDict[dependentFilter].getValues();
+                let selectedOptions = this.refsDict[dependentFilter].getValues()["selectedOptions"];
                 let newOptions = new Set();
 
                 for(let selectedOption of selectedOptions){
@@ -59,7 +59,11 @@ class Filter extends React.Component {
         let values = {};
 
         for(let title in this.refsDict){
-            values[title] = this.refsDict[title].getValues();
+            let filterType = this.state.filters.filter(filter => filter["title"]===title)[0]["type"];
+            values[title] = {
+                "type":filterType,
+                ...this.refsDict[title].getValues()
+            }
         }
 
         return values;

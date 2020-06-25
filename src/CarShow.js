@@ -29,15 +29,42 @@ class CarShow extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if ("Make" in nextProps.filterValues && "Model" in nextProps.filterValues) {
-            console.log('Filter');
-            let carDetails = [];
+    filterTitleToFieldName(filterTitle){
+        let dict = {
+            "Make":"make",
+            "Model":"model",
+            "Year":"year",
+            "Total cost":"total_cost",
+            "Mileage":"mileage"
+        }
 
-            for (let carDetail of nextProps.carDetails) {
-                if (nextProps.filterValues["Make"].includes(carDetail["make"])) {
-                    if (nextProps.filterValues["Model"].includes(carDetail["model"]))
-                        carDetails.push(carDetail);
+        return dict[filterTitle];
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let filterValuesLength = Object.keys(nextProps.filterValues).length;
+        let hasFilterValues = filterValuesLength > 0;
+
+        if (hasFilterValues) {
+            let carDetails = [...nextProps.carDetails];
+
+            for(let filterTitle in nextProps.filterValues){
+                let filterValue = nextProps.filterValues[filterTitle];
+                let filterType = filterValue["type"];
+                let filterFieldName = this.filterTitleToFieldName(filterTitle);
+
+                if (filterType == "list"){
+                    let selectedOptions = filterValue["selectedOptions"];
+                    let selectedOptionsSet = new Set(selectedOptions);
+
+                    carDetails = carDetails.filter(carDetail => selectedOptionsSet.has(carDetail[filterFieldName]));
+                }else if(filterType == "range"){
+                    let minVal = filterValue["min"];
+                    let maxVal = filterValue["max"];
+
+                    if (minVal !== "" && maxVal != ""){
+                        carDetails = carDetails.filter(carDetail => carDetail[filterFieldName] >= minVal && carDetail[filterFieldName] <= maxVal);
+                    }
                 }
             }
 

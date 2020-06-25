@@ -33,7 +33,7 @@ class ListFilter extends React.Component{
             }
         }
 
-        return selectedOptions;
+        return {"selectedOptions":selectedOptions};
     }
 
     componentWillReceiveProps(nextProps){
