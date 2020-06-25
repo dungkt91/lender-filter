@@ -26,6 +26,8 @@ import "react-scroll-to-top/lib/index.css";
 import Sort from "./Sort";
 import LeftPanel from "./LeftPanel";
 import {fetchCars, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
+import {css} from "@emotion/core";
+import {ClipLoader} from "react-spinners";
 
 const App = (props) => {
     const theme = useTheme();
@@ -33,6 +35,13 @@ const App = (props) => {
 
     return <AppClass isBigScreen={mdUp}/>
 }
+
+const clipLoaderCss = css`
+    border-color:rgb(55,71,172);
+    position:absolute;
+    border-bottom-color:transparent;
+    top:50%;
+`;
 
 class AppClass extends React.Component{
     constructor() {
@@ -121,7 +130,9 @@ class AppClass extends React.Component{
                    <LeftPanel ref={this.leftPanelRef} carDetails={this.state.carJson} lenders={this.state.lendersJson} lenderPrograms={this.state.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
                 </Grid>
                 <Grid item md={8} sm={7} xs={12}>
-                    <CarShow carDetails={this.state.carJson} filterValues={this.state.filterValues}/>
+                    {
+                        this.state.isLoading?(<div style={{display:'flex', justifyContent:'center'}}><ClipLoader css={clipLoaderCss}/></div>):(<CarShow carDetails={this.state.carJson} filterValues={this.state.filterValues}/>)
+                    }
                 </Grid>
                 <Grid item sm={1} xs={0}/>
             </Grid>

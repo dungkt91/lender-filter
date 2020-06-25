@@ -25,7 +25,6 @@ class CarShow extends React.Component {
         super(props);
 
         this.state = {
-            carDetails:[],
             sortOptionIndex:-1
         }
 
@@ -73,16 +72,16 @@ class CarShow extends React.Component {
         return carDetails;
     }
 
-    componentWillReceiveProps(nextProps) {
-        let filterValuesLength = Object.keys(nextProps.filterValues).length;
+    carDetails(){
+        let filterValuesLength = Object.keys(this.props.filterValues).length;
         let hasFilterValues = filterValuesLength > 0;
+        let carDetails = [...this.props.carDetails];
 
         if (hasFilterValues) {
-            let carDetails = [...nextProps.carDetails];
-            console.log(nextProps.filterValues);
 
-            for(let filterTitle in nextProps.filterValues){
-                let filterValue = nextProps.filterValues[filterTitle];
+
+            for(let filterTitle in this.props.filterValues){
+                let filterValue = this.props.filterValues[filterTitle];
                 let filterType = filterValue["type"];
                 let filterFieldName = this.filterTitleToFieldName(filterTitle);
 
@@ -114,27 +113,27 @@ class CarShow extends React.Component {
                 carDetails = this.sortCarDetails(carDetails, this.state.sortOptionIndex);
             }
 
-            this.setState({carDetails: carDetails});
+            return carDetails;
         }else{
-            this.setState({carDetails:nextProps.carDetails});
+            // Sort
+            if (this.state.sortOptionIndex != -1){
+                carDetails = this.sortCarDetails(carDetails, this.state.sortOptionIndex);
+            }
+
+            return carDetails;
         }
     }
 
     selectSortOption(event){
         let sortOptionIndex = event.target.value;
-        let carDetails = [...this.state.carDetails];
 
-        if (sortOptionIndex != -1){
-            carDetails = this.sortCarDetails(carDetails, sortOptionIndex);
-        }
-
-        this.setState({sortOptionIndex:sortOptionIndex, carDetails:carDetails});
+        this.setState({sortOptionIndex:sortOptionIndex});
     }
 
     render() {
         return (<Grid container spacing={2}>
             <Grid item xs={6}>
-                <span class={"matches"}>{this.state.carDetails.length + " matches"}</span>
+                <span class={"matches"}>{this.props.carDetails.length + " matches"}</span>
             </Grid>
             <Grid item xs={6} align={"right"}>
                 <span className={"sortBy"}>Sort by </span>
@@ -147,7 +146,7 @@ class CarShow extends React.Component {
                     <MenuItem value={6}>Oldest Year</MenuItem>
                 </Select>
             </Grid>
-            {this.state.carDetails.map(carDetail => (
+            {this.carDetails().map(carDetail => (
                <Grid item xs={12} md={4} lg={3}>
                    <Car details={carDetail}/>
                </Grid>
