@@ -16,20 +16,20 @@ class Car extends React.Component {
 
     render(){
         return (
-            <Card>
+            <Card className={"car"}>
                 <CardContent>
                     <Grid container>
                         <Grid item xs={12}>
                             <ImageGallery items={[{original:"https://drive.google.com/uc?export=view&id=1PNPS_e8i8a_m2Owox2ncuuFWNotAbYh6"}]} showPlayButton={false} showFullscreenButton={false} showThumbnails={false}/>
                         </Grid>
                         <Grid item xs={12}>
-                            {this.getCarTitle()}
+                            <span className={"car_title"}>{this.getCarTitle()}</span>
                         </Grid>
                         <Grid item xs={6}>
-                            ${this.props.details['total_cost']}
+                            <span className={"car_total_cost"}>${this.props.details['total_cost']}</span>
                         </Grid>
                         <Grid item xs={6} align={"right"}>
-                            {this.props.details['mileage']}
+                            <span className={"car_mileage"}>{this.props.details['mileage']}</span>
                         </Grid>
                     </Grid>
                 </CardContent>

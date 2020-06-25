@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.car:hover{
+  cursor:pointer;
+  user-select:none;
+  transform: scale(1.005);
+  box-shadow: 0 5px 15px gray;
+}
