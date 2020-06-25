@@ -53,8 +53,12 @@ class LeftPanel extends React.Component{
         this.setState({selectedTabIndex:newSelectedTabIndex});
     }
 
-    componentWillReceiveProps(nextProps){
-        let hasUpdate = this.state.carDetails.length != nextProps.carDetails.length;
+    componentDidMount() {
+        this.parseProps(this.props);
+    }
+
+    parseProps(props){
+        let hasUpdate = this.state.carDetails.length != props.carDetails.length;
 
         if (hasUpdate) {
             let makes = new Set();
@@ -62,8 +66,8 @@ class LeftPanel extends React.Component{
             let models = new Set();
             let yearSet = new Set();
 
-            for (let i = 0; i < nextProps.carDetails.length; i++) {
-                let carDetail = nextProps.carDetails[i];
+            for (let i = 0; i < props.carDetails.length; i++) {
+                let carDetail = props.carDetails[i];
                 let make = carDetail["make"];
                 let model = carDetail["model"];
                 let year = carDetail["year"];
@@ -113,24 +117,24 @@ class LeftPanel extends React.Component{
                     "type": "range",
                     "minTitle": "Min",
                     "maxTitle": "Max",
-                    "rangeList": this.createRangeListContinuousValue(nextProps.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10)
+                    "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10)
                 },
                 {
                     "title": "Total cost",
                     "type": "range",
                     "minTitle": "Min",
                     "maxTitle": "Max",
-                    "rangeList": this.createRangeListContinuousValue(nextProps.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10)
+                    "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10)
                 }
             ];
 
             let lenderToPrograms = {};
             let lenderIdToLenderName = {};
-            nextProps.lenders.forEach(lender => {
+            props.lenders.forEach(lender => {
                 lenderIdToLenderName[lender["id"]] = lender["name"];
             });
 
-            nextProps.lenderPrograms.forEach(lenderProgram => {
+            props.lenderPrograms.forEach(lenderProgram => {
                 let lenderName = lenderIdToLenderName[lenderProgram["lender_id"]];
 
                 if (!(lenderName in lenderToPrograms)) {
@@ -140,7 +144,8 @@ class LeftPanel extends React.Component{
                 lenderToPrograms[lenderName].push(lenderProgram["name"]);
             });
 
-            this.setState({filters: filters, lenderToPrograms: lenderToPrograms, carDetails:nextProps.carDetails});
+            console.log('update');
+            this.setState({filters: filters, lenderToPrograms: lenderToPrograms, carDetails:props.carDetails});
         }
     }
 

@@ -24,7 +24,7 @@ class Car extends React.Component {
     cardOnClick(){
         const {history} = this.props;
 
-        history.push('/car', {'test':'abc'})
+        history.push('/car', {carDetails:this.props.details})
     }
 
     render(){

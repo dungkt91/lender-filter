@@ -28,24 +28,9 @@ class HomePage extends React.Component{
         super();
 
         this.leftPanelRef = React.createRef();
-
         this.state = {
-            carJson:[],
-            lendersJson:[],
-            lenderTermsJson:[],
-            lenderProgramsJson:[],
-            isLoading: true,
             filterValues: {}
         }
-
-        Promise.all([fetchCars(), fetchLenders(), fetchLenderTerms(), fetchLenderPrograms()]).then(responses => Promise.all(responses.map(response => response.json()))).then(jsons => {
-            let carJson = jsons[0];
-            let lendersJson = jsons[1];
-            let lenderTermsJson = jsons[2];
-            let lenderProgramsJson = jsons[3];
-
-            this.setState({carJson:carJson, lendersJson:lendersJson, lenderTermsJson:lenderTermsJson, lenderProgramsJson:lenderProgramsJson, isLoading:false});
-        });
         this.filterOnChange = this.filterOnChange.bind(this);
     }
 
@@ -65,11 +50,11 @@ class HomePage extends React.Component{
                     <Grid item xl={1} xs={0}/>
                     <Grid item sm={1} xs={0}/>
                     <Grid item md={2} sm={3} xs={12}>
-                        <LeftPanel ref={this.leftPanelRef} carDetails={this.state.carJson} lenders={this.state.lendersJson} lenderPrograms={this.state.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
+                        <LeftPanel ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
                     </Grid>
                     <Grid item md={8} sm={7} xs={12}>
                         {
-                            this.state.isLoading?(<div style={{display:'flex', justifyContent:'center'}}><ClipLoader css={clipLoaderCss}/></div>):(<CarShow carDetails={this.state.carJson} filterValues={this.state.filterValues}/>)
+                            this.props.isLoading?(<div style={{display:'flex', justifyContent:'center'}}><ClipLoader css={clipLoaderCss}/></div>):(<CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>)
                         }
                     </Grid>
                     <Grid item sm={1} xs={0}/>

@@ -11,6 +11,7 @@ import {
     Link
 } from "react-router-dom";
 import CarPage from "./CarPage";
+import {fetchCars, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
 
 const App = (props) => {
     const theme = useTheme();
@@ -21,6 +22,27 @@ const App = (props) => {
 
 
 class AppClass extends React.Component{
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            carJson:[],
+            lendersJson:[],
+            lenderTermsJson:[],
+            lenderProgramsJson:[],
+            isLoading: true
+        }
+
+        Promise.all([fetchCars(), fetchLenders(), fetchLenderTerms(), fetchLenderPrograms()]).then(responses => Promise.all(responses.map(response => response.json()))).then(jsons => {
+            let carJson = jsons[0];
+            let lendersJson = jsons[1];
+            let lenderTermsJson = jsons[2];
+            let lenderProgramsJson = jsons[3];
+
+            this.setState({carJson:carJson, lendersJson:lendersJson, lenderTermsJson:lenderTermsJson, lenderProgramsJson:lenderProgramsJson, isLoading:false});
+        });
+    }
+
     render(){
         return (
             <Router>
@@ -29,7 +51,7 @@ class AppClass extends React.Component{
                         <CarPage isBigScreen={this.props.isBigScreen} />
                     </Route>
                     <Route path="/">
-                        <HomePage isBigScreen={this.props.isBigScreen}/>
+                        <HomePage isBigScreen={this.props.isBigScreen} {...this.state}/>
                     </Route>
                 </Switch>
             </Router>
