@@ -31,19 +31,32 @@ class LeftPanel extends React.Component{
             let makes = new Set();
             let makeToModelsDict = {}
             let models = new Set();
+            let yearSet = new Set();
 
             for (let i = 0; i < nextProps.carDetails.length; i++) {
                 let carDetail = nextProps.carDetails[i];
                 let make = carDetail["make"];
                 let model = carDetail["model"];
+                let year = carDetail["year"];
 
                 makes.add(make);
                 models.add(model);
+                if (!isNaN(year)){
+                    yearSet.add(year);
+                }
+
                 if (!(make in makeToModelsDict)) {
                     makeToModelsDict[make] = new Set();
                 }
 
                 makeToModelsDict[make].add(model);
+            }
+
+            let yearRangeList = [];
+
+            // Create year range list
+            for(let year of yearSet){
+                yearRangeList.push([year]);
             }
 
             let filters = [
@@ -63,7 +76,8 @@ class LeftPanel extends React.Component{
                     "title": "Year",
                     "type": "range",
                     "minTitle": "Min",
-                    "maxTitle": "Max"
+                    "maxTitle": "Max",
+                    "rangeList": yearRangeList
                 },
                 {
                     "title": "Mileage",
