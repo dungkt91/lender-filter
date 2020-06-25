@@ -14,7 +14,36 @@ class LeftPanel extends React.Component{
         let filter =
         this.state = {
             selectedTabIndex:0,
-            filters:[],
+            filters:[
+                {
+                    "title": "Make",
+                    "type": "list",
+                    "options":[]
+                },
+                {
+                    "title": "Model",
+                    "type": "list",
+                    "options": []
+                },
+                {
+                    "title": "Year",
+                    "type": "range",
+                    "minTitle": "Min",
+                    "maxTitle": "Max"
+                },
+                {
+                    "title": "Mileage",
+                    "type": "range",
+                    "minTitle": "Min",
+                    "maxTitle": "Max"
+                },
+                {
+                    "title": "Total cost",
+                    "type": "range",
+                    "minTitle": "Min",
+                    "maxTitle": "Max"
+                }
+            ],
             lenderToPrograms:{},
             carDetails:[]
         }

@@ -131,9 +131,11 @@ class CarShow extends React.Component {
     }
 
     render() {
+        let carDetailsAfterFilterAndSort = this.carDetails();
+
         return (<Grid container spacing={2}>
             <Grid item xs={6}>
-                <span class={"matches"}>{this.props.carDetails.length + " matches"}</span>
+                <span class={"matches"}>{carDetailsAfterFilterAndSort.length + " matches"}</span>
             </Grid>
             <Grid item xs={6} align={"right"}>
                 <span className={"sortBy"}>Sort by </span>
@@ -146,7 +148,7 @@ class CarShow extends React.Component {
                     <MenuItem value={6}>Oldest Year</MenuItem>
                 </Select>
             </Grid>
-            {this.carDetails().map(carDetail => (
+            {carDetailsAfterFilterAndSort.map(carDetail => (
                <Grid item xs={12} md={4} lg={3}>
                    <Car details={carDetail}/>
                </Grid>

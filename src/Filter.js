@@ -90,7 +90,7 @@ class Filter extends React.Component {
 
         return (
             <React.Fragment>
-                <Grid item xs={12} className={"padding10"} style={{borderBottom:'solid 1px gray'}}>
+                <Grid item xs={12} className={"filter"}>
                     <Grid container className={"expandable"} onClick={(event) => this.expandOrCollapse(event, filter["title"])}>
                         <Grid item xs={10}>
                             <span className={'filter_title'}>{filter["title"]}</span>
