@@ -83,13 +83,15 @@ class LeftPanel extends React.Component{
                     "title": "Mileage",
                     "type": "range",
                     "minTitle": "Min",
-                    "maxTitle": "Max"
+                    "maxTitle": "Max",
+                    "rangeList": this.createRangeListContinuousValue(nextProps.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10)
                 },
                 {
                     "title": "Total cost",
                     "type": "range",
                     "minTitle": "Min",
-                    "maxTitle": "Max"
+                    "maxTitle": "Max",
+                    "rangeList": this.createRangeListContinuousValue(nextProps.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10)
                 }
             ];
 
@@ -111,6 +113,14 @@ class LeftPanel extends React.Component{
 
             this.setState({filters: filters, lenderToPrograms: lenderToPrograms, carDetails:nextProps.carDetails});
         }
+    }
+
+    createRangeListContinuousValue(values, partsCount){
+        let min = Math.min(...values);
+        let max = Math.max(...values);
+        let x = (max - min)/partsCount;
+
+        return [[min, max]];
     }
 
     getFilterValues(){
