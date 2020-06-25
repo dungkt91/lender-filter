@@ -25,8 +25,11 @@ class CarShow extends React.Component {
         super(props);
 
         this.state = {
-            carDetails:[]
+            carDetails:[],
+            sortOptionIndex:-1
         }
+
+        this.selectSortOption = this.selectSortOption.bind(this);
     }
 
     filterTitleToFieldName(filterTitle){
@@ -39,6 +42,35 @@ class CarShow extends React.Component {
         }
 
         return dict[filterTitle];
+    }
+
+    reverseNumberSign(number){
+        return -number;
+    }
+
+    sortCarDetails(carDetails, sortOptionIndex){
+        switch(sortOptionIndex){
+            case 1:
+                carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost));
+                break;
+            case 2:
+                carDetails.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost)));
+                break;
+            case 3:
+                carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage));
+                break;
+            case 4:
+                carDetails.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage)));
+                break;
+            case 5:
+                carDetails.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseInt(carDetail1.year) - parseInt(carDetail2.year)));
+                break;
+            case 6:
+                carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.year) - parseInt(carDetail2.year));
+                break;
+        }
+
+        return carDetails;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -77,10 +109,26 @@ class CarShow extends React.Component {
                 }
             }
 
+            // Sort
+            if (this.state.sortOptionIndex != -1){
+                carDetails = this.sortCarDetails(carDetails, this.state.sortOptionIndex);
+            }
+
             this.setState({carDetails: carDetails});
         }else{
             this.setState({carDetails:nextProps.carDetails});
         }
+    }
+
+    selectSortOption(event){
+        let sortOptionIndex = event.target.value;
+        let carDetails = [...this.state.carDetails];
+
+        if (sortOptionIndex != -1){
+            carDetails = this.sortCarDetails(carDetails, sortOptionIndex);
+        }
+
+        this.setState({sortOptionIndex:sortOptionIndex, carDetails:carDetails});
     }
 
     render() {
@@ -89,14 +137,14 @@ class CarShow extends React.Component {
                 <span class={"matches"}>{this.state.carDetails.length + " matches"}</span>
             </Grid>
             <Grid item xs={6} align={"right"}>
-                <span className={"sortBy"}>Sort by</span>
-                <Select>
-                    <MenuItem>Lowest Price</MenuItem>
-                    <MenuItem>Highest Price</MenuItem>
-                    <MenuItem>Lowest Mileage</MenuItem>
-                    <MenuItem>Highest Mileage</MenuItem>
-                    <MenuItem>Newest Year</MenuItem>
-                    <MenuItem>Oldest Year</MenuItem>
+                <span className={"sortBy"}>Sort by </span>
+                <Select value={this.state.sortOptionIndex} onChange={this.selectSortOption}>
+                    <MenuItem value={1}>Lowest Price</MenuItem>
+                    <MenuItem value={2}>Highest Price</MenuItem>
+                    <MenuItem value={3}>Lowest Mileage</MenuItem>
+                    <MenuItem value={4}>Highest Mileage</MenuItem>
+                    <MenuItem value={5}>Newest Year</MenuItem>
+                    <MenuItem value={6}>Oldest Year</MenuItem>
                 </Select>
             </Grid>
             {this.state.carDetails.map(carDetail => (
