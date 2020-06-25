@@ -57,6 +57,10 @@ class LeftPanel extends React.Component{
         this.parseProps(this.props);
     }
 
+    componentWillReceiveProps(nextProps){
+        this.parseProps(nextProps);
+    }
+
     parseProps(props){
         let hasUpdate = this.state.carDetails.length != props.carDetails.length;
 
