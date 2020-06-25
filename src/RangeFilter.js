@@ -2,6 +2,7 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import TextField from "@material-ui/core/TextField";
+import debounce from "lodash/debounce";
 
 class RangeFilter extends React.Component {
     constructor(props) {
@@ -11,6 +12,8 @@ class RangeFilter extends React.Component {
             "min":"",
             "max":""
         }
+
+        this.onChangeDebounced = debounce(this.onChangeDebounced, 2000);
     }
 
     textFieldOnChange(event, textFieldName){
@@ -18,7 +21,12 @@ class RangeFilter extends React.Component {
 
         newState[textFieldName] = event.target.value;
 
-        this.setState(newState, this.props.onChange);
+        this.setState(newState);
+        this.onChangeDebounced();
+    }
+
+    onChangeDebounced = () => {
+        this.props.onChange();
     }
 
     getValues(){

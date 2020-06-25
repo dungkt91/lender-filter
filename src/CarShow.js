@@ -47,6 +47,7 @@ class CarShow extends React.Component {
 
         if (hasFilterValues) {
             let carDetails = [...nextProps.carDetails];
+            console.log(nextProps.filterValues);
 
             for(let filterTitle in nextProps.filterValues){
                 let filterValue = nextProps.filterValues[filterTitle];
@@ -62,7 +63,15 @@ class CarShow extends React.Component {
                     let minVal = filterValue["min"];
                     let maxVal = filterValue["max"];
 
-                    if (minVal !== "" && maxVal != ""){
+                    if (minVal !== "" || maxVal != "") {
+                        if (minVal == "") {
+                            minVal = 0;
+                        }
+
+                        if (maxVal == "") {
+                            maxVal = Number.MAX_SAFE_INTEGER;
+                        }
+
                         carDetails = carDetails.filter(carDetail => carDetail[filterFieldName] >= minVal && carDetail[filterFieldName] <= maxVal);
                     }
                 }
