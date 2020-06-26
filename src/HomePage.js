@@ -49,14 +49,20 @@ class HomePage extends React.Component{
                     </Grid>
                     <Grid item xl={1} xs={0}/>
                     <Grid item sm={1} xs={0}/>
-                    <Grid item md={2} sm={3} xs={12}>
-                        <LeftPanel ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
-                    </Grid>
-                    <Grid item md={8} sm={7} xs={12}>
-                        {
-                            this.props.isLoading?(<div style={{display:'flex', justifyContent:'center'}}><ClipLoader css={clipLoaderCss}/></div>):(<CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>)
-                        }
-                    </Grid>
+                    {this.props.isLoading?(
+                        <Grid item xs={12}>
+                            <div style={{display:'flex', justifyContent:'center'}}><ClipLoader css={clipLoaderCss}/></div>
+                        </Grid>
+                    ):(
+                        <>
+                        <Grid item md={2} sm={3} xs={12}>
+                            <LeftPanel ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
+                        </Grid>
+                        <Grid item md={8} sm={7} xs={12}>
+                        <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>
+                        </Grid>
+                        </>
+                    )}
                     <Grid item sm={1} xs={0}/>
                 </Grid>
             </React.Fragment>
