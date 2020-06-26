@@ -20,6 +20,27 @@ class ListFilter extends React.Component{
         this.optionOnchange = this.optionOnchange.bind(this);
     }
 
+    componentDidMount() {
+        if(this.props.init && this.props.init["selectedOptions"]){
+            let newState = {...this.state};
+
+            let checkedAll = true;
+
+            for(let option of this.props.options){
+                let isChecked = this.props.init["selectedOptions"].includes(option);
+                newState[option] = isChecked;
+
+                if(!isChecked) {
+                    checkedAll = false;
+                }
+            }
+
+            newState['Select All'] = checkedAll;
+
+            this.setState(newState, this.props.onChange);
+        }
+    }
+
     getTitle(){
         return this.props.title;
     }
@@ -34,22 +55,6 @@ class ListFilter extends React.Component{
         }
 
         return {"selectedOptions":selectedOptions};
-    }
-
-    componentWillReceiveProps(nextProps){
-        let optionsChanged = nextProps.options.length != this.props.options.length;
-
-        if(optionsChanged) {
-            let newState = {};
-
-            newState['Select All'] = true;
-
-            for (let option of nextProps.options) {
-                newState[option] = true;
-            }
-
-            this.setState({...newState});
-        }
     }
 
     selectAll(event){

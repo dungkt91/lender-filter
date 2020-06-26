@@ -95,6 +95,17 @@ class LeftPanel extends React.Component{
             }
         ];
 
+        if(this.props.init){
+            for(let filterTitle in this.props.init){
+                for(let filter of filters){
+                    if (filter["title"] == filterTitle){
+                        filter["init"] = this.props.init[filterTitle];
+                        break;
+                    }
+                }
+            }
+        }
+
         let lenderToPrograms = {};
         let lenderIdToLenderName = {};
         props.lenders.forEach(lender => {

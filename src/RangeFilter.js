@@ -18,6 +18,12 @@ class RangeFilter extends React.Component {
         this.selectRange = this.selectRange.bind(this);
     }
 
+    componentDidMount(){
+        if(this.props.init){
+            this.setState({"min":this.props.init["min"], "max":this.props.init["max"]});
+        }
+    }
+
     textFieldOnChange(event, textFieldName){
         let newState = {};
 
