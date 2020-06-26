@@ -12,7 +12,7 @@ class Filter extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {filters:[]};
+        this.state = {filters:this.props.filters};
         this.filterOnChange = this.filterOnChange.bind(this);
         this.createFilter = this.createFilter.bind(this);
         this.expandOrCollapse = this.expandOrCollapse.bind(this);
@@ -24,10 +24,6 @@ class Filter extends React.Component {
         newState[stateKeyName] = !this.state[stateKeyName];
 
         this.setState(newState);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({filters:nextProps.filters});
     }
 
     filterOnChange(event, filterTitle){

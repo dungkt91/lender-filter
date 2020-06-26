@@ -11,41 +11,15 @@ class LeftPanel extends React.Component{
 
         this.handleChange = this.handleChange.bind(this);
         this.filterRef = React.createRef();
-        let filter =
+        const {filters, lenderToPrograms, carDetails} = this.parseProps(this.props);
+        console.log(this.props);
+        console.log(filters);
+
         this.state = {
             selectedTabIndex:0,
-            filters:[
-                {
-                    "title": "Make",
-                    "type": "list",
-                    "options":[]
-                },
-                {
-                    "title": "Model",
-                    "type": "list",
-                    "options": []
-                },
-                {
-                    "title": "Year",
-                    "type": "range",
-                    "minTitle": "Min",
-                    "maxTitle": "Max"
-                },
-                {
-                    "title": "Mileage",
-                    "type": "range",
-                    "minTitle": "Min",
-                    "maxTitle": "Max"
-                },
-                {
-                    "title": "Total cost",
-                    "type": "range",
-                    "minTitle": "Min",
-                    "maxTitle": "Max"
-                }
-            ],
-            lenderToPrograms:{},
-            carDetails:[]
+            filters:filters,
+            lenderToPrograms:lenderToPrograms,
+            carDetails:carDetails
         }
     }
 
@@ -53,100 +27,91 @@ class LeftPanel extends React.Component{
         this.setState({selectedTabIndex:newSelectedTabIndex});
     }
 
-    componentDidMount() {
-        this.parseProps(this.props);
-    }
+    parseProps(props) {
+        let makes = new Set();
+        let makeToModelsDict = {}
+        let models = new Set();
+        let yearSet = new Set();
 
-    parseProps(props){
-        let hasUpdate = this.state.carDetails.length != props.carDetails.length;
+        for (let i = 0; i < props.carDetails.length; i++) {
+            let carDetail = props.carDetails[i];
+            let make = carDetail["make"];
+            let model = carDetail["model"];
+            let year = carDetail["year"];
 
-        if (hasUpdate) {
-            let makes = new Set();
-            let makeToModelsDict = {}
-            let models = new Set();
-            let yearSet = new Set();
-
-            for (let i = 0; i < props.carDetails.length; i++) {
-                let carDetail = props.carDetails[i];
-                let make = carDetail["make"];
-                let model = carDetail["model"];
-                let year = carDetail["year"];
-
-                makes.add(make);
-                models.add(model);
-                if (!isNaN(year)){
-                    yearSet.add(year);
-                }
-
-                if (!(make in makeToModelsDict)) {
-                    makeToModelsDict[make] = new Set();
-                }
-
-                makeToModelsDict[make].add(model);
+            makes.add(make);
+            models.add(model);
+            if (!isNaN(year)) {
+                yearSet.add(year);
             }
 
-            let yearRangeList = [];
-
-            // Create year range list
-            for(let year of yearSet){
-                yearRangeList.push([year]);
+            if (!(make in makeToModelsDict)) {
+                makeToModelsDict[make] = new Set();
             }
 
-            let filters = [
-                {
-                    "title": "Make",
-                    "type": "list",
-                    "options": Array.from(makes)
-                },
-                {
-                    "title": "Model",
-                    "type": "list",
-                    "dependent_filter": "Make",
-                    "dependent_list": makeToModelsDict,
-                    "options": Array.from(models)
-                },
-                {
-                    "title": "Year",
-                    "type": "range",
-                    "minTitle": "Min",
-                    "maxTitle": "Max",
-                    "rangeList": yearRangeList
-                },
-                {
-                    "title": "Mileage",
-                    "type": "range",
-                    "minTitle": "Min",
-                    "maxTitle": "Max",
-                    "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10)
-                },
-                {
-                    "title": "Total cost",
-                    "type": "range",
-                    "minTitle": "Min",
-                    "maxTitle": "Max",
-                    "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10)
-                }
-            ];
-
-            let lenderToPrograms = {};
-            let lenderIdToLenderName = {};
-            props.lenders.forEach(lender => {
-                lenderIdToLenderName[lender["id"]] = lender["name"];
-            });
-
-            props.lenderPrograms.forEach(lenderProgram => {
-                let lenderName = lenderIdToLenderName[lenderProgram["lender_id"]];
-
-                if (!(lenderName in lenderToPrograms)) {
-                    lenderToPrograms[lenderName] = [];
-                }
-
-                lenderToPrograms[lenderName].push(lenderProgram["name"]);
-            });
-
-            console.log('update');
-            this.setState({filters: filters, lenderToPrograms: lenderToPrograms, carDetails:props.carDetails});
+            makeToModelsDict[make].add(model);
         }
+
+        let yearRangeList = [];
+
+        // Create year range list
+        for (let year of yearSet) {
+            yearRangeList.push([year]);
+        }
+
+        let filters = [
+            {
+                "title": "Make",
+                "type": "list",
+                "options": Array.from(makes)
+            },
+            {
+                "title": "Model",
+                "type": "list",
+                "dependent_filter": "Make",
+                "dependent_list": makeToModelsDict,
+                "options": Array.from(models)
+            },
+            {
+                "title": "Year",
+                "type": "range",
+                "minTitle": "Min",
+                "maxTitle": "Max",
+                "rangeList": yearRangeList
+            },
+            {
+                "title": "Mileage",
+                "type": "range",
+                "minTitle": "Min",
+                "maxTitle": "Max",
+                "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10)
+            },
+            {
+                "title": "Total cost",
+                "type": "range",
+                "minTitle": "Min",
+                "maxTitle": "Max",
+                "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10)
+            }
+        ];
+
+        let lenderToPrograms = {};
+        let lenderIdToLenderName = {};
+        props.lenders.forEach(lender => {
+            lenderIdToLenderName[lender["id"]] = lender["name"];
+        });
+
+        props.lenderPrograms.forEach(lenderProgram => {
+            let lenderName = lenderIdToLenderName[lenderProgram["lender_id"]];
+
+            if (!(lenderName in lenderToPrograms)) {
+                lenderToPrograms[lenderName] = [];
+            }
+
+            lenderToPrograms[lenderName].push(lenderProgram["name"]);
+        });
+
+        return {filters: filters, lenderToPrograms: lenderToPrograms, carDetails: props.carDetails};
     }
 
     createRangeListContinuousValue(values, partsCount){

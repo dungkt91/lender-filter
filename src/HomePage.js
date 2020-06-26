@@ -59,7 +59,7 @@ class HomePage extends React.Component{
                             <LeftPanel ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
                         </Grid>
                         <Grid item md={8} sm={7} xs={12}>
-                        <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>
+                            <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>
                         </Grid>
                         </>
                     )}
