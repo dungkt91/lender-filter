@@ -21,13 +21,13 @@ class ListFilter extends React.Component{
     }
 
     componentDidMount() {
-        if(this.props.init && this.props.init["selectedOptions"]){
+        if(this.props.init){
             let newState = {...this.state};
 
             let checkedAll = true;
 
             for(let option of this.props.options){
-                let isChecked = this.props.init["selectedOptions"].includes(option);
+                let isChecked = this.props.init.includes(option);
                 newState[option] = isChecked;
 
                 if(!isChecked) {

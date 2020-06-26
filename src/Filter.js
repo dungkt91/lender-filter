@@ -13,6 +13,11 @@ class Filter extends React.Component {
         super(props);
 
         this.state = {filters:this.props.filters};
+
+        for(let filter of this.props.filters){
+            this.state[filter["title"] + '_expand'] = true;
+        }
+
         this.filterOnChange = this.filterOnChange.bind(this);
         this.createFilter = this.createFilter.bind(this);
         this.expandOrCollapse = this.expandOrCollapse.bind(this);
