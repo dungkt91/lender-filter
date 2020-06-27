@@ -15,7 +15,11 @@ class Filter extends React.Component {
         this.state = {filters:this.props.filters};
 
         for(let filter of this.props.filters){
-            this.state[filter["title"] + '_expand'] = true;
+            if ("expand" in filter) {
+                this.state[filter["title"] + '_expand'] = filter["expand"];
+            }else{
+                this.state[filter["title"] + '_expand'] = true;
+            }
         }
 
         this.filterOnChange = this.filterOnChange.bind(this);

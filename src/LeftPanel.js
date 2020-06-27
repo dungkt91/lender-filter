@@ -63,35 +63,40 @@ class LeftPanel extends React.Component{
             {
                 "title": "Make",
                 "type": "list",
-                "options": Array.from(makes)
+                "options": Array.from(makes),
+                "expand": this.props.filtersExpanded
             },
             {
                 "title": "Model",
                 "type": "list",
                 "dependent_filter": "Make",
                 "dependent_list": makeToModelsDict,
-                "options": Array.from(models)
+                "options": Array.from(models),
+                "expand": this.props.filtersExpanded
             },
             {
                 "title": "Year",
                 "type": "range",
                 "minTitle": "Min",
                 "maxTitle": "Max",
-                "rangeList": yearRangeList
+                "rangeList": yearRangeList,
+                "expand": this.props.filtersExpanded
             },
             {
                 "title": "Mileage",
                 "type": "range",
                 "minTitle": "Min",
                 "maxTitle": "Max",
-                "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10)
+                "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10),
+                "expand": this.props.filtersExpanded
             },
             {
                 "title": "Total cost",
                 "type": "range",
                 "minTitle": "Min",
                 "maxTitle": "Max",
-                "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10)
+                "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10),
+                "expand": this.props.filtersExpanded
             }
         ];
 
