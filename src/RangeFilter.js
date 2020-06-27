@@ -4,23 +4,37 @@ import Grid from '@material-ui/core/Grid';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import debounce from "lodash/debounce";
+import Slider from '@material-ui/core/Slider';
 
 class RangeFilter extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            "min":"",
-            "max":""
+        let min = "";
+        let max = "";
+
+        if (this.props.value_type == "discrete"){
+            min = Math.min(...this.props.values);
+            max = Math.max(...this.props.values);
+        } else if (this.props.value_type == "continuous"){
+            min = this.props.values[0];
+            max = this.props.values[1];
         }
 
-        this.onChangeDebounced = debounce(this.onChangeDebounced, 2000);
-        this.selectRange = this.selectRange.bind(this);
+        this.state = {
+            "min":min,
+            "max":max,
+            "current_min":min,
+            "current_max":max
+        }
+
+        this.onChangeDebounced = debounce(this.onChangeDebounced, 1000);
+        this.sliderOnChange = this.sliderOnChange.bind(this);
     }
 
     componentDidMount(){
         if(this.props.init){
-            this.setState({"min":this.props.init["min"], "max":this.props.init["max"]});
+            this.setState({"current_min":this.props.init["min"], "current_max":this.props.init["max"]});
         }
     }
 
@@ -38,7 +52,7 @@ class RangeFilter extends React.Component {
     }
 
     getValues(){
-        return {"min":this.state.min, "max":this.state.max};
+        return {"min":this.state.current_min, "max":this.state.current_max};
     }
 
     getMinTitle(){
@@ -53,35 +67,26 @@ class RangeFilter extends React.Component {
         return this.props.toText == undefined?"To":this.props.toText;
     }
 
-    selectRange(event, min, max){
-        this.setState({"min":min, "max":max}, this.props.onChange);
+    sliderOnChange(event, values){
+        this.setState({current_min:values[0], current_max:values[1]});
+        this.onChangeDebounced();
     }
 
     render(){
         return (
             <Grid container>
                 <Grid item xs={4}>
-                    <TextField value={this.state["min"]} label={this.getMinTitle()}
-                               variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "min")}/>
+                    <TextField value={this.state["current_min"]} label={this.getMinTitle()}
+                               variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "current_min")}/>
                 </Grid>
                 <Grid item xs={4} align={"center"}>
                     {this.getToText()}
                 </Grid>
                 <Grid item xs={4}>
-                    <TextField value={this.state["max"]} label={this.getMaxTitle()}
-                               variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "max")}/>
+                    <TextField value={this.state["current_max"]} label={this.getMaxTitle()}
+                               variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "current_max")}/>
                 </Grid>
-                {
-                    this.props.rangeList?(<ul>{this.props.rangeList.map(range => {
-                        if (range.length == 1){
-                            return (<li><a href="#" onClick={(event) => this.selectRange(event, range[0], range[0])}>{range[0]}</a></li>);
-                        }else if (range.length == 2){
-                            return (<li><a href="#"  onClick={(event) => this.selectRange(event, range[0], range[1])}>{range[0]} - {range[1]}</a></li>);
-                        }
-
-                        return null;
-                    })}</ul>):(null)
-                }
+                <Slider min={this.state.min} max={this.state.max} value={[this.state.current_min, this.state.current_max]} valueLabelDisplay="auto" step={1} onChange={this.sliderOnChange}/>
             </Grid>
         )
     }

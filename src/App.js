@@ -35,11 +35,25 @@ class AppClass extends React.Component{
 
         Promise.all([fetchCars(), fetchLenders(), fetchLenderTerms(), fetchLenderPrograms()]).then(responses => Promise.all(responses.map(response => response.json()))).then(jsons => {
             let carJson = jsons[0];
+            carJson = this.convertKmToMileage(carJson);
+
             let lendersJson = jsons[1];
             let lenderTermsJson = jsons[2];
             let lenderProgramsJson = jsons[3];
 
             this.setState({carJson:carJson, lendersJson:lendersJson, lenderTermsJson:lenderTermsJson, lenderProgramsJson:lenderProgramsJson, isLoading:false});
+        });
+    }
+
+    convertKmToMileage(carJson){
+        return carJson.map(car => {
+            let mileageLowerCase = car["mileage"].toLowerCase();
+
+            if(mileageLowerCase.includes('km')){
+                car["mileage"] = 0.621371 * Math.floor(parseFloat(mileageLowerCase.replace("km", "")));
+            }
+
+            return car;
         });
     }
 

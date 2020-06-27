@@ -117,7 +117,8 @@ class LeftPanel extends React.Component{
                 "type": "range",
                 "minTitle": "Min",
                 "maxTitle": "Max",
-                "rangeList": yearRangeList,
+                "value_type":"discrete",
+                "values":yearRangeList,
                 "expand": this.props.filtersExpanded
             },
             {
@@ -125,7 +126,8 @@ class LeftPanel extends React.Component{
                 "type": "range",
                 "minTitle": "Min",
                 "maxTitle": "Max",
-                "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10),
+                "value_type":"continuous",
+                "values": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10),
                 "expand": this.props.filtersExpanded
             },
             {
@@ -133,7 +135,8 @@ class LeftPanel extends React.Component{
                 "type": "range",
                 "minTitle": "Min",
                 "maxTitle": "Max",
-                "rangeList": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10),
+                "value_type":"continuous",
+                "values": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10),
                 "expand": this.props.filtersExpanded
             }
         ];
@@ -173,7 +176,7 @@ class LeftPanel extends React.Component{
         let max = Math.max(...values);
         let x = (max - min)/partsCount;
 
-        return [[min, max]];
+        return [min, max];
     }
 
     getFilterValues(){
