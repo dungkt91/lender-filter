@@ -133,9 +133,9 @@ class CarShow extends React.Component {
     render() {
         let carDetailsAfterFilterAndSort = this.carDetails();
 
-        return (<Grid container spacing={2}>
+        return (<Grid container spacing={2} className={"carshow"}>
             <Grid item xs={6}>
-                <span class={"matches"}>{carDetailsAfterFilterAndSort.length + " matches"}</span>
+                <span className={"matches"}>{carDetailsAfterFilterAndSort.length + " matches"}</span>
             </Grid>
             <Grid item xs={6} align={"right"}>
                 <span className={"sortBy"}>Sort by </span>
