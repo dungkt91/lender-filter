@@ -27,9 +27,29 @@ class LeftPanel extends React.Component{
         this.setState({selectedTabIndex:newSelectedTabIndex});
     }
 
+    convertStr(str){
+        let words = str.split(/(\s+)/);
+
+        return words.map(word => {
+            let result = '';
+
+            if (word.length > 0){
+                result += word.charAt(0).toUpperCase();
+            }
+
+            if (word.length > 1){
+                result += word.substring(1).toLowerCase();
+            }
+
+            return result;
+        }).join(' ');
+    }
+
     parseProps(props) {
         let makes = new Set();
-        let makeToModelsDict = {}
+        let makeToModelsDict = {};
+        let makeToCountDict = {};
+        let modelToCountDict = {};
         let models = new Set();
         let yearSet = new Set();
 
@@ -50,6 +70,18 @@ class LeftPanel extends React.Component{
             }
 
             makeToModelsDict[make].add(model);
+
+            if(!(make in makeToCountDict)){
+                makeToCountDict[make] = 0;
+            }
+
+            makeToCountDict[make] = makeToCountDict[make] + 1;
+
+            if(!(model in modelToCountDict)){
+                modelToCountDict[model] = 0;
+            }
+
+            modelToCountDict[model] = modelToCountDict[model] + 1;
         }
 
         let yearRangeList = [];
@@ -64,7 +96,10 @@ class LeftPanel extends React.Component{
                 "title": "Make",
                 "type": "list",
                 "options": Array.from(makes),
-                "expand": this.props.filtersExpanded
+                "expand": this.props.filtersExpanded,
+                "displayCount":true,
+                "counts": makeToCountDict,
+                "titleTransformFunc":this.convertStr
             },
             {
                 "title": "Model",
@@ -72,7 +107,10 @@ class LeftPanel extends React.Component{
                 "dependent_filter": "Make",
                 "dependent_list": makeToModelsDict,
                 "options": Array.from(models),
-                "expand": this.props.filtersExpanded
+                "expand": this.props.filtersExpanded,
+                "displayCount":true,
+                "counts":modelToCountDict,
+                "titleTransformFunc":this.convertStr
             },
             {
                 "title": "Year",

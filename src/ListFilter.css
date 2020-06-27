@@ -1,0 +1,4 @@
+.item_wrapper.many_options{
+    overflow: auto;
+    max-height: 430px;
+}

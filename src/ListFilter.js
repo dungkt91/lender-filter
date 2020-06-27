@@ -1,6 +1,7 @@
 import React from 'react';
 import {Checkbox} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import './ListFilter.css';
 
 class ListFilter extends React.Component{
     constructor(props) {
@@ -101,15 +102,17 @@ class ListFilter extends React.Component{
         let manyOptions = sortedOptions.length > 10;
 
         return (
-            <Grid container>
+            <Grid container className={'item_wrapper ' + (manyOptions?'many_options':'')}>
                 <Grid item xs={12}>
                     <Checkbox checked={this.state['Select All']} color={"primary"} onChange={this.selectAll} />All
                 </Grid>
                 {
                     sortedOptions.map(item => (
-                        <Grid item xs={manyOptions?6:12}>
+                        <Grid item xs={12}>
                             <Checkbox checked={this.state[item]} color={"primary"}
-                                      onChange={(event) => this.optionOnchange(event, item)}/>{item}
+                                      onChange={(event) => this.optionOnchange(event, item)}/>
+                            {this.props.titleTransformFunc?this.props.titleTransformFunc(item):item}
+                            {this.props.displayCount?<span className={"filter_item_count"}>  ({this.props.counts[item]})</span>:null}
                         </Grid>
                     ))
                 }
