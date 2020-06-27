@@ -1,11 +1,7 @@
-.matches{
-    color:gray;
-}
-
-.sortBy{
-    color:gray;
-}
-
 .carshow{
     padding:10px;
+}
+
+.sort_by_select_option{
+    width:150px;
 }

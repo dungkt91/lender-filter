@@ -12,13 +12,7 @@ import {calculateProfitFirstInterest} from "./CarCalculation";
 import Car from './Car.js';
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-
-const clipLoaderCss = css`
-    border-color:rgb(55,71,172);
-    position:absolute;
-    border-bottom-color:transparent;
-    top:50%;
-`;
+import Loader from './Loader';
 
 class CarShow extends React.Component {
     constructor(props) {
@@ -133,27 +127,33 @@ class CarShow extends React.Component {
     render() {
         let carDetailsAfterFilterAndSort = this.carDetails();
 
-        return (<Grid container spacing={2} className={"carshow"}>
-            <Grid item xs={6}>
-                <span className={"matches"}>{carDetailsAfterFilterAndSort.length + " matches"}</span>
-            </Grid>
-            <Grid item xs={6} align={"right"}>
-                <span className={"sortBy"}>Sort by </span>
-                <Select value={this.state.sortOptionIndex} onChange={this.selectSortOption}>
-                    <MenuItem value={1}>Lowest Price</MenuItem>
-                    <MenuItem value={2}>Highest Price</MenuItem>
-                    <MenuItem value={3}>Lowest Mileage</MenuItem>
-                    <MenuItem value={4}>Highest Mileage</MenuItem>
-                    <MenuItem value={5}>Newest Year</MenuItem>
-                    <MenuItem value={6}>Oldest Year</MenuItem>
-                </Select>
-            </Grid>
-            {carDetailsAfterFilterAndSort.map(carDetail => (
-               <Grid item xs={12} md={4} lg={3}>
-                   <Car details={carDetail}/>
-               </Grid>
-            ))}
-        </Grid>);
+        return (
+            <>
+                <Loader timeout={500}>
+                    <Grid container spacing={2} className={"carshow"}>
+                    <Grid item xs={6}>
+                        <span className={"matches"}>{carDetailsAfterFilterAndSort.length + " matches"}</span>
+                    </Grid>
+                    <Grid item xs={6} align={"right"}>
+                        <span className={"sortBy"}>Sort by </span>
+                        <Select className={"sort_by_select_option"} value={this.state.sortOptionIndex} onChange={this.selectSortOption}>
+                            <MenuItem value={1}>Lowest Price</MenuItem>
+                            <MenuItem value={2}>Highest Price</MenuItem>
+                            <MenuItem value={3}>Lowest Mileage</MenuItem>
+                            <MenuItem value={4}>Highest Mileage</MenuItem>
+                            <MenuItem value={5}>Newest Year</MenuItem>
+                            <MenuItem value={6}>Oldest Year</MenuItem>
+                        </Select>
+                    </Grid>
+                    {carDetailsAfterFilterAndSort.map(carDetail => (
+                       <Grid item xs={12} md={4} lg={3}>
+                           <Car details={carDetail}/>
+                       </Grid>
+                    ))}
+                    </Grid>
+                </Loader>
+            </>
+        );
     }
 }
 

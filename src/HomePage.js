@@ -15,13 +15,7 @@ import CarShow from "./CarShow";
 import {fetchCars, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
 import {css} from "@emotion/core";
 import Menubar from "./Menubar";
-
-const clipLoaderCss = css`
-    border-color:rgb(55,71,172);
-    position:absolute;
-    border-bottom-color:transparent;
-    top:50%;
-`;
+import Loader from './Loader';
 
 class HomePage extends React.Component{
     constructor() {
@@ -43,27 +37,27 @@ class HomePage extends React.Component{
             <React.Fragment>
                 <ScrollToTop smooth />
                 <Grid container style={{backgroundColor:"rgb(247,248,248)"}}>
-                    <Grid item xl={1} xs={0} />
-                    <Grid item xl={10} xs={12}>
+                    <Grid item xl={2} xs={0} />
+                    <Grid item xl={8} xs={12}>
                         <Menubar isBigScreen={this.props.isBigScreen}/>
                     </Grid>
-                    <Grid item xl={1} xs={0}/>
-                    <Grid item sm={1} xs={0}/>
+                    <Grid item xl={2} xs={0}/>
+                    <Grid item sm={2} xs={0}/>
                     {this.props.isLoading?(
                         <Grid item xs={12}>
-                            <div style={{display:'flex', justifyContent:'center'}}><ClipLoader css={clipLoaderCss}/></div>
+                            <Loader />
                         </Grid>
                     ):(
                         <>
                         <Grid item md={2} sm={3} xs={12}>
                             <LeftPanel filtersExpanded={this.props.isBigScreen} ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
                         </Grid>
-                        <Grid item md={8} sm={7} xs={12}>
+                        <Grid item md={6} sm={7} xs={12}>
                             <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>
                         </Grid>
                         </>
                     )}
-                    <Grid item sm={1} xs={0}/>
+                    <Grid item sm={2} xs={0}/>
                 </Grid>
             </React.Fragment>
         );
