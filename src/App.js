@@ -50,7 +50,7 @@ class AppClass extends React.Component{
             let mileageLowerCase = car["mileage"].toLowerCase();
 
             if(mileageLowerCase.includes('km')){
-                car["mileage"] = 0.621371 * Math.floor(parseFloat(mileageLowerCase.replace("km", "")));
+                car["mileage"] = Math.floor(0.621371 * parseFloat(mileageLowerCase.replace("km", "")));
             }
 
             return car;

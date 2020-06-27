@@ -74,7 +74,7 @@ class RangeFilter extends React.Component {
 
     render(){
         return (
-            <Grid container>
+            <Grid container style={{padding:20}}>
                 <Grid item xs={4}>
                     <TextField value={this.state["current_min"]} label={this.getMinTitle()}
                                variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "current_min")}/>

@@ -42,7 +42,7 @@ class Car extends React.Component {
                             <span className={"car_total_cost"}>${this.props.details['total_cost']}</span>
                         </Grid>
                         <Grid item xs={6} align={"right"}>
-                            <span className={"car_mileage"}>{this.props.details['mileage']}</span>
+                            <span className={"car_mileage"}>{this.props.details['mileage']} mi.</span>
                         </Grid>
                     </Grid>
                 </CardContent>
