@@ -31,9 +31,13 @@ class Car extends React.Component {
         }
 
         let displayOnlyMoney = this.props.displayOnlyMoney;
+        let cardMinHeight = 250;
+        if (displayOnlyMoney){
+            cardMinHeight = 160;
+        }
 
         return (
-            <Card className={"car"} onClick={(event) => {
+            <Card className={"car"} style={{minHeight:cardMinHeight}} onClick={(event) => {
                 if(this.props.onClick)
                     this.props.onClick(event, this.props.details)
             }}>
