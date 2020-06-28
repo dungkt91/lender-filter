@@ -1,5 +1,7 @@
 const globalDict = {
-    filterValues:null
+    filterValues:null,
+    lenderInputs:null,
+    lenderData:null
 }
 
 export function setFilterValues(newFilterValues){
@@ -10,4 +12,20 @@ export function setFilterValues(newFilterValues){
 
 export function getFilterValues(){
     return {...globalDict.filterValues};
+}
+
+export function setLenderInputs(newLenderInputs){
+    globalDict.lenderInputs = [...newLenderInputs];
+}
+
+export function getLenderInputs(){
+    return [...globalDict.lenderInputs];
+}
+
+export function setLenderData(newLenderData){
+    globalDict.lenderData = [...newLenderData];
+}
+
+export function getLenderData(){
+    return [...globalDict.lenderData];
 }

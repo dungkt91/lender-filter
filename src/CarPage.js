@@ -6,6 +6,7 @@ import Menubar from "./Menubar";
 import { BsArrowLeft } from "react-icons/bs";
 import CarShowElement from "./CarShowElement";
 import CarList from "./CarList";
+import {getLenderData, getLenderInputs} from "./GlobalVariables";
 
 class CarPage extends React.Component {
     constructor(props) {
@@ -46,6 +47,8 @@ class CarPage extends React.Component {
         }
 
         let carDetailsAvailable = location.state && location.state.carDetails;
+        console.log('CarPage');
+        console.log(getLenderInputs());
 
         return (
             <>
@@ -66,7 +69,7 @@ class CarPage extends React.Component {
                                     <CarList detailsList={results} onChange={this.selectCarInCarList}/>
                             </Grid>
                             <Grid item xs={12}>
-                                {carDetailsAvailable?<CarShowElement details={this.state.carDetails}/>:'Not found'}
+                                {carDetailsAvailable?<CarShowElement filtersInputs={getLenderInputs()} lenderData={getLenderData()} details={this.state.carDetails}/>:'Not found'}
                             </Grid>
                         </Grid>
                     </Grid>

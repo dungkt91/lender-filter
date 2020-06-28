@@ -78,12 +78,9 @@ export default class CarShowElement extends React.Component{
                        <Grid item xs={12} lg={5}>
                            <CarDescription details={this.convertToCarDetails(this.props.details)}/>
                        </Grid>
-                       {/*<Grid item xs={12}>*/}
-                       {/*    <CarCalculation filtersInputs={this.props.filtersInputs} lenderData={this.props.lenderData} details={this.props.details}/>*/}
-                       {/*</Grid>*/}
-                       {/*<Grid item xs={12}>*/}
-                       {/*    <CarShowElementButtons />*/}
-                       {/*</Grid>*/}
+                       <Grid item xs={12}>
+                           <CarCalculation filtersInputs={this.props.filtersInputs} lenderData={this.props.lenderData} details={this.props.details}/>
+                       </Grid>
                    </Grid>
                </CardContent>
            </Card>

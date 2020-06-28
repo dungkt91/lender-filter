@@ -169,7 +169,7 @@ class Lender extends React.Component {
             let newLenderInputs = this.state.lenderInputs;
             newLenderInputs.push(lenderInput);
 
-            this.setState({lenderInputs: newLenderInputs});
+            this.setState({lenderInputs: newLenderInputs}, this.props.onChange);
         }
     }
 
@@ -182,7 +182,11 @@ class Lender extends React.Component {
 
         newLenderInputs.splice(lenderInputIndex, 1);
 
-        this.setState({lenderInputs:newLenderInputs});
+        this.setState({lenderInputs:newLenderInputs}, this.props.onChange);
+    }
+
+    getLenderInputs(){
+        return this.state.lenderInputs;
     }
 
     render(){

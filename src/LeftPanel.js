@@ -11,6 +11,7 @@ class LeftPanel extends React.Component{
 
         this.handleChange = this.handleChange.bind(this);
         this.filterRef = React.createRef();
+        this.lenderRef = React.createRef();
         const {filters, lenderToPrograms, carDetails} = this.parseProps(this.props);
         console.log(this.props);
         console.log(filters);
@@ -187,6 +188,10 @@ class LeftPanel extends React.Component{
         return this.filterRef.current.getFilterValues();
     }
 
+    getLenderInputs(){
+        return this.lenderRef.current.getLenderInputs();
+    }
+
     render(){
         return (
         <React.Fragment>
@@ -200,7 +205,7 @@ class LeftPanel extends React.Component{
                 />
             </div>
             <div className={this.state.selectedTabIndex==1?'':'hide'}>
-                <Lender lenderToPrograms={this.state.lenderToPrograms} />
+                <Lender ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms} onChange={this.props.lenderOnChange}/>
             </div>
         </React.Fragment>
         );

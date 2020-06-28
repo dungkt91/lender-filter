@@ -16,7 +16,7 @@ import {fetchCars, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./
 import {css} from "@emotion/core";
 import Menubar from "./Menubar";
 import Loader from './Loader';
-import {getFilterValues, setFilterValues} from "./GlobalVariables";
+import {getFilterValues, setFilterValues, setLenderInputs} from "./GlobalVariables";
 
 class HomePage extends React.Component{
     constructor() {
@@ -26,7 +26,9 @@ class HomePage extends React.Component{
         this.state = {
             filterValues: {}
         }
+
         this.filterOnChange = this.filterOnChange.bind(this);
+        this.lenderOnChange = this.lenderOnChange.bind(this);
     }
 
     filterOnChange(){
@@ -35,6 +37,13 @@ class HomePage extends React.Component{
         this.setState({filterValues:filterValues}, () => {
             setFilterValues(filterValues);
         });
+    }
+
+    lenderOnChange(){
+        let lenderInputs = this.leftPanelRef.current.getLenderInputs();
+        console.log(lenderInputs);
+
+        setLenderInputs(lenderInputs);
     }
 
     render() {
@@ -55,7 +64,7 @@ class HomePage extends React.Component{
                     ):(
                         <>
                         <Grid item md={2} sm={3} xs={12}>
-                            <LeftPanel init={getFilterValues()} filtersExpanded={this.props.isBigScreen} ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange}/>
+                            <LeftPanel init={getFilterValues()} filtersExpanded={this.props.isBigScreen} ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange} lenderOnChange={this.lenderOnChange}/>
                         </Grid>
                         <Grid item md={6} sm={7} xs={12}>
                             <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>

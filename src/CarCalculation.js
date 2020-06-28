@@ -106,8 +106,8 @@ function createCalculationDetail(selectedInterest, filterInputs, lenderData, car
     let lenderPrograms = lenderData[1];
     let lenderTerms = lenderData[2];
 
-    let lenderName = filterInputs.allLenderNames[filterInputs.selectedLenderIndex - 1];
-    let tierName = filterInputs.allTierNames[filterInputs.selectedTierIndex - 1];
+    let lenderName = filterInputs["lender"];
+    let tierName = filterInputs["tier"];
     console.log('lenderName = ' + lenderName);
     console.log('tierName = ' + tierName);
 
@@ -162,7 +162,7 @@ function createCalculationDetail(selectedInterest, filterInputs, lenderData, car
     console.log('interest = ' + interest);
     console.log('term = ' + term);
 
-    let payment = parseFloat(filterInputs.currencyFields.Payment.value);
+    let payment = parseFloat(filterInputs["payment"]);
     let back = '0';
 
     // Calculate max front
@@ -210,23 +210,23 @@ function createCalculationDetail(selectedInterest, filterInputs, lenderData, car
         let ppsa = 0;
 
         let tradeAllowance = 0;
-        if (filterInputs.currencyFields["Trade Allowance"].value != '' && !isNaN(filterInputs.currencyFields["Trade Allowance"].value)) {
-            tradeAllowance = parseFloat(filterInputs.currencyFields["Trade Allowance"].value);
+        if (filterInputs["trade allowance"] != '' && !isNaN(filterInputs["trade allowance"])) {
+            tradeAllowance = parseFloat(filterInputs["trade allowance"]);
         }
 
         let tradePayOff = 0;
-        if (filterInputs.currencyFields["Trade Payoff"].value != '' && !isNaN(filterInputs.currencyFields["Trade Payoff"].value)) {
-            tradePayOff = parseFloat(filterInputs.currencyFields["Trade Payoff"].value)
+        if (filterInputs["trade payoff"] != '' && !isNaN(filterInputs["trade payoff"])) {
+            tradePayOff = parseFloat(filterInputs["trade payoff"])
         }
 
         let downPayment = 0;
-        if (filterInputs.currencyFields["Down Payment"].value != '' && !isNaN(filterInputs.currencyFields["Down Payment"].value)) {
-            downPayment = parseFloat(filterInputs.currencyFields["Down Payment"].value);
+        if (filterInputs["down payment"] != '' && !isNaN(filterInputs["down payment"])) {
+            downPayment = parseFloat(filterInputs["down payment"]);
         }
 
         let tradeAcv = 0;
-        if (filterInputs.currencyFields["Trace a.c.v"].value != '' && !isNaN(filterInputs.currencyFields["Trace a.c.v"].value)) {
-            tradeAcv = parseFloat(filterInputs.currencyFields["Trace a.c.v"].value)
+        if (filterInputs["trade a.c.v"] != '' && !isNaN(filterInputs["trade a.c.v"])) {
+            tradeAcv = parseFloat(filterInputs["trade a.c.v"])
         }
 
         console.log('tradeAllowance = ' + tradeAllowance);
@@ -239,9 +239,9 @@ function createCalculationDetail(selectedInterest, filterInputs, lenderData, car
 
         let userInputTax = 0;
 
-        if (filterInputs.percentageFields.Tax.value != '' && !isNaN(filterInputs.percentageFields.Tax.value)) {
-            console.log(filterInputs.percentageFields.Tax.value);
-            userInputTax = parseFloat(filterInputs.percentageFields.Tax.value) / 100;
+        if (filterInputs["tax"] != '' && !isNaN(filterInputs["tax"])) {
+            console.log(filterInputs["tax"]);
+            userInputTax = parseFloat(filterInputs["tax"]) / 100;
         }
 
         console.log('userInputTax = ' + userInputTax);
