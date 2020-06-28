@@ -2,6 +2,7 @@ import React from "react";
 import Car from './Car';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import './CarList.css';
 
 export default class CarList extends React.Component {
     constructor(props) {
@@ -10,7 +11,7 @@ export default class CarList extends React.Component {
         let noCars = this.props.detailsList.length  == 0;
 
         this.state = {
-            firstCarIndex:0,
+            selectedCarIndex:0,
             previousBtnDisabled:true,
             nextBtnDisabled:noCars
         }
@@ -20,51 +21,72 @@ export default class CarList extends React.Component {
         this.carOnClick = this.carOnClick.bind(this);
     }
 
-    updateBtnDisabled(firstCarIndex){
+    updateBtnDisabled(selectedCarIndex){
         return {
-            previousBtnDisabled:firstCarIndex == 0,
-            nextBtnDisabled:(firstCarIndex == this.props.detailsList.length - 1)
+            previousBtnDisabled:selectedCarIndex == 0,
+            nextBtnDisabled:(selectedCarIndex == this.props.detailsList.length - 1)
         };
     }
 
-    previous(){
-        if(this.state.firstCarIndex > 0) {
-            let newCarIndex = (this.state.firstCarIndex - 1);
+    callOnChange = (carIndex) => {
+        if (this.props.onChange)
+            this.props.onChange(this.props.detailsList[carIndex]);
+    }
 
-            this.setState({firstCarIndex: newCarIndex, ...this.updateBtnDisabled(newCarIndex)});
+    previous(){
+        if(this.state.selectedCarIndex > 0) {
+            let newCarIndex = (this.state.selectedCarIndex - 1);
+
+            this.setState({selectedCarIndex: newCarIndex, ...this.updateBtnDisabled(newCarIndex)}, this.callOnChange(newCarIndex));
         }
     }
 
     next(){
-        if(this.state.firstCarIndex < this.props.detailsList.length - 1){
-            let newCarIndex = (this.state.firstCarIndex + 1);
+        if(this.state.selectedCarIndex < this.props.detailsList.length - 1){
+            let newCarIndex = (this.state.selectedCarIndex + 1);
 
-            this.setState({firstCarIndex:newCarIndex, ...this.updateBtnDisabled(newCarIndex)});
+            this.setState({selectedCarIndex:newCarIndex, ...this.updateBtnDisabled(newCarIndex)}, this.callOnChange(newCarIndex));
         }
     }
 
     carOnClick(carIndex){
-        this.setState({firstCarIndex:carIndex}, () => {
-            if (this.props.onChange)
-                this.props.onChange(this.props.detailsList[carIndex])
-        });
+        this.setState({selectedCarIndex:carIndex}, this.callOnChange(carIndex));
     }
 
     render(){
+        let startCarIndex = -1;
+        let endCarIndex = -1;
+
+        if (this.state.selectedCarIndex - 2 >= 0 && this.state.selectedCarIndex + 2 <= this.props.detailsList.length){
+            startCarIndex = this.state.selectedCarIndex - 2;
+            endCarIndex = this.state.selectedCarIndex + 2;
+        }else if(this.state.selectedCarIndex - 2 < 0){
+            startCarIndex = 0;
+            endCarIndex = 4;
+        }else if(this.state.selectedCarIndex + 2 >= this.props.detailsList.length){
+            endCarIndex = this.props.detailsList.length;
+            startCarIndex = this.props.detailsList.length - 5;
+        }
+
+        console.log('startCarIndex = ' + startCarIndex);
+        console.log('endCarIndex = ' + endCarIndex);
+
         return (
             <Grid container style={{minHeight: 200}}>
-                <Grid item xs={1}>
-                    <Button disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous}>Prev</Button>
-                </Grid>
                 {
-                    this.props.detailsList.slice(this.state.firstCarIndex, this.state.firstCarIndex + 5).map((details, index) =>
+                    this.props.detailsList.slice(startCarIndex, endCarIndex + 1).map((details, index) =>
                         <Grid item xs={2} style={{padding:10}}>
-                            <Car displayOnlyMoney={true} details={details} onClick={(event, carDetails) => this.carOnClick(this.state.firstCarIndex + index)}/>
+                            <div className={(startCarIndex + index == this.state.selectedCarIndex)?"selected_car":""}>
+                                <Car displayOnlyMoney={true} details={details} onClick={(event, carDetails) => this.carOnClick(startCarIndex + index)}/>
+                            </div>
                         </Grid>
                     )
                 }
-                <Grid item xs={1}>
-                    <Button disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next}>Next</Button>
+                <Grid item xs={2}>
+                    <div style={{display:'flex', width:'100%', height:'100%', alignItems: 'center', justifyContent:"space-around"}}>
+                        <Button disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous}>Prev</Button>
+                        <Button disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next}>Next</Button>
+                    </div>
                 </Grid>
             </Grid>
         )

@@ -1,5 +1,4 @@
 import * as React from "react";
-import CarShowElement from "./CarShowElement";
 import Grid from "@material-ui/core/Grid";
 import {styled, useTheme} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
