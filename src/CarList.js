@@ -57,7 +57,7 @@ export default class CarList extends React.Component {
         let startCarIndex = -1;
         let endCarIndex = -1;
 
-        if (this.state.selectedCarIndex - 2 >= 0 && this.state.selectedCarIndex + 2 <= this.props.detailsList.length){
+        if (this.state.selectedCarIndex - 2 >= 0 && this.state.selectedCarIndex + 2 < this.props.detailsList.length){
             startCarIndex = this.state.selectedCarIndex - 2;
             endCarIndex = this.state.selectedCarIndex + 2;
         }else if(this.state.selectedCarIndex - 2 < 0){
@@ -68,6 +68,7 @@ export default class CarList extends React.Component {
             startCarIndex = this.props.detailsList.length - 5;
         }
 
+        console.log('selectedCarIndex = ' + this.state.selectedCarIndex);
         console.log('startCarIndex = ' + startCarIndex);
         console.log('endCarIndex = ' + endCarIndex);
 
