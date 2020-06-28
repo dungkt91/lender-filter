@@ -52,14 +52,14 @@ export default class CarList extends React.Component {
 
     render(){
         return (
-            <Grid container>
+            <Grid container style={{minHeight: 200}}>
                 <Grid item xs={1}>
                     <Button disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous}>Prev</Button>
                 </Grid>
                 {
                     this.props.detailsList.slice(this.state.firstCarIndex, this.state.firstCarIndex + 5).map((details, index) =>
                         <Grid item xs={2} style={{padding:10}}>
-                            <Car details={details} onClick={(event, carDetails) => this.carOnClick(this.state.firstCarIndex + index)}/>
+                            <Car displayOnlyMoney={true} details={details} onClick={(event, carDetails) => this.carOnClick(this.state.firstCarIndex + index)}/>
                         </Grid>
                     )
                 }

@@ -30,6 +30,8 @@ class Car extends React.Component {
             carImgSrc = detailsImages[0]["src"];
         }
 
+        let displayOnlyMoney = this.props.displayOnlyMoney;
+
         return (
             <Card className={"car"} onClick={(event) => {
                 if(this.props.onClick)
@@ -40,15 +42,25 @@ class Car extends React.Component {
                         <Grid item xs={12}>
                             <img src={carImgSrc} style={{width:'100%'}}/>
                         </Grid>
-                        <Grid item xs={12}>
-                            <span className={"car_title"}>{this.getCarTitle()}</span>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <span className={"car_total_cost"}>${this.props.details['total_cost']}</span>
-                        </Grid>
-                        <Grid item xs={6} align={"right"}>
-                            <span className={"car_mileage"}>{this.props.details['mileage']} mi.</span>
-                        </Grid>
+                        {displayOnlyMoney
+                            ?(
+                                <Grid item xs={12} style={{textAlign:'center'}}>
+                                    <span className={"car_total_cost"}>${this.props.details['total_cost']}</span>
+                                </Grid>
+                            ):(
+                                <>
+                                    <Grid item xs={12}>
+                                        <span className={"car_title"}>{this.getCarTitle()}</span>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <span className={"car_total_cost"}>${this.props.details['total_cost']}</span>
+                                    </Grid>
+                                    <Grid item xs={6} align={"right"}>
+                                        <span className={"car_mileage"}>{this.props.details['mileage']} mi.</span>
+                                    </Grid>
+                                </>
+                            )
+                        }
                     </Grid>
                 </CardContent>
             </Card>
