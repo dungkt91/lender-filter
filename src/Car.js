@@ -32,7 +32,14 @@ class Car extends React.Component {
     }
 
     render(){
-        let carImages = this.props.details["images"].map(image => {return {original: image["src"]}});
+        let carImages = [];
+        let detailsImages = this.props.details["images"];
+
+        if (detailsImages && detailsImages.length > 0){
+            let firstCarImage = detailsImages[0];
+
+            carImages = [{original:firstCarImage["src"]}];
+        }
 
         return (
             <Card className={"car"} onClick={this.cardOnClick}>
