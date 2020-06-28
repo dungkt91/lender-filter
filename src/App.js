@@ -42,7 +42,7 @@ class AppClass extends React.Component{
             let lenderTermsJson = jsons[2];
             let lenderProgramsJson = jsons[3];
 
-            setLenderData([lendersJson, lenderTermsJson, lenderProgramsJson]);
+            setLenderData([lendersJson, lenderProgramsJson, lenderTermsJson]);
 
             this.setState({carJson:carJson, lendersJson:lendersJson, lenderTermsJson:lenderTermsJson, lenderProgramsJson:lenderProgramsJson, isLoading:false});
         });
