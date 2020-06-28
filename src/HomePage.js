@@ -42,11 +42,11 @@ class HomePage extends React.Component{
             <React.Fragment>
                 <ScrollToTop smooth />
                 <Grid container style={{backgroundColor:"rgb(247,248,248)"}}>
-                    <Grid item xl={2} xs={0} />
-                    <Grid item xl={8} xs={12}>
+                    <Grid item md={2} xs={0} />
+                    <Grid item md={8} xs={12}>
                         <Menubar isBigScreen={this.props.isBigScreen}/>
                     </Grid>
-                    <Grid item xl={2} xs={0}/>
+                    <Grid item md={2} xs={0}/>
                     <Grid item sm={2} xs={0}/>
                     {this.props.isLoading?(
                         <Grid item xs={12}>

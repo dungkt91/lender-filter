@@ -51,13 +51,13 @@ class CarPage extends React.Component {
             <>
                 <ScrollToTop smooth />
                 <Grid container style={{backgroundColor:"rgb(247,248,248)"}}>
-                    <Grid item xl={2} xs={0} />
-                    <Grid item xl={8} xs={12}>
+                    <Grid item md={2} xs={0} />
+                    <Grid item md={8} xs={12}>
                         <Menubar isBigScreen={this.props.isBigScreen}/>
                     </Grid>
-                    <Grid item xl={2} xs={0}/>
-                    <Grid item xl={2} xs={0} />
-                    <Grid item xl={8} xs={12}>
+                    <Grid item md={2} xs={0}/>
+                    <Grid item md={2} xs={0} />
+                    <Grid item md={8} xs={12}>
                         <Grid container item>
                             <Grid item xs={12}>
                                 <BsArrowLeft /> <a href={"#"} onClick={this.goBack}>Search Results</a>
@@ -70,7 +70,7 @@ class CarPage extends React.Component {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xl={2} xs={0}/>
+                    <Grid item md={2} xs={0}/>
                 </Grid>
             </>
         )
