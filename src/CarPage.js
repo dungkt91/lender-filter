@@ -47,8 +47,11 @@ class CarPage extends React.Component {
         }
 
         let carDetailsAvailable = location.state && location.state.carDetails;
-        console.log('CarPage');
-        console.log(getLenderInputs());
+        let lenderInputs = getLenderInputs();
+
+        if (lenderInputs == null){
+            lenderInputs = [];
+        }
 
         return (
             <>
@@ -69,7 +72,7 @@ class CarPage extends React.Component {
                                     <CarList detailsList={results} onChange={this.selectCarInCarList}/>
                             </Grid>
                             <Grid item xs={12}>
-                                {carDetailsAvailable?<CarShowElement filtersInputs={getLenderInputs()} lenderData={getLenderData()} details={this.state.carDetails}/>:'Not found'}
+                                {carDetailsAvailable?<CarShowElement filtersInputs={lenderInputs} lenderData={getLenderData()} details={this.state.carDetails}/>:'Not found'}
                             </Grid>
                         </Grid>
                     </Grid>

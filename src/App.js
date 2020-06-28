@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import CarPage from "./CarPage";
 import {fetchCars, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
+import {setLenderData} from "./GlobalVariables";
 
 const App = (props) => {
     const theme = useTheme();
@@ -40,6 +41,8 @@ class AppClass extends React.Component{
             let lendersJson = jsons[1];
             let lenderTermsJson = jsons[2];
             let lenderProgramsJson = jsons[3];
+
+            setLenderData([lendersJson, lenderTermsJson, lenderProgramsJson]);
 
             this.setState({carJson:carJson, lendersJson:lendersJson, lenderTermsJson:lenderTermsJson, lenderProgramsJson:lenderProgramsJson, isLoading:false});
         });

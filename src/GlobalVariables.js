@@ -11,7 +11,10 @@ export function setFilterValues(newFilterValues){
 }
 
 export function getFilterValues(){
-    return {...globalDict.filterValues};
+    if (globalDict.filterValues)
+        return {...globalDict.filterValues};
+
+    return null;
 }
 
 export function setLenderInputs(newLenderInputs){
@@ -19,7 +22,10 @@ export function setLenderInputs(newLenderInputs){
 }
 
 export function getLenderInputs(){
-    return [...globalDict.lenderInputs];
+    if (globalDict.lenderInputs)
+        return [...globalDict.lenderInputs];
+
+    return null;
 }
 
 export function setLenderData(newLenderData){
@@ -27,5 +33,8 @@ export function setLenderData(newLenderData){
 }
 
 export function getLenderData(){
-    return [...globalDict.lenderData];
+    if (globalDict.lenderData)
+        return [...globalDict.lenderData];
+
+    return null;
 }
