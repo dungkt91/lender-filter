@@ -13,6 +13,7 @@ import Car from './Car.js';
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Loader from './Loader';
+import { withRouter } from "react-router";
 
 class CarShow extends React.Component {
     constructor(props) {
@@ -23,6 +24,7 @@ class CarShow extends React.Component {
         }
 
         this.selectSortOption = this.selectSortOption.bind(this);
+        this.carOnClick = this.carOnClick.bind(this);
     }
 
     filterTitleToFieldName(filterTitle){
@@ -124,6 +126,12 @@ class CarShow extends React.Component {
         this.setState({sortOptionIndex:sortOptionIndex});
     }
 
+    carOnClick(event, carDetails){
+        const {history} = this.props;
+
+        history.push('/car', {carDetails:carDetails, results:this.carDetails()});
+    }
+
     render() {
         let carDetailsAfterFilterAndSort = this.carDetails();
 
@@ -147,7 +155,7 @@ class CarShow extends React.Component {
                     </Grid>
                     {carDetailsAfterFilterAndSort.map(carDetail => (
                        <Grid item xs={12} md={4} lg={3}>
-                           <Car details={carDetail}/>
+                           <Car details={carDetail} onClick={this.carOnClick}/>
                        </Grid>
                     ))}
                     </Grid>
@@ -157,4 +165,4 @@ class CarShow extends React.Component {
     }
 }
 
-export default CarShow;
+export default withRouter(CarShow);

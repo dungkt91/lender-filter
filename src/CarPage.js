@@ -5,13 +5,26 @@ import Grid from "@material-ui/core/Grid";
 import Menubar from "./Menubar";
 import { BsArrowLeft } from "react-icons/bs";
 import CarShowElement from "./CarShowElement";
-import testVar from "./GlobalVariables";
+import CarList from "./CarList";
 
 class CarPage extends React.Component {
     constructor(props) {
         super(props);
 
+        const {location} = this.props;
+
+        let carDetails = null;
+
+        if (location.state.carDetails){
+            carDetails = location.state.carDetails;
+        }
+
+        this.state = {
+            carDetails: location.state.carDetails
+        }
+
         this.goBack = this.goBack.bind(this);
+        this.selectCarInCarList = this.selectCarInCarList.bind(this);
     }
 
     goBack(){
@@ -20,8 +33,18 @@ class CarPage extends React.Component {
         history.push('/');
     }
 
+    selectCarInCarList(carDetails){
+        this.setState({carDetails:carDetails});
+    }
+
     render() {
         const {history, location} = this.props;
+        let results = [];
+
+        if (location.state.results){
+            results = location.state.results;
+        }
+
         let carDetailsAvailable = location.state && location.state.carDetails;
 
         return (
@@ -39,8 +62,13 @@ class CarPage extends React.Component {
                             <Grid item xs={12}>
                                 <BsArrowLeft /> <a href={"#"} onClick={this.goBack}>Search Results</a>
                             </Grid>
+                            <Grid item xs={12}>
+                                    <CarList detailsList={results} onChange={this.selectCarInCarList}/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                {carDetailsAvailable?<CarShowElement details={this.state.carDetails}/>:'Not found'}
+                            </Grid>
                         </Grid>
-                        {carDetailsAvailable?<CarShowElement details={location.state.carDetails}/>:'Not found'}
                     </Grid>
                     <Grid item xl={2} xs={0}/>
                 </Grid>

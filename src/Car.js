@@ -3,13 +3,10 @@ import { Card } from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from "@material-ui/core/Grid";
 import ImageGallery from "react-image-gallery";
-import { withRouter } from "react-router";
 
 class Car extends React.Component {
     constructor(props) {
         super(props);
-
-        this.cardOnClick = this.cardOnClick.bind(this);
     }
 
     getCarTitle(){
@@ -21,32 +18,27 @@ class Car extends React.Component {
         return `${carYear} ${carMake} ${carModel} ${carTrim}`;
     }
 
-    cardOnClick(){
-        const {history} = this.props;
-
-        history.push('/car', {carDetails:this.props.details})
-    }
-
     convertImages(images){
         return images.map(image => {return {original:image}});
     }
 
     render(){
-        let carImages = [];
+        let carImgSrc = '';
         let detailsImages = this.props.details["images"];
 
         if (detailsImages && detailsImages.length > 0){
-            let firstCarImage = detailsImages[0];
-
-            carImages = [{original:firstCarImage["src"]}];
+            carImgSrc = detailsImages[0]["src"];
         }
 
         return (
-            <Card className={"car"} onClick={this.cardOnClick}>
+            <Card className={"car"} onClick={(event) => {
+                if(this.props.onClick)
+                    this.props.onClick(event, this.props.details)
+            }}>
                 <CardContent>
                     <Grid container>
                         <Grid item xs={12}>
-                            <ImageGallery items={carImages} showPlayButton={false} showFullscreenButton={false} showThumbnails={false}/>
+                            <img src={carImgSrc} style={{width:'100%'}}/>
                         </Grid>
                         <Grid item xs={12}>
                             <span className={"car_title"}>{this.getCarTitle()}</span>
@@ -64,4 +56,4 @@ class Car extends React.Component {
     }
 }
 
-export default withRouter(Car);
+export default Car;
