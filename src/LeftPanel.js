@@ -145,7 +145,11 @@ class LeftPanel extends React.Component{
             for(let filterTitle in this.props.init){
                 for(let filter of filters){
                     if (filter["title"] == filterTitle){
-                        filter["init"] = this.props.init[filterTitle];
+                        if (filter["type"] == "list"){
+                            filter["init"] = this.props.init[filterTitle]["selectedOptions"];
+                        }else{
+                            filter["init"] = this.props.init[filterTitle];
+                        }
                         break;
                     }
                 }

@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Menubar from "./Menubar";
 import { BsArrowLeft } from "react-icons/bs";
 import CarShowElement from "./CarShowElement";
+import testVar from "./GlobalVariables";
 
 class CarPage extends React.Component {
     constructor(props) {

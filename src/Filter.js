@@ -12,7 +12,7 @@ class Filter extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {filters:this.props.filters};
+        this.state = {filters:this.props.filters, filtersInitializationHappened:{}};
 
         for(let filter of this.props.filters){
             if ("expand" in filter) {
@@ -27,6 +27,18 @@ class Filter extends React.Component {
         this.expandOrCollapse = this.expandOrCollapse.bind(this);
     }
 
+    componentDidMount(){
+        let filtersInitializationHappened = {};
+
+        for(let filter of this.props.filters){
+            if(filter["init"]){
+                filtersInitializationHappened[filter["title"]] = true;
+            }
+        }
+
+        this.setState({filtersInitializationHappened:filtersInitializationHappened});
+    }
+
     expandBtnOnClick(event, filterTitle) {
         let stateKeyName = filterTitle + '_expand';
         let newState = {};
@@ -36,7 +48,7 @@ class Filter extends React.Component {
     }
 
     filterOnChange(event, filterTitle){
-        console.log("filterOnChange");
+
         let newState = {...this.state};
 
         for(let filter of newState.filters){
@@ -46,17 +58,24 @@ class Filter extends React.Component {
                 let dependentFilter = filter["dependent_filter"];
                 let dependentList = filter["dependent_list"];
 
-                let selectedOptions = this.refsDict[dependentFilter].getValues()["selectedOptions"];
-                let newOptions = new Set();
+                if (this.refsDict[dependentFilter]) {
+                    let selectedOptions = this.refsDict[dependentFilter].getValues()["selectedOptions"];
+                    let newOptions = new Set();
 
-                for(let selectedOption of selectedOptions){
-                    dependentList[selectedOption].forEach(newOptions.add, newOptions);
+                    for (let selectedOption of selectedOptions) {
+                        dependentList[selectedOption].forEach(newOptions.add, newOptions);
+                    }
+
+                    filter["options"] = Array.from(newOptions);
                 }
+            }
 
-                filter["options"] = Array.from(newOptions);
+            if(this.state.filtersInitializationHappened[filter["title"]]){
+                delete filter["init"];
             }
         }
 
+        console.log(newState);
         this.setState(newState, this.props.onChange);
     }
 
@@ -113,8 +132,6 @@ class Filter extends React.Component {
     }
 
     render(){
-        console.log('render');
-        console.log(this.state);
         this.refsDict = {};
 
         return (
