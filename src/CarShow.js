@@ -129,7 +129,7 @@ class CarShow extends React.Component {
 
         return (
             <>
-                <Loader timeout={500}>
+                {/*<Loader timeout={500}>*/}
                     <Grid container spacing={2} className={"carshow"}>
                     <Grid item xs={6}>
                         <span className={"matches"}>{carDetailsAfterFilterAndSort.length + " matches"}</span>
@@ -151,7 +151,7 @@ class CarShow extends React.Component {
                        </Grid>
                     ))}
                     </Grid>
-                </Loader>
+                {/*</Loader>*/}
             </>
         );
     }
