@@ -27,13 +27,19 @@ class Car extends React.Component {
         history.push('/car', {carDetails:this.props.details})
     }
 
+    convertImages(images){
+        return images.map(image => {return {original:image}});
+    }
+
     render(){
+        let carImages = this.props.details["images"].map(image => {return {original: image["src"]}});
+
         return (
             <Card className={"car"} onClick={this.cardOnClick}>
                 <CardContent>
                     <Grid container>
                         <Grid item xs={12}>
-                            <ImageGallery items={[{original:"https://drive.google.com/uc?export=view&id=1PNPS_e8i8a_m2Owox2ncuuFWNotAbYh6"}]} showPlayButton={false} showFullscreenButton={false} showThumbnails={false}/>
+                            <ImageGallery items={carImages} showPlayButton={false} showFullscreenButton={false} showThumbnails={false}/>
                         </Grid>
                         <Grid item xs={12}>
                             <span className={"car_title"}>{this.getCarTitle()}</span>
