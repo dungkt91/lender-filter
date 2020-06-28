@@ -4,6 +4,7 @@ import Tab from "@material-ui/core/Tab";
 import Filter from './Filter';
 import './LeftPanel.css';
 import Lender from './Lender';
+import {getLenderInputs} from "./GlobalVariables";
 
 class LeftPanel extends React.Component{
     constructor(props) {
@@ -205,7 +206,7 @@ class LeftPanel extends React.Component{
                 />
             </div>
             <div className={this.state.selectedTabIndex==1?'':'hide'}>
-                <Lender ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms} onChange={this.props.lenderOnChange}/>
+                <Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms} onChange={this.props.lenderOnChange}/>
             </div>
         </React.Fragment>
         );

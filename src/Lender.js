@@ -66,6 +66,12 @@ class Lender extends React.Component {
         this.deleteLenderInput = this.deleteLenderInput.bind(this);
     }
 
+    componentDidMount() {
+        if(this.props.init){
+            this.setState({lenderInputs:this.props.init});
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         let lenderMenuItems = [];
 
