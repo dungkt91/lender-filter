@@ -5,6 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import debounce from "lodash/debounce";
 import Slider from '@material-ui/core/Slider';
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 class RangeFilter extends React.Component {
     constructor(props) {
@@ -73,18 +74,32 @@ class RangeFilter extends React.Component {
     }
 
     render(){
+        let inputProps = {};
+
+        if (this.props.startAdornment){
+            inputProps['startAdornment'] = <InputAdornment position="start">{this.props.startAdornment}</InputAdornment>
+        }
+
+        if (this.props.endAdornment){
+            inputProps['endAdornment'] = <InputAdornment position="end">{this.props.endAdornment}</InputAdornment>
+        }
+
         return (
             <Grid container style={{padding:20}}>
                 <Grid item xs={4}>
                     <TextField value={this.state["current_min"]} label={this.getMinTitle()}
-                               variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "current_min")}/>
+                               variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "current_min")}
+                               InputProps={inputProps}
+                    />
                 </Grid>
                 <Grid item xs={4} align={"center"} style={{paddingTop:10}}>
                     {this.getToText()}
                 </Grid>
                 <Grid item xs={4}>
                     <TextField value={this.state["current_max"]} label={this.getMaxTitle()}
-                               variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "current_max")}/>
+                               variant="outlined" size={"small"} onChange={(event) => this.textFieldOnChange(event, "current_max")}
+                               InputProps={inputProps}
+                    />
                 </Grid>
                 <Slider min={this.state.min} max={this.state.max} value={[this.state.current_min, this.state.current_max]} valueLabelDisplay="auto" step={1} onChange={this.sliderOnChange}/>
             </Grid>

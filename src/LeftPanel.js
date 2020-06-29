@@ -131,7 +131,8 @@ class LeftPanel extends React.Component{
                 "maxTitle": "Max",
                 "value_type":"continuous",
                 "values": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10),
-                "expand": this.props.filtersExpanded
+                "expand": this.props.filtersExpanded,
+                "endAdornment":'mi'
             },
             {
                 "title": "Total cost",
@@ -140,7 +141,8 @@ class LeftPanel extends React.Component{
                 "maxTitle": "Max",
                 "value_type":"continuous",
                 "values": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10),
-                "expand": this.props.filtersExpanded
+                "expand": this.props.filtersExpanded,
+                "startAdornment":'$'
             }
         ];
 
