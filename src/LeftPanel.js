@@ -197,7 +197,7 @@ class LeftPanel extends React.Component{
     render(){
         return (
         <div className={"left_panel"}>
-            <Tabs value={this.state.selectedTabIndex} onChange={this.handleChange}>
+            <Tabs value={this.state.selectedTabIndex} onChange={this.handleChange} TabIndicatorProps={{style:{background:'#4153AF'}}}>
                 <Tab label={"Filter"} className={"filter_tab " + (this.state.selectedTabIndex==0?"tab_selected":"tab_deselected")}/>
                 <Tab label={"Lender"} className={"lender_tab " + (this.state.selectedTabIndex==1?"tab_selected":"tab_deselected")} />
             </Tabs>
