@@ -138,7 +138,7 @@ class CarShow extends React.Component {
             <>
                 {/*<Loader timeout={500}>*/}
                     <Grid container spacing={2} className={"carshow"}>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} style={{paddingTop:20}}>
                         <span className={"matches"}>{carDetailsAfterFilterAndSort.length + " matches"}</span>
                     </Grid>
                     <Grid item xs={6} align={"right"}>
