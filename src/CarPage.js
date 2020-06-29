@@ -56,7 +56,7 @@ class CarPage extends React.Component {
         return (
             <>
                 <ScrollToTop smooth />
-                <Grid container style={{backgroundColor:"rgb(247,248,248)"}}>
+                <Grid container>
                     <Grid item xl={2} xs={0} />
                     <Grid item xl={8} xs={12}>
                         <Menubar isBigScreen={this.props.isBigScreen}/>

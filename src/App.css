@@ -41,7 +41,7 @@
   cursor:pointer;
   user-select:none;
   transform: scale(1.005);
-  box-shadow: 0 5px 15px gray;
+  box-shadow: 0 1px 5px gray;
 }
 
 .car_title{

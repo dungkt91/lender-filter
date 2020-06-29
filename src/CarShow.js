@@ -19,7 +19,7 @@ class CarShow extends React.Component {
         super(props);
 
         this.state = {
-            sortOptionIndex:-1
+            sortOptionIndex:0
         }
 
         this.selectSortOption = this.selectSortOption.bind(this);
@@ -142,8 +142,8 @@ class CarShow extends React.Component {
                         <span className={"matches"}>{carDetailsAfterFilterAndSort.length + " matches"}</span>
                     </Grid>
                     <Grid item xs={6} align={"right"}>
-                        <span className={"sortBy"}>Sort by </span>
                         <Select className={"sort_by_select_option"} value={this.state.sortOptionIndex} onChange={this.selectSortOption}>
+                            <MenuItem value={0}>Sort By</MenuItem>
                             <MenuItem value={1}>Lowest Price</MenuItem>
                             <MenuItem value={2}>Highest Price</MenuItem>
                             <MenuItem value={3}>Lowest Mileage</MenuItem>
