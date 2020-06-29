@@ -56,3 +56,7 @@
 .car_mileage{
   color:gray;
 }
+
+.car{
+  border:solid 1px lightgray;
+}
