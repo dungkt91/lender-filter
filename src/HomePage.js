@@ -51,27 +51,27 @@ class HomePage extends React.Component{
             <React.Fragment>
                 <ScrollToTop smooth />
                 <Grid container style={{backgroundColor:"rgb(247,248,248)"}}>
-                    <Grid item md={2} xs={0} />
-                    <Grid item md={8} xs={12}>
+                    <Grid item xl={2} xs={0} />
+                    <Grid item xl={8} xs={12}>
                         <Menubar isBigScreen={this.props.isBigScreen}/>
                     </Grid>
-                    <Grid item md={2} xs={0}/>
-                    <Grid item sm={2} xs={0}/>
+                    <Grid item xl={2} xs={0}/>
+                    <Grid item xl={2} xs={0}/>
                     {this.props.isLoading?(
                         <Grid item xs={12}>
                             <Loader />
                         </Grid>
                     ):(
                         <>
-                        <Grid item md={2} sm={3} xs={12}>
+                        <Grid item xl={2} sm={3} xs={12}>
                             <LeftPanel init={getFilterValues()} filtersExpanded={this.props.isBigScreen} ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange} lenderOnChange={this.lenderOnChange}/>
                         </Grid>
-                        <Grid item md={6} sm={7} xs={12}>
+                        <Grid item xl={6} sm={9} xs={12}>
                             <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>
                         </Grid>
                         </>
                     )}
-                    <Grid item sm={2} xs={0}/>
+                    <Grid item xl={2} xs={0}/>
                 </Grid>
             </React.Fragment>
         );

@@ -46,5 +46,13 @@
 
 .car_title{
   font-weight: bold;
-  font-size:1.2rem;
+  color:#4153AF;
+}
+
+.car_total_cost{
+  color:gray;
+}
+
+.car_mileage{
+  color:gray;
 }
