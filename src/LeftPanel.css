@@ -20,3 +20,7 @@
     border-radius: 10px 10px 0px 0px !important;
     border:solid 1px lightgray !important;
 }
+
+.left_panel{
+    padding-top:10px;
+}

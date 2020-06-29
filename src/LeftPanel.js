@@ -196,7 +196,7 @@ class LeftPanel extends React.Component{
 
     render(){
         return (
-        <React.Fragment>
+        <div className={"left_panel"}>
             <Tabs value={this.state.selectedTabIndex} onChange={this.handleChange}>
                 <Tab label={"Filter"} className={"filter_tab " + (this.state.selectedTabIndex==0?"tab_selected":"tab_deselected")}/>
                 <Tab label={"Lender"} className={"lender_tab " + (this.state.selectedTabIndex==1?"tab_selected":"tab_deselected")} />
@@ -209,7 +209,7 @@ class LeftPanel extends React.Component{
             <div className={this.state.selectedTabIndex==1?'':'hide'}>
                 <Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms} onChange={this.props.lenderOnChange}/>
             </div>
-        </React.Fragment>
+        </div>
         );
     }
 }
