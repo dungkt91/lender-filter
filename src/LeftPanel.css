@@ -9,3 +9,14 @@
 .hide{
     display:none;
 }
+
+.lender_tab{
+    border-radius: 10px 10px 0px 0px !important;
+    margin-left:10px !important;
+    border:solid 1px lightgray !important;
+}
+
+.filter_tab{
+    border-radius: 10px 10px 0px 0px !important;
+    border:solid 1px lightgray !important;
+}

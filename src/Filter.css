@@ -1,5 +1,10 @@
 .filter_main_content{
     background-color:white;
+    border: solid 1px lightgray;
+}
+
+.filter_main_content{
+    border-top:none;
 }
 
 .padding10{

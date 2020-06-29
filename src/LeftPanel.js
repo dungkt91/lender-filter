@@ -5,6 +5,7 @@ import Filter from './Filter';
 import './LeftPanel.css';
 import Lender from './Lender';
 import {getLenderInputs} from "./GlobalVariables";
+import './LeftPanel.css';
 
 class LeftPanel extends React.Component{
     constructor(props) {
@@ -197,8 +198,8 @@ class LeftPanel extends React.Component{
         return (
         <React.Fragment>
             <Tabs value={this.state.selectedTabIndex} onChange={this.handleChange}>
-                <Tab label={"Filter"} className={this.state.selectedTabIndex==0?"tab_selected":"tab_deselected"}/>
-                <Tab label={"Lender"} className={this.state.selectedTabIndex==1?"tab_selected":"tab_deselected"} />
+                <Tab label={"Filter"} className={"filter_tab " + (this.state.selectedTabIndex==0?"tab_selected":"tab_deselected")}/>
+                <Tab label={"Lender"} className={"lender_tab " + (this.state.selectedTabIndex==1?"tab_selected":"tab_deselected")} />
             </Tabs>
             <div className={this.state.selectedTabIndex==0?'':'hide'}>
                 <Filter ref={this.filterRef} filters={this.state.filters}
