@@ -1,3 +1,23 @@
 .selected_car {
     border:solid 3px blue;
 }
+
+.prev_btn{
+    border: solid 1px gray !important;
+    border-radius: 10px 0px 0px 10px !important;
+}
+
+.next_btn{
+    border: solid 1px gray !important;
+    border-radius: 0px 10px 10px 0px !important;
+}
+
+.navigation_btn.enabled{
+    color:blue !important;
+    border-color: blue !important;
+}
+
+.navigation_btn.disabled{
+    color:gray !important;
+    border-color: gray !important;
+}

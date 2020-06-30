@@ -69,10 +69,10 @@ class CarPage extends React.Component {
                             <Grid item xs={12}>
                                 <a href={"#"} className={"search_results_back_link"}onClick={this.goBack}><BsArrowLeft /> All Results</a>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} className={"car_list"}>
                                     <CarList initSelectedCarIndex={location.state.carIndex} detailsList={results} onChange={this.selectCarInCarList}/>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} className={"car_detail"}>
                                 {carDetailsAvailable?<CarShowElement filtersInputs={lenderInputs} lenderData={getLenderData()} details={this.state.carDetails}/>:'Not found'}
                             </Grid>
                         </Grid>

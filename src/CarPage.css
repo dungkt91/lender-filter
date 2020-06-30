@@ -1,4 +1,13 @@
 .search_results_back_link{
     text-decoration: none;
     color:black;
+    margin-left:10px;
+}
+
+.car_list{
+    border-bottom: solid 1px gray;
+}
+
+.car_detail{
+    padding-top:10px;
 }

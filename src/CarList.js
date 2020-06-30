@@ -77,7 +77,7 @@ export default class CarList extends React.Component {
         }
 
         return (
-            <Grid container style={{minHeight: 200}}>
+            <Grid container>
                 {
                     this.props.detailsList.slice(startCarIndex, endCarIndex + 1).map((details, index) =>
                         <Grid item xs={1} style={{padding:10}}>
@@ -89,9 +89,9 @@ export default class CarList extends React.Component {
                 }
                 <Grid item xs={1} />
                 <Grid item xs={2}>
-                    <div style={{display:'flex', width:'100%', height:'100%', alignItems: 'center', justifyContent:"space-around"}}>
-                        <IconButton disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous} size={"medium"}><ArrowLeft /> Prev</IconButton>
-                        <IconButton disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next} size={"medium"}>Next <ArrowRight /></IconButton>
+                    <div style={{display:'flex', width:'100%', height:'100%', alignItems: 'center', justifyContent:"center"}}>
+                        <IconButton disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous} size={"medium"} className={"navigation_btn prev_btn " + (this.state.previousBtnDisabled?"disabled":"enabled")}><ArrowLeft /> Prev</IconButton>
+                        <IconButton disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next} size={"medium"} className={"navigation_btn next_btn " + (this.state.nextBtnDisabled?"disabled":"enabled")}>Next <ArrowRight /></IconButton>
                     </div>
                 </Grid>
             </Grid>
