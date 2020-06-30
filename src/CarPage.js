@@ -67,7 +67,7 @@ class CarPage extends React.Component {
                     <Grid item xl={8} xs={12}>
                         <Grid container item>
                             <Grid item xs={12}>
-                                <a href={"#"} className={"search_results_back_link"}onClick={this.goBack}><BsArrowLeft /> Search Results</a>
+                                <a href={"#"} className={"search_results_back_link"}onClick={this.goBack}><BsArrowLeft /> All Results</a>
                             </Grid>
                             <Grid item xs={12}>
                                     <CarList initSelectedCarIndex={location.state.carIndex} detailsList={results} onChange={this.selectCarInCarList}/>

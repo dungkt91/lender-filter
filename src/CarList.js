@@ -2,8 +2,8 @@ import React from "react";
 import Car from './Car';
 import Grid from "@material-ui/core/Grid";
 import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowLeft from '@material-ui/icons/ArrowLeft';
+import ArrowRight from '@material-ui/icons/ArrowRight';
 import './CarList.css';
 
 export default class CarList extends React.Component {
@@ -65,15 +65,15 @@ export default class CarList extends React.Component {
         let startCarIndex = -1;
         let endCarIndex = -1;
 
-        if (this.state.selectedCarIndex - 5 >= 0 && this.state.selectedCarIndex + 5 < this.props.detailsList.length){
-            startCarIndex = this.state.selectedCarIndex - 5;
-            endCarIndex = this.state.selectedCarIndex + 5;
-        }else if(this.state.selectedCarIndex - 5 < 0){
+        if (this.state.selectedCarIndex - 4 >= 0 && this.state.selectedCarIndex + 4 < this.props.detailsList.length){
+            startCarIndex = this.state.selectedCarIndex - 4;
+            endCarIndex = this.state.selectedCarIndex + 4;
+        }else if(this.state.selectedCarIndex - 4 < 0){
             startCarIndex = 0;
-            endCarIndex = 10;
-        }else if(this.state.selectedCarIndex + 5 >= this.props.detailsList.length){
+            endCarIndex = 8;
+        }else if(this.state.selectedCarIndex + 4 >= this.props.detailsList.length){
             endCarIndex = this.props.detailsList.length;
-            startCarIndex = this.props.detailsList.length - 11;
+            startCarIndex = this.props.detailsList.length - 9;
         }
 
         return (
@@ -87,10 +87,11 @@ export default class CarList extends React.Component {
                         </Grid>
                     )
                 }
-                <Grid item xs={1}>
+                <Grid item xs={1} />
+                <Grid item xs={2}>
                     <div style={{display:'flex', width:'100%', height:'100%', alignItems: 'center', justifyContent:"space-around"}}>
-                        <IconButton disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous}><ArrowBackIos /></IconButton>
-                        <IconButton disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next}><ArrowForwardIosIcon /></IconButton>
+                        <IconButton disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous} size={"medium"}><ArrowLeft /> Prev</IconButton>
+                        <IconButton disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next} size={"medium"}>Next <ArrowRight /></IconButton>
                     </div>
                 </Grid>
             </Grid>

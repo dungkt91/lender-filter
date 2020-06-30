@@ -58,7 +58,7 @@ export default class CarShowElement extends React.Component{
         let images = [];
         for(let image of carDetail["images"]){
             console.log(image);
-            images.push({original:image["src"]});
+            images.push({original:image["src"], thumbnail:image["src"]});
         }
 
         console.log(images);
@@ -66,24 +66,19 @@ export default class CarShowElement extends React.Component{
     }
 
     render() {
-        console.log(this.props.details);
-
         return (
-           <Card style={{width:"100%"}}>
-               <CardContent>
-                   <Grid container spacing={2}>
-                       <Grid item xs={12} lg={7}>
-                            <CarImagesGallery images={this.convertToImages(this.props.details)}/>
-                       </Grid>
-                       <Grid item xs={12} lg={5}>
-                           <CarDescription details={this.convertToCarDetails(this.props.details)}/>
-                       </Grid>
-                       <Grid item xs={12}>
-                           <CarCalculation filtersInputs={this.props.filtersInputs} lenderData={this.props.lenderData} details={this.props.details}/>
-                       </Grid>
-                   </Grid>
-               </CardContent>
-           </Card>
+            <Grid container spacing={2}>
+                <Grid item xs={12} lg={7}>
+                    <CarImagesGallery images={this.convertToImages(this.props.details)}/>
+                </Grid>
+                <Grid item xs={12} lg={5}>
+                    <CarDescription details={this.convertToCarDetails(this.props.details)}/>
+                </Grid>
+                <Grid item xs={12}>
+                    <CarCalculation filtersInputs={this.props.filtersInputs} lenderData={this.props.lenderData}
+                                    details={this.props.details}/>
+                </Grid>
+            </Grid>
         )
     }
 }
