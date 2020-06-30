@@ -1,7 +1,6 @@
 .car_description_title{
     font-weight: bold;
     color:#4153AF;
-    padding-bottom:30px;
     font-size:1.5rem;
 }
 
@@ -22,7 +21,7 @@
 }
 
 .car_description_table{
-    margin-top:40px;
+    margin-top:30px;
     border: solid 1px lightgrey;
     border-collapse: separate !important;
     border-radius: 10px;

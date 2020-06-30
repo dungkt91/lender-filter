@@ -53,8 +53,16 @@ class Lender extends React.Component {
     constructor(props) {
         super(props);
 
+        let lenderMenuItems = [];
+
+        lenderMenuItems.push(<MenuItem value={'NONE'}>Please select lender</MenuItem>);
+
+        for (let lenderName in props.lenderToPrograms){
+            lenderMenuItems.push(<MenuItem value={lenderName}>{lenderName}</MenuItem>);
+        }
+
         this.state = {
-            lenderMenuItems:[],
+            lenderMenuItems:lenderMenuItems,
             ...this.beginningState(),
             lenderInputs:[]
         }
@@ -70,18 +78,6 @@ class Lender extends React.Component {
         if(this.props.init){
             this.setState({lenderInputs:this.props.init});
         }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        let lenderMenuItems = [];
-
-        lenderMenuItems.push(<MenuItem value={'NONE'}>Please select lender</MenuItem>);
-
-        for (let lenderName in nextProps.lenderToPrograms){
-            lenderMenuItems.push(<MenuItem value={lenderName}>{lenderName}</MenuItem>);
-        }
-
-        this.setState({lenderMenuItems:lenderMenuItems});
     }
 
     textboxOnChange(event, fieldLabel){

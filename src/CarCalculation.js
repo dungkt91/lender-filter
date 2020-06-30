@@ -10,6 +10,14 @@ import Grid from "@material-ui/core/Grid";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import AddIcon from '@material-ui/icons/Add';
+import Dialog from '@material-ui/core/Dialog';
+import Lender from "./Lender";
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import {getLenderData} from "./GlobalVariables";
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -288,12 +296,46 @@ class CarCalculationClass extends React.Component{
             "Profit"
         ];
 
+
+
         this.state = {
             calculationDetailsValues:[],
-            interests:[-1,-1,-1]
+            interests:[-1,-1,-1],
+            lendersDialogOpen:false,
+            lenderToPrograms: this.createLenderToPrograms()
         }
 
         this.selectInterestEvent = this.selectInterestEvent.bind(this);
+        this.addRemoveLenders = this.addRemoveLenders.bind(this);
+        this.handleModalClose = this.handleModalClose.bind(this);
+    }
+
+    createLenderToPrograms(){
+        let lenderData = getLenderData();
+
+        if(lenderData){
+            let lenderToPrograms = {};
+            let lenderIdToLenderName = {};
+            let [lenders, lenderPrograms, ...rest] = lenderData;
+
+            lenders.forEach(lender => {
+                lenderIdToLenderName[lender["id"]] = lender["name"];
+            });
+
+            lenderPrograms.forEach(lenderProgram => {
+                let lenderName = lenderIdToLenderName[lenderProgram["lender_id"]];
+
+                if (!(lenderName in lenderToPrograms)) {
+                    lenderToPrograms[lenderName] = [];
+                }
+
+                lenderToPrograms[lenderName].push(lenderProgram["name"]);
+            });
+
+            return lenderToPrograms;
+        }
+
+        return [];
     }
 
     createCalculationDetails(selectedInterests, filtersInputs, lenderData, details){
@@ -447,17 +489,43 @@ class CarCalculationClass extends React.Component{
         )
     }
 
+    addRemoveLenders(){
+        this.setState({lendersDialogOpen: true});
+    }
+
+    handleModalClose(){
+        this.setState({lendersDialogOpen:false});
+    }
 
     render(){
-        let userInputsFilterData = this.props.filtersInputs != undefined && this.props.filtersInputs.length > 0;
+        let userInputsFilterData = this.props.filtersInputs != undefined;
         let calculationDetailsValues = this.createCalculationDetails(this.state.interests, this.props.filtersInputs, this.props.lenderData, this.props.details);
 
         if (userInputsFilterData){
+            let table = null;
+
             if (this.props.isBigScreen){
-                return this.renderWithOneTable(calculationDetailsValues);
+                table = this.renderWithOneTable(calculationDetailsValues);
             }else{
-                return this.renderWithThreeTables(calculationDetailsValues);
+                table = this.renderWithThreeTables(calculationDetailsValues);
             }
+
+            return (
+                <>
+                    {table}
+                    <div style={{textAlign:'right', marginTop:10}}>
+                        <Button variant={"contained"} color={"primary"} onClick={this.addRemoveLenders}><AddIcon />Add Lender</Button>
+                    </div>
+                    <Dialog  open={this.state.lendersDialogOpen}
+                             onClose={this.handleModalClose}>
+                        <DialogTitle>Add Lender</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>Please enter full information for new lender</DialogContentText>
+                            <Lender lenderToPrograms={this.state.lenderToPrograms}/>
+                        </DialogContent>
+                    </Dialog>
+                </>
+            )
         }else{
             return null;
         }

@@ -6,7 +6,7 @@ import './CarImagesGallery.css';
 export default class CarImagesGallery extends React.Component{
     render(){
         return (
-            <ImageGallery items={this.props.images} showPlayButton={false} showFullscreenButton={false} showThumbnails={false}/>
+            <ImageGallery items={this.props.images} showPlayButton={false} showFullscreenButton={false}/>
         );
     }
 }

@@ -41,13 +41,7 @@ export default class CarDescription extends React.Component {
         return (
             <Grid container>
                 <Grid item xs={12} className={"car_description_title"}>
-                    <span>{this.getCarTitle()}</span>
-                </Grid>
-                <Grid item xs={6}  className={"car_description_total_cost"}>
-                    <span>{this.getRowValue('TOTAL COST')}</span>
-                </Grid>
-                <Grid item xs={6}  className={"car_description_mileage"}>
-                    <span>{this.getRowValue('MILEAGE')} miles</span>
+                    <span>{this.getCarTitle()} - {this.getRowValue('TOTAL COST')}</span>
                 </Grid>
                 <Table className={"car_description_table"}>
                     <TableBody>
