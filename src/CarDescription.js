@@ -4,6 +4,9 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import './CarDescription.css';
+import Utils from "./Utils";
 
 export default class CarDescription extends React.Component {
     getCarTitle() {
@@ -36,24 +39,31 @@ export default class CarDescription extends React.Component {
     }
     render() {
         return (
-            <Paper style={{padding: "20px", backgroundColor: "rgb(247, 248, 248)"}}>
-                <Table>
+            <Grid container>
+                <Grid item xs={12} className={"car_description_title"}>
+                    <span>{this.getCarTitle()}</span>
+                </Grid>
+                <Grid item xs={6}  className={"car_description_total_cost"}>
+                    <span>{this.getRowValue('TOTAL COST')}</span>
+                </Grid>
+                <Grid item xs={6}  className={"car_description_mileage"}>
+                    <span>{this.getRowValue('MILEAGE')} miles</span>
+                </Grid>
+                <Table className={"car_description_table"}>
+                    <TableBody>
+                {this.props.details.map(row => (
                     <TableRow>
-                        <TableCell colSpan={2} style={{textAlign: "center"}}><b
-                            style={{fontSize: "1.2rem"}}>{this.getCarTitle()}</b></TableCell>
+                        <TableCell>
+                            <span className={"car_description_row_header"}>{Utils.convertStr(row.name)}</span>
+                        </TableCell>
+                        <TableCell>
+                            <span className={"car_description_row_value"}>{row.value}</span>
+                        </TableCell>
                     </TableRow>
-                    {this.props.details.map(row => (
-                        <TableRow>
-                            <TableCell style={{padding: "0px"}}>
-                                <b>{row.name}</b>
-                            </TableCell>
-                            <TableCell style={{padding: "0px"}}>
-                                {row.value}
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                ))}
+                    </TableBody>
                 </Table>
-            </Paper>
+            </Grid>
         )
     }
 }

@@ -1,0 +1,29 @@
+.car_description_title{
+    font-weight: bold;
+    color:#4153AF;
+    padding-bottom:30px;
+    font-size:1.5rem;
+}
+
+.car_description_total_cost{
+    font-weight: bold;
+}
+
+.car_description_mileage{
+    color:gray;
+}
+
+.car_description_row_header{
+
+}
+
+.car_description_row_value{
+
+}
+
+.car_description_table{
+    margin-top:40px;
+    border: solid 1px lightgrey;
+    border-collapse: separate !important;
+    border-radius: 10px;
+}

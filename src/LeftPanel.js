@@ -6,6 +6,7 @@ import './LeftPanel.css';
 import Lender from './Lender';
 import {getLenderInputs} from "./GlobalVariables";
 import './LeftPanel.css';
+import Utils from "./Utils";
 
 class LeftPanel extends React.Component{
     constructor(props) {
@@ -28,24 +29,6 @@ class LeftPanel extends React.Component{
 
     handleChange(event, newSelectedTabIndex){
         this.setState({selectedTabIndex:newSelectedTabIndex});
-    }
-
-    convertStr(str){
-        let words = str.split(/(\s+)/);
-
-        return words.map(word => {
-            let result = '';
-
-            if (word.length > 0){
-                result += word.charAt(0).toUpperCase();
-            }
-
-            if (word.length > 1){
-                result += word.substring(1).toLowerCase();
-            }
-
-            return result;
-        }).join(' ');
     }
 
     parseProps(props) {
@@ -102,7 +85,7 @@ class LeftPanel extends React.Component{
                 "expand": this.props.filtersExpanded,
                 "displayCount":true,
                 "counts": makeToCountDict,
-                "titleTransformFunc":this.convertStr
+                "titleTransformFunc":Utils.convertStr
             },
             {
                 "title": "Model",
@@ -113,7 +96,7 @@ class LeftPanel extends React.Component{
                 "expand": this.props.filtersExpanded,
                 "displayCount":true,
                 "counts":modelToCountDict,
-                "titleTransformFunc":this.convertStr
+                "titleTransformFunc":Utils.convertStr
             },
             {
                 "title": "Year",
