@@ -1,7 +1,9 @@
 import React from "react";
 import Car from './Car';
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import IconButton from '@material-ui/core/IconButton';
+import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import './CarList.css';
 
 export default class CarList extends React.Component {
@@ -57,36 +59,32 @@ export default class CarList extends React.Component {
         let startCarIndex = -1;
         let endCarIndex = -1;
 
-        if (this.state.selectedCarIndex - 2 >= 0 && this.state.selectedCarIndex + 2 < this.props.detailsList.length){
-            startCarIndex = this.state.selectedCarIndex - 2;
-            endCarIndex = this.state.selectedCarIndex + 2;
-        }else if(this.state.selectedCarIndex - 2 < 0){
+        if (this.state.selectedCarIndex - 5 >= 0 && this.state.selectedCarIndex + 5 < this.props.detailsList.length){
+            startCarIndex = this.state.selectedCarIndex - 5;
+            endCarIndex = this.state.selectedCarIndex + 5;
+        }else if(this.state.selectedCarIndex - 5 < 0){
             startCarIndex = 0;
-            endCarIndex = 4;
-        }else if(this.state.selectedCarIndex + 2 >= this.props.detailsList.length){
+            endCarIndex = 10;
+        }else if(this.state.selectedCarIndex + 5 >= this.props.detailsList.length){
             endCarIndex = this.props.detailsList.length;
-            startCarIndex = this.props.detailsList.length - 5;
+            startCarIndex = this.props.detailsList.length - 11;
         }
-
-        console.log('selectedCarIndex = ' + this.state.selectedCarIndex);
-        console.log('startCarIndex = ' + startCarIndex);
-        console.log('endCarIndex = ' + endCarIndex);
 
         return (
             <Grid container style={{minHeight: 200}}>
                 {
                     this.props.detailsList.slice(startCarIndex, endCarIndex + 1).map((details, index) =>
-                        <Grid item xs={2} style={{padding:10}}>
+                        <Grid item xs={1} style={{padding:10}}>
                             <div className={(startCarIndex + index == this.state.selectedCarIndex)?"selected_car":""}>
-                                <Car displayOnlyMoney={true} details={details} onClick={(event, carDetails) => this.carOnClick(startCarIndex + index)}/>
+                                <Car size={"sm"} details={details} onClick={(event, carDetails) => this.carOnClick(startCarIndex + index)}/>
                             </div>
                         </Grid>
                     )
                 }
-                <Grid item xs={2}>
+                <Grid item xs={1}>
                     <div style={{display:'flex', width:'100%', height:'100%', alignItems: 'center', justifyContent:"space-around"}}>
-                        <Button disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous}>Prev</Button>
-                        <Button disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next}>Next</Button>
+                        <IconButton disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous}><ArrowBackIos /></IconButton>
+                        <IconButton disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next}><ArrowForwardIosIcon /></IconButton>
                     </div>
                 </Grid>
             </Grid>

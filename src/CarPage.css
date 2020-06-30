@@ -1,0 +1,8 @@
+.search_results_back_link{
+    text-decoration: none;
+    color:black;
+}
+
+.search_results_back_link:hover{
+    color:blue;
+}

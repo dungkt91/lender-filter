@@ -36,27 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-.car:hover{
-  cursor:pointer;
-  user-select:none;
-  transform: scale(1.005);
-  box-shadow: 0 1px 5px gray;
-}
-
-.car_title{
-  font-weight: bold;
-  color:#4153AF;
-}
-
-.car_total_cost{
-  color:gray;
-}
-
-.car_mileage{
-  color:gray;
-}
-
-.car{
-  border:solid 1px lightgray;
-}

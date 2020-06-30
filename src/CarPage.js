@@ -7,6 +7,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import CarShowElement from "./CarShowElement";
 import CarList from "./CarList";
 import {getLenderData, getLenderInputs} from "./GlobalVariables";
+import './CarPage.css';
 
 class CarPage extends React.Component {
     constructor(props) {
@@ -66,7 +67,7 @@ class CarPage extends React.Component {
                     <Grid item xl={8} xs={12}>
                         <Grid container item>
                             <Grid item xs={12}>
-                                <BsArrowLeft /> <a href={"#"} onClick={this.goBack}>Search Results</a>
+                                <a href={"#"} className={"search_results_back_link"}onClick={this.goBack}><BsArrowLeft /> Search Results</a>
                             </Grid>
                             <Grid item xs={12}>
                                     <CarList detailsList={results} onChange={this.selectCarInCarList}/>
