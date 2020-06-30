@@ -125,10 +125,10 @@ class CarShow extends React.Component {
         this.setState({sortOptionIndex:sortOptionIndex});
     }
 
-    carOnClick(event, carDetails){
+    carOnClick(event, carDetails, carIndex){
         const {history} = this.props;
 
-        history.push('/car', {carDetails:carDetails, results:this.carDetails()});
+        history.push('/car', {carDetails:carDetails, results:this.carDetails(), carIndex: carIndex});
     }
 
     render() {
@@ -152,9 +152,9 @@ class CarShow extends React.Component {
                             <MenuItem value={6}>Oldest Year</MenuItem>
                         </Select>
                     </Grid>
-                    {carDetailsAfterFilterAndSort.map(carDetail => (
+                    {carDetailsAfterFilterAndSort.map((carDetail, index) => (
                        <Grid item xs={12} md={4} lg={3}>
-                           <Car details={carDetail} onClick={this.carOnClick}/>
+                           <Car details={carDetail} onClick={(event, carDetails) => this.carOnClick(event, carDetails, index)}/>
                        </Grid>
                     ))}
                     </Grid>

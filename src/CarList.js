@@ -12,8 +12,14 @@ export default class CarList extends React.Component {
 
         let noCars = this.props.detailsList.length  == 0;
 
+        let selectedCarIndex = 0;
+
+        if(this.props.initSelectedCarIndex){
+            selectedCarIndex = this.props.initSelectedCarIndex;
+        }
+
         this.state = {
-            selectedCarIndex:0,
+            selectedCarIndex:selectedCarIndex,
             previousBtnDisabled:true,
             nextBtnDisabled:noCars
         }
