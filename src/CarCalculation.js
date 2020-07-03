@@ -13,11 +13,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import AddIcon from '@material-ui/icons/Add';
 import Dialog from '@material-ui/core/Dialog';
-import Lender from "./Lender";
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import {getLenderData} from "./GlobalVariables";
+import {getLenderData, getLenderInputs, setLenderInputs} from "./GlobalVariables";
+import LenderInput from "./LenderInput";
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -281,8 +281,8 @@ function createCalculationDetail(selectedInterest, filterInputs, lenderData, car
 }
 
 class CarCalculationClass extends React.Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.calculationDetailsColumnHeaders =[
             "Lender",
@@ -296,18 +296,18 @@ class CarCalculationClass extends React.Component{
             "Profit"
         ];
 
-
-
         this.state = {
             calculationDetailsValues:[],
             interests:[-1,-1,-1],
             lendersDialogOpen:false,
-            lenderToPrograms: this.createLenderToPrograms()
+            lenderToPrograms: this.createLenderToPrograms(),
+            lenderInputs: this.props.filtersInputs
         }
 
         this.selectInterestEvent = this.selectInterestEvent.bind(this);
         this.addRemoveLenders = this.addRemoveLenders.bind(this);
         this.handleModalClose = this.handleModalClose.bind(this);
+        this.addLender = this.addLender.bind(this);
     }
 
     createLenderToPrograms(){
@@ -497,9 +497,21 @@ class CarCalculationClass extends React.Component{
         this.setState({lendersDialogOpen:false});
     }
 
+    addLender(lenderInput){
+        let newLenderInputs = getLenderInputs();
+
+        if (newLenderInputs == null)
+            newLenderInputs = [];
+        newLenderInputs.push(lenderInput);
+        setLenderInputs(newLenderInputs);
+        this.setState({lendersDialogOpen:false, lenderInputs:newLenderInputs});
+    }
+
     render(){
-        let userInputsFilterData = this.props.filtersInputs != undefined;
-        let calculationDetailsValues = this.createCalculationDetails(this.state.interests, this.props.filtersInputs, this.props.lenderData, this.props.details);
+        console.log("abc");
+        console.log(this.state.lenderInputs);
+        let userInputsFilterData = this.state.lenderInputs != undefined;
+        let calculationDetailsValues = this.createCalculationDetails(this.state.interests, this.state.lenderInputs, this.props.lenderData, this.props.details);
 
         if (userInputsFilterData){
             let table = null;
@@ -521,7 +533,7 @@ class CarCalculationClass extends React.Component{
                         <DialogTitle>Add Lender</DialogTitle>
                         <DialogContent>
                             <DialogContentText>Please enter full information for new lender</DialogContentText>
-                            <Lender lenderToPrograms={this.state.lenderToPrograms}/>
+                            <LenderInput lenderToPrograms={this.state.lenderToPrograms} onChange={this.addLender}/>
                         </DialogContent>
                     </Dialog>
                 </>

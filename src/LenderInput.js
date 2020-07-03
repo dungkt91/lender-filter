@@ -6,11 +6,9 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import LenderInputs from "./LenderInputs";
-import LenderInput from "./LenderInput";
 import './Lender.css';
-import {setLenderInputs} from "./GlobalVariables";
 
-class Lender extends React.Component {
+class LenderInput extends React.Component {
     beginningState(){
         return {
             selectedTier:'NONE',
@@ -65,8 +63,7 @@ class Lender extends React.Component {
 
         this.state = {
             lenderMenuItems:lenderMenuItems,
-            ...this.beginningState(),
-            lenderInputs:[]
+            ...this.beginningState()
         }
 
         this.selectLender = this.selectLender.bind(this);
@@ -157,10 +154,10 @@ class Lender extends React.Component {
     }
 
     addLender(event){
-        let lenderInput = {};
         let hasAnyErrors = this.hasAnyErrorsInLenderInput();
 
         if (this.state.selectedLender != 'NONE' && this.state.selectedTier != 'NONE' && !hasAnyErrors) {
+            let lenderInput = {};
             lenderInput["lender"] = this.state.selectedLender;
             lenderInput["tier"] = this.state.selectedTier;
             lenderInput["payment"] = this.state.currencyFields["Payment"].value;
@@ -170,10 +167,9 @@ class Lender extends React.Component {
             lenderInput["trade a.c.v"] = this.state.currencyFields["Trace a.c.v"].value;
             lenderInput["tax"] = this.state.percentageFields["Tax"].value;
 
-            let newLenderInputs = this.state.lenderInputs;
-            newLenderInputs.push(lenderInput);
-
-            this.setState({lenderInputs: newLenderInputs}, this.props.onChange);
+            if (this.props.onChange){
+                this.props.onChange(lenderInput);
+            }
         }
     }
 
@@ -189,33 +185,59 @@ class Lender extends React.Component {
         this.setState({lenderInputs:newLenderInputs}, this.props.onChange);
     }
 
-    getLenderInputs(){
-        return this.state.lenderInputs;
-    }
-
-    addLender(lenderInput){
-        let newLenderInputs = [...this.state.lenderInputs];
-        newLenderInputs.push(lenderInput);
-        setLenderInputs(newLenderInputs);
-
-        this.setState({lenderInputs:newLenderInputs});
-    }
-
     render(){
         return (
-          <Grid container className={"lender_main_content padding10"} spacing={2}>
-              <Grid item xs={12}>
-                  <LenderInput lenderToPrograms={this.props.lenderToPrograms} onChange={this.addLender}/>
-              </Grid>
-              {
-                  this.state.lenderInputs.map((lenderInput, lenderInputIndex) =>
-                      <Grid item xs={12}>
-                          <LenderInputs inputs={lenderInput} handleDeleteBtnClick={(event) => this.deleteLenderInput(lenderInputIndex)}/>
-                      </Grid>)
-              }
-          </Grid>
+            <Grid container className={"lender_main_content padding10"} spacing={2}>
+                <Grid item xs={12}>
+                    <Select onChange={this.selectLender} value={this.state.selectedLender} disabled={this.state.lenderSelectDisabled} style={{width:'100%'}}>
+                        {this.state.lenderMenuItems}
+                    </Select>
+                </Grid>
+                <Grid item xs={12}>
+                    <Select onChange={this.selectTier} value={this.state.selectedTier} disabled={this.state.tierSelectDisabled} style={{width:'100%'}}>
+                        {this.state.tierMenuItems}
+                    </Select>
+                </Grid>
+                {Object.keys(this.state.currencyFields).map(currencyFieldLabel => (
+                        <Grid item xs={6} sm={3} md={6} style={{padding:10}}><TextField disabled={!this.state.isTextFieldsEnabled}
+                                                                                        label={currencyFieldLabel}
+                                                                                        variant="outlined"
+                                                                                        onChange={(event) => this.textboxOnChange(event, currencyFieldLabel)}
+                                                                                        error = {this.state.currencyFields[currencyFieldLabel].error}
+                                                                                        helperText={this.state.currencyFields[currencyFieldLabel].error?"Invalid Value":""}
+                                                                                        value={this.state.currencyFields[currencyFieldLabel].value}
+                                                                                        InputProps={{
+                                                                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                                                        }
+                                                                                        }
+                                                                                        size={"small"}
+                        /></Grid>
+                    )
+                )
+                }
+                {Object.keys(this.state.percentageFields).map(percentageFieldLabel => (
+                        <Grid item xs={6} sm={3} md={6} style={{padding:10}}><TextField disabled={!this.state.isTextFieldsEnabled}
+                                                                                        label={percentageFieldLabel}
+                                                                                        variant="outlined"
+                                                                                        onChange={(event) => this.textboxOnChange(event, percentageFieldLabel)}
+                                                                                        error = {this.state.percentageFields[percentageFieldLabel].error}
+                                                                                        helperText={this.state.percentageFields[percentageFieldLabel].error?"Invalid Value":""}
+                                                                                        value={this.state.percentageFields[percentageFieldLabel].value}
+                                                                                        InputProps={{
+                                                                                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                                                                        }}
+                                                                                        size={"small"}
+                        /></Grid>
+                    )
+                )
+                }
+                <Grid item xs={12} style={{textAlign:"center"}}>
+                    <Button variant="contained" color={"primary"} onClick={this.addLender}>Add</Button>
+                    <Button variant="contained" color={"secondary"} onClick={this.reset} style={{marginLeft:10}}>Reset</Button>
+                </Grid>
+            </Grid>
         );
     }
 }
 
-export default Lender;
+export default LenderInput;
