@@ -2,13 +2,16 @@
     border:solid 3px blue;
 }
 
-.prev_btn{
+.navigation_btn{
     border: solid 1px gray !important;
+    border-radius: 5px !important;
+}
+
+.full_version.prev_btn{
     border-radius: 10px 0px 0px 10px !important;
 }
 
-.next_btn{
-    border: solid 1px gray !important;
+.full_version.next_btn{
     border-radius: 0px 10px 10px 0px !important;
 }
 
