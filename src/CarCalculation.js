@@ -389,6 +389,26 @@ class CarCalculationClass extends React.Component{
 
         this.setState({lenderInputs:newLenderInputs});
     }
+
+
+    getCellStyle(value, index){
+        let classNameValue = "";
+        let maxFrontIndex = 7;
+        let profitIndex = 8;
+
+        if ((index == maxFrontIndex || index == profitIndex) && value !=="NOT_FOUND"){
+            let number = value.replace("$", "");
+
+            if (parseFloat(number) > 0){
+                classNameValue = "positive";
+            }else if (parseFloat(number) < 0){
+                classNameValue = "negative";
+            }
+        }
+
+        return classNameValue;
+    }
+    
     renderWithOneTable(calculationDetailsValues){
         return (
             <React.Fragment>
@@ -426,12 +446,13 @@ class CarCalculationClass extends React.Component{
                                                     </StyledTableCell>
                                                 )
                                             }
-                                            else
-                                            return (
-                                                <StyledTableCell>
-                                                    {columnValue}
-                                                </StyledTableCell>
-                                            )
+                                            else {
+                                                return (
+                                                    <StyledTableCell className={this.getCellStyle(columnValue, index)}>
+                                                        {columnValue}
+                                                    </StyledTableCell>
+                                                )
+                                            }
                                         })
                                     }
                                     <StyledTableCell>
@@ -486,10 +507,15 @@ class CarCalculationClass extends React.Component{
                                 lenderCalculationDetailsValues.map((row, index) => (
                                     <StyledTableRow>
                                         <StyledTableCell>{this.calculationDetailsColumnHeaders[index]}</StyledTableCell>
-                                        <StyledTableCell>{this.createCell(row, index, lenderIndex)}</StyledTableCell>
+                                        <StyledTableCell className={this.getCellStyle(row, index)}>{this.createCell(row, index, lenderIndex)}</StyledTableCell>
                                     </StyledTableRow>
                                 ))
                             }
+                            <StyledTableRow>
+                                <StyledTableCell colspan={2} style={{textAlign: 'center'}}>
+                                    <IconButton className="remove_lender" onClick={(event) => this.removeLenderInput(lenderIndex)}><DeleteIcon /></IconButton>
+                                </StyledTableCell>
+                            </StyledTableRow>
                         </Table>
                     </Paper>
                 </Grid>
