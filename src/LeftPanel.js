@@ -1,4 +1,5 @@
 import React from 'react';
+import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Filter from './Filter';
@@ -7,6 +8,16 @@ import Lender from './Lender';
 import {getLenderInputs} from "./GlobalVariables";
 import './LeftPanel.css';
 import Utils from "./Utils";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import LenderInput from "./LenderInput";
+import Dialog from "@material-ui/core/Dialog";
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 class LeftPanel extends React.Component{
     constructor(props) {
@@ -23,8 +34,15 @@ class LeftPanel extends React.Component{
             selectedTabIndex:0,
             filters:filters,
             lenderToPrograms:lenderToPrograms,
-            carDetails:carDetails
+            carDetails:carDetails,
+            lenderDialogOpen:false,
+            filterDialogOpen:false
         }
+
+        this.openFilter = this.openFilter.bind(this);
+        this.openLender = this.openLender.bind(this);
+        this.closeFilter = this.closeFilter.bind(this);
+        this.closeLender = this.closeLender.bind(this);
     }
 
     handleChange(event, newSelectedTabIndex){
@@ -179,21 +197,79 @@ class LeftPanel extends React.Component{
         return this.lenderRef.current.getLenderInputs();
     }
 
+    openFilter(){
+        this.setState({filterDialogOpen:true});
+    }
+
+    closeFilter(){
+        this.setState({filterDialogOpen:false});
+    }
+
+    openLender(){
+        this.setState({lendersDialogOpen:true});
+    }
+
+    closeLender(){
+        this.setState({lendersDialogOpen:false});
+    }
+
     render(){
         return (
         <div className={"left_panel"}>
-            <Tabs value={this.state.selectedTabIndex} onChange={this.handleChange} TabIndicatorProps={{style:{background:'#4153AF'}}}>
-                <Tab label={"Filter"} className={"filter_tab " + (this.state.selectedTabIndex==0?"tab_selected":"tab_deselected")}/>
-                <Tab label={"Lender"} className={"lender_tab " + (this.state.selectedTabIndex==1?"tab_selected":"tab_deselected")} />
-            </Tabs>
-            <div className={this.state.selectedTabIndex==0?'':'hide'}>
-                <Filter ref={this.filterRef} filters={this.state.filters}
+            {
+                this.props.screenSize["smUp"]?(
+                    <>
+                        <Tabs value={this.state.selectedTabIndex} onChange={this.handleChange} TabIndicatorProps={{style:{background:'#4153AF'}}}>
+                            <Tab label={"Filter"} className={"filter_tab " + (this.state.selectedTabIndex==0?"tab_selected":"tab_deselected")}/>
+                            <Tab label={"Lender"} className={"lender_tab " + (this.state.selectedTabIndex==1?"tab_selected":"tab_deselected")} />
+                        </Tabs>
+                        <div className={this.state.selectedTabIndex==0?'':'hide'}>
+                        <Filter ref={this.filterRef} filters={this.state.filters}
                         onChange={this.props.filterOnChange}
-                />
-            </div>
-            <div className={this.state.selectedTabIndex==1?'':'hide'}>
-                <Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms} onChange={this.props.lenderOnChange}/>
-            </div>
+                        />
+                        </div>
+                        <div className={this.state.selectedTabIndex==1?'':'hide'}>
+                        <Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms} onChange={this.props.lenderOnChange}/>
+                        </div>
+                    </>
+                ):(
+                    <>
+                        <Grid container>
+                            <Grid xs={6}>
+                                <Button className={"filter_btn"} variant={"contained"} style={{width:"100%"}} onClick={this.openFilter}>Filter</Button>
+                            </Grid>
+                            <Grid xs={6}>
+                                <Button className={"lender_btn"} variant={"contained"} style={{width:"100%"}} onClick={this.openLender}>Lender</Button>
+                            </Grid>
+                        </Grid>
+                    </>
+                )
+            }
+            <Dialog  fullScreen open={this.state.filterDialogOpen}>
+                <AppBar  style={{position: "relative"}}>
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" onClick={this.closeFilter} aria-label="close">
+                            <CloseIcon />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+                <DialogContent>
+                    <Filter ref={this.filterRef} filters={this.state.filters}
+                            onChange={this.props.filterOnChange}
+                    />
+                </DialogContent>
+            </Dialog>
+            <Dialog  fullScreen open={this.state.lendersDialogOpen}>
+                <AppBar style={{position: "relative"}}>
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" onClick={this.closeLender} aria-label="close">
+                            <CloseIcon/>
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+                <Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms}
+                        onChange={this.props.lenderOnChange}/>
+            </Dialog>
         </div>
         );
     }

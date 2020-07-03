@@ -16,9 +16,19 @@ import {setLenderData} from "./GlobalVariables";
 
 const App = (props) => {
     const theme = useTheme();
+    const xsUp = useMediaQuery(theme.breakpoints.up("xs"));
+    const smUp = useMediaQuery(theme.breakpoints.up("sm"));
     const mdUp = useMediaQuery(theme.breakpoints.up("md"));
+    const lgUp = useMediaQuery(theme.breakpoints.up("lg"));
+    const xlUp = useMediaQuery(theme.breakpoints.up("xl"));
 
-    return <AppClass isBigScreen={mdUp}/>
+    return <AppClass screenSize={{
+        xsUp:xsUp,
+        smUp:smUp,
+        mdUp:mdUp,
+        lgUp:lgUp,
+        xlUp:xlUp
+    }}/>
 }
 
 
@@ -65,10 +75,10 @@ class AppClass extends React.Component{
             <Router basename={process.env.PUBLIC_URL}>
                 <Switch>
                     <Route path="/car">
-                        <CarPage isBigScreen={this.props.isBigScreen} />
+                        <CarPage screenSize={this.props.screenSize} />
                     </Route>
                     <Route path="/">
-                        <HomePage isBigScreen={this.props.isBigScreen} {...this.state}/>
+                        <HomePage screenSize={this.props.screenSize} {...this.state}/>
                     </Route>
                 </Switch>
             </Router>
