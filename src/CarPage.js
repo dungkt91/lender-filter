@@ -81,7 +81,7 @@ class CarPage extends React.Component {
                                    onClick={this.goBack}><BsArrowLeft/> All Results</a>
                             </Grid>
                             <Grid item xs={12} className={"car_list"}>
-                                {results.length > 0 ? (<CarList version={carListVersion} initSelectedCarIndex={carIndex}
+                                {results.length > 1? (<CarList version={carListVersion} initSelectedCarIndex={carIndex}
                                                                 detailsList={results}
                                                                 onChange={this.selectCarInCarList}/>) : null}
                             </Grid>

@@ -1,0 +1,9 @@
+.car_container{
+    border:1px solid;
+    border-color:gray;
+    background-color:white;
+}
+
+.car_container:hover{
+    box-shadow:2px 2px gray;
+}

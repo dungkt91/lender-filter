@@ -53,7 +53,7 @@ class HomePage extends React.Component{
                 <Grid container>
                     <Grid item xl={2} xs={0} />
                     <Grid item xl={8} xs={12}>
-                        <Menubar isBigScreen={this.props.isBigScreen}/>
+                        <Menubar isBigScreen={this.props.screenSize["mdUp"]}/>
                     </Grid>
                     <Grid item xl={2} xs={0}/>
                     <Grid item xl={2} xs={0}/>
@@ -64,7 +64,7 @@ class HomePage extends React.Component{
                     ):(
                         <>
                         <Grid item xl={2} sm={3} xs={12}>
-                            <LeftPanel init={getFilterValues()} filtersExpanded={this.props.isBigScreen} ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange} lenderOnChange={this.lenderOnChange}/>
+                            <LeftPanel init={getFilterValues()} filtersExpanded={this.props.screenSize["mdUp"]} screenSize={this.props.screenSize}ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange} lenderOnChange={this.lenderOnChange}/>
                         </Grid>
                         <Grid item xl={6} sm={9} xs={12}>
                             <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>
