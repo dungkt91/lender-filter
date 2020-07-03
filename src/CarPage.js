@@ -17,12 +17,12 @@ class CarPage extends React.Component {
 
         let carDetails = null;
 
-        if (location.state.carDetails){
+        if (location.state && location.state.carDetails){
             carDetails = location.state.carDetails;
         }
 
         this.state = {
-            carDetails: location.state.carDetails
+            carDetails: carDetails
         }
 
         this.goBack = this.goBack.bind(this);
@@ -42,12 +42,15 @@ class CarPage extends React.Component {
     render() {
         const {history, location} = this.props;
         let results = [];
+        let carIndex = 0;
+        let  carDetailsAvailable = false;
 
-        if (location.state.results){
+        if (location && location.state){
             results = location.state.results;
+            carDetailsAvailable = location.state && location.state.carDetails;
+            carIndex = location.state.carIndex;
         }
 
-        let carDetailsAvailable = location.state && location.state.carDetails;
         let lenderInputs = getLenderInputs();
 
         if (lenderInputs == null){
@@ -70,7 +73,7 @@ class CarPage extends React.Component {
                                 <a href={"#"} className={"search_results_back_link"}onClick={this.goBack}><BsArrowLeft /> All Results</a>
                             </Grid>
                             <Grid item xs={12} className={"car_list"}>
-                                    <CarList initSelectedCarIndex={location.state.carIndex} detailsList={results} onChange={this.selectCarInCarList}/>
+                                {results.length > 0?(<CarList initSelectedCarIndex={carIndex} detailsList={results} onChange={this.selectCarInCarList}/>):null}
                             </Grid>
                             <Grid item xs={12} className={"car_detail"}>
                                 {carDetailsAvailable?<CarShowElement filtersInputs={lenderInputs} lenderData={getLenderData()} details={this.state.carDetails}/>:'Not found'}

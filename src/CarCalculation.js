@@ -18,6 +18,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import {getLenderData, getLenderInputs, setLenderInputs} from "./GlobalVariables";
 import LenderInput from "./LenderInput";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from '@material-ui/icons/Delete';
+import "./CarCalculation.css";
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -379,6 +382,13 @@ class CarCalculationClass extends React.Component{
         this.setState({interests:interests});
     }
 
+    removeLenderInput(lenderInputIndex){
+        let newLenderInputs = [...this.state.lenderInputs];
+        newLenderInputs.splice(lenderInputIndex, 1);
+        setLenderInputs(newLenderInputs);
+
+        this.setState({lenderInputs:newLenderInputs});
+    }
     renderWithOneTable(calculationDetailsValues){
         return (
             <React.Fragment>
@@ -386,9 +396,12 @@ class CarCalculationClass extends React.Component{
                     <Table>
                         <TableHead>
                                 <StyledTableRow>
-                                {this.calculationDetailsColumnHeaders.map(header => (
-                                    <StyledTableCell>{header}</StyledTableCell>
-                                ))}
+                                    {this.calculationDetailsColumnHeaders.map(header => (
+                                        <StyledTableCell>{header}</StyledTableCell>
+                                    ))}
+                                    <StyledTableCell>
+                                        Actions
+                                    </StyledTableCell>
                                 </StyledTableRow>
                         </TableHead>
                         {
@@ -421,6 +434,9 @@ class CarCalculationClass extends React.Component{
                                             )
                                         })
                                     }
+                                    <StyledTableCell>
+                                        <IconButton className="remove_lender" onClick={(event) => this.removeLenderInput(lenderIndex)}><DeleteIcon /></IconButton>
+                                    </StyledTableCell>
                                 </StyledTableRow>
                             ))
                         }
@@ -508,8 +524,6 @@ class CarCalculationClass extends React.Component{
     }
 
     render(){
-        console.log("abc");
-        console.log(this.state.lenderInputs);
         let userInputsFilterData = this.state.lenderInputs != undefined;
         let calculationDetailsValues = this.createCalculationDetails(this.state.interests, this.state.lenderInputs, this.props.lenderData, this.props.details);
 
