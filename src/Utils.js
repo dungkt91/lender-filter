@@ -16,8 +16,15 @@ function convertStr(str){
     }).join(' ');
 }
 
+function sortImages(images){
+    images.sort((img1, img2) => {
+        return img1["name"].localeCompare(img2["name"]);
+    });
+}
+
 const Utils = {
-    convertStr:convertStr
+    convertStr:convertStr,
+    sortImages:sortImages
 }
 
 export default Utils;

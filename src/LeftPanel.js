@@ -97,6 +97,15 @@ class LeftPanel extends React.Component{
 
         let filters = [
             {
+                "title": "Year",
+                "type": "range",
+                "minTitle": "Min",
+                "maxTitle": "Max",
+                "value_type":"discrete",
+                "values":yearRangeList,
+                "expand": this.props.filtersExpanded
+            },
+            {
                 "title": "Make",
                 "type": "list",
                 "options": Array.from(makes),
@@ -115,15 +124,6 @@ class LeftPanel extends React.Component{
                 "displayCount":true,
                 "counts":modelToCountDict,
                 "titleTransformFunc":Utils.convertStr
-            },
-            {
-                "title": "Year",
-                "type": "range",
-                "minTitle": "Min",
-                "maxTitle": "Max",
-                "value_type":"discrete",
-                "values":yearRangeList,
-                "expand": this.props.filtersExpanded
             },
             {
                 "title": "Mileage",

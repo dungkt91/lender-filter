@@ -3,6 +3,7 @@
 }
 
 .navigation_btn{
+    padding: 5px !important;
     border: solid 1px gray !important;
     border-radius: 5px !important;
 }

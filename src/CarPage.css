@@ -5,6 +5,8 @@
 }
 
 .car_list{
+    padding-bottom:10px;
+    padding-top:10px;
     border-bottom: solid 1px gray;
 }
 

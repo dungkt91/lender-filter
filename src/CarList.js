@@ -111,21 +111,27 @@ export default class CarList extends React.Component {
     renderOnlyButtonsVersion(){
         return (
             <Grid container>
-                <Grid item xs={2}>
-                    <IconButton disabled={this.state.firstBtnDisabled} onClick={this.first} className={"navigation_btn firt_btn " + (this.state.firstBtnDisabled?"disabled":"enabled")}><FirstPageIcon />First</IconButton>
+                <Grid item xs={5}>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            <IconButton disabled={this.state.firstBtnDisabled} onClick={this.first} className={"navigation_btn firt_btn " + (this.state.firstBtnDisabled?"disabled":"enabled")}><FirstPageIcon />First</IconButton>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <IconButton disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous} size={"medium"} className={"navigation_btn prev_btn " + (this.state.previousBtnDisabled?"disabled":"enabled")}><ArrowLeft /> Prev</IconButton>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item xs={1}/>
-                <Grid item xs={2}>
-                    <IconButton disabled={this.state.previousBtnDisabled} variant="contained" onClick={this.previous} size={"medium"} className={"navigation_btn prev_btn " + (this.state.previousBtnDisabled?"disabled":"enabled")}><ArrowLeft /> Prev</IconButton>
-                </Grid>
                 <Grid item xs={2}>
                 </Grid>
-                <Grid item xs={2}>
-                    <IconButton disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next} size={"medium"} className={"navigation_btn next_btn " + (this.state.nextBtnDisabled?"disabled":"enabled")}>Next <ArrowRight /></IconButton>
-                </Grid>
-                <Grid item xs={1}/>
-                <Grid item xs={2}>
-                    <IconButton disabled={this.state.lastBtnDisabled} onClick={this.last} className={"navigation_btn last_btn " + (this.state.lastBtnDisabled?"disabled":"enabled")}>Last<LastPageIcon /></IconButton>
+                <Grid item xs={5}>
+                    <Grid container>
+                        <Grid item xs={6} style={{textAlign:"right"}}>
+                            <IconButton disabled={this.state.nextBtnDisabled} variant="contained" onClick={this.next} size={"medium"} className={"navigation_btn next_btn " + (this.state.nextBtnDisabled?"disabled":"enabled")}>Next <ArrowRight /></IconButton>
+                        </Grid>
+                        <Grid item xs={6} style={{textAlign:"right"}}>
+                            <IconButton disabled={this.state.lastBtnDisabled} onClick={this.last} className={"navigation_btn last_btn " + (this.state.lastBtnDisabled?"disabled":"enabled")}>Last<LastPageIcon /></IconButton>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         )
@@ -147,7 +153,7 @@ export default class CarList extends React.Component {
         }
 
         if (this.props.version == "full"){
-            return this.renderFullVersion();
+            return this.renderFullVersion(startCarIndex, endCarIndex);
         }else if(this.props.version == "only_buttons"){
             return this.renderOnlyButtonsVersion();
         }

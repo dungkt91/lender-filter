@@ -5,6 +5,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Grid from "@material-ui/core/Grid";
 import ImageGallery from "react-image-gallery";
 import './Car.css';
+import Utils from './Utils';
 
 class Car extends React.Component {
     constructor(props) {
@@ -27,7 +28,7 @@ class Car extends React.Component {
     render(){
         let carImgSrc = '';
         let detailsImages = this.props.details["images"];
-
+        Utils.sortImages(detailsImages);
         if (detailsImages && detailsImages.length > 0){
             carImgSrc = detailsImages[0]["src"];
         }
