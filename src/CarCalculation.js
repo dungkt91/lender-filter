@@ -146,13 +146,8 @@ function createCalculationDetail(selectedInterest, filterInputs, lenderData, car
                 let rateMax = parseFloat(lenderProgram.rate_max);
                 interest = '';
 
-
-                let rate = rateMin;
-
-                while(rate < rateMax){
-                    rate += 1;
-                    rate = rate.toFixed(2);
-                    interest += rate + ',';
+                for(let rate = rateMin; rate < rateMax; rate+=1){
+                    interest += rate.toFixed(2) + ',';
                 }
 
                 interest += rateMax;
