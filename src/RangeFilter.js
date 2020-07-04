@@ -6,27 +6,17 @@ import Button from "@material-ui/core/Button";
 import debounce from "lodash/debounce";
 import Slider from '@material-ui/core/Slider';
 import InputAdornment from "@material-ui/core/InputAdornment";
+import {connect} from "react-redux";
 
 class RangeFilter extends React.Component {
     constructor(props) {
         super(props);
 
-        let min = "";
-        let max = "";
-
-        if (this.props.value_type == "discrete"){
-            min = Math.min(...this.props.values);
-            max = Math.max(...this.props.values);
-        } else if (this.props.value_type == "continuous"){
-            min = this.props.values[0];
-            max = this.props.values[1];
-        }
-
         this.state = {
-            "min":min,
-            "max":max,
-            "current_min":min,
-            "current_max":max
+            "min":this.props.min,
+            "max":this.props.max,
+            "current_min":this.props.current_min,
+            "current_max":this.props.current_max
         }
 
         this.onChangeDebounced = debounce(this.onChangeDebounced, 1000);
@@ -41,15 +31,18 @@ class RangeFilter extends React.Component {
 
     textFieldOnChange(event, textFieldName){
         let newState = {};
-
-        newState[textFieldName] = event.target.value;
+        let newValue = event.target.value;
+        newState[textFieldName] = newValue;
 
         this.setState(newState);
-        this.onChangeDebounced();
+        let valueDict = {};
+        valueDict[textFieldName] = newValue;
+
+        this.onChangeDebounced(valueDict);
     }
 
-    onChangeDebounced = () => {
-        this.props.onChange();
+    onChangeDebounced = (value) => {
+        this.props.onChange(value);
     }
 
     getValues(){
@@ -69,8 +62,10 @@ class RangeFilter extends React.Component {
     }
 
     sliderOnChange(event, values){
-        this.setState({current_min:values[0], current_max:values[1]});
-        this.onChangeDebounced();
+        let valueDict = {current_min:values[0], current_max:values[1]};
+
+        this.setState(valueDict);
+        this.onChangeDebounced(valueDict);
     }
 
     render(){
@@ -107,4 +102,28 @@ class RangeFilter extends React.Component {
     }
 }
 
-export default RangeFilter;
+const mapStateToProps = (state, ownProps) => {
+
+    return {
+        min:state.filters[ownProps["name"]].min,
+        max:state.filters[ownProps["name"]].max,
+        current_min:state.filters[ownProps["name"]].current_min,
+        current_max:state.filters[ownProps["name"]].current_max,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        onChange: (value) => {
+            let dict = {
+                type:"UPDATE_FILTER",
+                filter_name:ownProps["name"],
+                value:value
+            };
+
+            dispatch(dict);
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RangeFilter);

@@ -2,48 +2,26 @@ import React from 'react';
 import {Checkbox} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import './ListFilter.css';
+import {connect} from "react-redux";
 
 class ListFilter extends React.Component{
     constructor(props) {
         super(props);
+
+        let selectAll = this.props.options.length == this.props.selectedOptions.length;
         let optionCheckedDict = {};
 
-        for(let option of this.props.options){
-            optionCheckedDict[option] = true;
+        for(let selectedOption of this.props.selectedOptions){
+            optionCheckedDict[selectedOption] = true;
         }
 
         this.state = {
-            'Select All': true,
+            select_all: selectAll,
             ...optionCheckedDict
         };
 
         this.selectAll = this.selectAll.bind(this);
         this.optionOnchange = this.optionOnchange.bind(this);
-    }
-
-    componentDidMount() {
-        if(this.props.init){
-            let newState = {...this.state};
-
-            let checkedAll = true;
-
-            for(let option of this.props.options){
-                let isChecked = this.props.init.includes(option);
-                newState[option] = isChecked;
-
-                if(!isChecked) {
-                    checkedAll = false;
-                }
-            }
-
-            newState['Select All'] = checkedAll;
-
-            this.setState(newState, this.props.onChange);
-        }
-    }
-
-    getTitle(){
-        return this.props.title;
     }
 
     getValues(){
@@ -71,8 +49,10 @@ class ListFilter extends React.Component{
             }
         }
 
-        newState['Select All'] = selectedCheckboxState;
-        this.setState(newState, this.props.onChange);
+        newState.select_all = selectedCheckboxState;
+        this.setState(newState, () => {
+            this.props.onChange(this.getValues())
+        });
     }
 
     optionOnchange(event, name){
@@ -89,9 +69,11 @@ class ListFilter extends React.Component{
             }
         }
 
-        newState['Select All'] = selectAll;
+        newState.select_all = selectAll;
 
-        this.setState(newState, this.props.onChange);
+        this.setState(newState, () => {
+            this.props.onChange(this.getValues())
+        });
         console.log((checkbox.checked?'Check ':'Unchecked ') + name);
     }
 
@@ -104,7 +86,7 @@ class ListFilter extends React.Component{
         return (
             <Grid container className={'item_wrapper ' + (manyOptions?'many_options':'')}>
                 <Grid item xs={12}>
-                    <Checkbox checked={this.state['Select All']} color={"primary"} onChange={this.selectAll} />All
+                    <Checkbox checked={this.state.select_all} color={"primary"} onChange={this.selectAll} />All
                 </Grid>
                 {
                     sortedOptions.map(item => (
@@ -121,4 +103,29 @@ class ListFilter extends React.Component{
     }
 }
 
-export default ListFilter;
+const mapStateToProps = (state, ownProps) => {
+    let filter = state.filters[ownProps["name"]];
+
+    return {
+        options:filter["options"],
+        displayCount:filter["displayCount"],
+        counts:filter["counts"],
+        selectedOptions:filter["selectedOptions"]
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        onChange: (value) => {
+            let dict = {
+                type:"UPDATE_FILTER",
+                filter_name:ownProps["name"],
+                value:value
+            };
+
+            dispatch(dict);
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListFilter);

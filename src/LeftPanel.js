@@ -18,6 +18,9 @@ import Dialog from "@material-ui/core/Dialog";
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import {connect} from "react-redux";
+import RangeFilter from "./RangeFilter";
+import ListFilter from "./ListFilter";
 
 class LeftPanel extends React.Component{
     constructor(props) {
@@ -26,15 +29,11 @@ class LeftPanel extends React.Component{
         this.handleChange = this.handleChange.bind(this);
         this.filterRef = React.createRef();
         this.lenderRef = React.createRef();
-        const {filters, lenderToPrograms, carDetails} = this.parseProps(this.props);
-        console.log(this.props);
-        console.log(filters);
 
         this.state = {
             selectedTabIndex:0,
-            filters:filters,
-            lenderToPrograms:lenderToPrograms,
-            carDetails:carDetails,
+            lenderToPrograms:{},
+            carDetails:[],
             lenderDialogOpen:false,
             filterDialogOpen:false
         }
@@ -47,154 +46,6 @@ class LeftPanel extends React.Component{
 
     handleChange(event, newSelectedTabIndex){
         this.setState({selectedTabIndex:newSelectedTabIndex});
-    }
-
-    parseProps(props) {
-        let makes = new Set();
-        let makeToModelsDict = {};
-        let makeToCountDict = {};
-        let modelToCountDict = {};
-        let models = new Set();
-        let yearSet = new Set();
-
-        for (let i = 0; i < props.carDetails.length; i++) {
-            let carDetail = props.carDetails[i];
-            let make = carDetail["make"];
-            let model = carDetail["model"];
-            let year = carDetail["year"];
-
-            makes.add(make);
-            models.add(model);
-            if (!isNaN(year)) {
-                yearSet.add(year);
-            }
-
-            if (!(make in makeToModelsDict)) {
-                makeToModelsDict[make] = new Set();
-            }
-
-            makeToModelsDict[make].add(model);
-
-            if(!(make in makeToCountDict)){
-                makeToCountDict[make] = 0;
-            }
-
-            makeToCountDict[make] = makeToCountDict[make] + 1;
-
-            if(!(model in modelToCountDict)){
-                modelToCountDict[model] = 0;
-            }
-
-            modelToCountDict[model] = modelToCountDict[model] + 1;
-        }
-
-        let yearRangeList = [];
-
-        // Create year range list
-        for (let year of yearSet) {
-            yearRangeList.push([year]);
-        }
-
-        let filters = [
-            {
-                "title": "Year",
-                "type": "range",
-                "minTitle": "Min",
-                "maxTitle": "Max",
-                "value_type":"discrete",
-                "values":yearRangeList,
-                "expand": this.props.filtersExpanded
-            },
-            {
-                "title": "Make",
-                "type": "list",
-                "options": Array.from(makes),
-                "expand": this.props.filtersExpanded,
-                "displayCount":true,
-                "counts": makeToCountDict,
-                "titleTransformFunc":Utils.convertStr
-            },
-            {
-                "title": "Model",
-                "type": "list",
-                "dependent_filter": "Make",
-                "dependent_list": makeToModelsDict,
-                "options": Array.from(models),
-                "expand": this.props.filtersExpanded,
-                "displayCount":true,
-                "counts":modelToCountDict,
-                "titleTransformFunc":Utils.convertStr
-            },
-            {
-                "title": "Mileage",
-                "type": "range",
-                "minTitle": "Min",
-                "maxTitle": "Max",
-                "value_type":"continuous",
-                "values": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["mileage"])), 10),
-                "expand": this.props.filtersExpanded,
-                "endAdornment":'mi'
-            },
-            {
-                "title": "Total cost",
-                "type": "range",
-                "minTitle": "Min",
-                "maxTitle": "Max",
-                "value_type":"continuous",
-                "values": this.createRangeListContinuousValue(props.carDetails.map(carDetail => parseInt(carDetail["total_cost"])), 10),
-                "expand": this.props.filtersExpanded,
-                "startAdornment":'$'
-            }
-        ];
-
-        if(this.props.init){
-            for(let filterTitle in this.props.init){
-                for(let filter of filters){
-                    if (filter["title"] == filterTitle){
-                        if (filter["type"] == "list"){
-                            filter["init"] = this.props.init[filterTitle]["selectedOptions"];
-                        }else{
-                            filter["init"] = this.props.init[filterTitle];
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        let lenderToPrograms = {};
-        let lenderIdToLenderName = {};
-        props.lenders.forEach(lender => {
-            lenderIdToLenderName[lender["id"]] = lender["name"];
-        });
-
-        props.lenderPrograms.forEach(lenderProgram => {
-            let lenderName = lenderIdToLenderName[lenderProgram["lender_id"]];
-
-            if (!(lenderName in lenderToPrograms)) {
-                lenderToPrograms[lenderName] = [];
-            }
-
-            lenderToPrograms[lenderName].push(lenderProgram["name"]);
-        });
-
-        return {filters: filters, lenderToPrograms: lenderToPrograms, carDetails: props.carDetails};
-    }
-
-    createRangeListContinuousValue(values, partsCount){
-        let min = Math.min(...values);
-        let max = Math.max(...values);
-        let x = (max - min)/partsCount;
-
-        return [min, max];
-    }
-
-    getFilterValues(){
-        return this.filterRef.current.getFilterValues();
-    }
-
-    getLenderInputs(){
-        return this.lenderRef.current.getLenderInputs();
     }
 
     openFilter(){
@@ -224,12 +75,14 @@ class LeftPanel extends React.Component{
                             <Tab label={"Lender"} className={"lender_tab " + (this.state.selectedTabIndex==1?"tab_selected":"tab_deselected")} />
                         </Tabs>
                         <div className={this.state.selectedTabIndex==0?'':'hide'}>
-                        <Filter ref={this.filterRef} filters={this.state.filters}
-                        onChange={this.props.filterOnChange}
-                        />
+                            <Filter title={"Year"} name={"year_filter"}><RangeFilter name={"year"}/></Filter>
+                            <Filter title={"Make"} name={"make_filter"}><ListFilter name={"make"}/></Filter>
+                            <Filter title={"Model"} name={"model_filter"}><ListFilter name={"model"} /></Filter>
+                            <Filter title={"Mileage"} name={"mileage_filter"}><RangeFilter name={"mileage"}/></Filter>
+                            <Filter title={"Total cost"} name={"total_cost_filter"}><RangeFilter name={"total_cost"}/></Filter>
                         </div>
                         <div className={this.state.selectedTabIndex==1?'':'hide'}>
-                        <Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms} onChange={this.props.lenderOnChange}/>
+                        {/*<Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={lenderToPrograms} onChange={this.props.lenderOnChange}/>*/}
                         </div>
                     </>
                 ):(
@@ -254,25 +107,40 @@ class LeftPanel extends React.Component{
                     </Toolbar>
                 </AppBar>
                 <DialogContent>
-                    <Filter ref={this.filterRef} filters={this.state.filters}
-                            onChange={this.props.filterOnChange}
-                    />
+                    <Filter title={"Year"} name={"year_filter"}><RangeFilter name={"year"}/></Filter>
+                    <Filter title={"Make"} name={"make_filter"}><ListFilter name={"make"}/></Filter>
+                    <Filter title={"Model"} name={"model_filter"}><ListFilter name={"model"} /></Filter>
+                    <Filter title={"Mileage"} name={"mileage_filter"}><RangeFilter name={"mileage"}/></Filter>
+                    <Filter title={"Total cost"} name={"total_cost_filter"}><RangeFilter name={"total_cost"}/></Filter>
                 </DialogContent>
             </Dialog>
-            <Dialog  fullScreen open={this.state.lendersDialogOpen}>
-                <AppBar style={{position: "relative"}}>
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" onClick={this.closeLender} aria-label="close">
-                            <CloseIcon/>
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-                <Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={this.state.lenderToPrograms}
-                        onChange={this.props.lenderOnChange}/>
-            </Dialog>
+            {/*<Dialog  fullScreen open={this.state.lendersDialogOpen}>*/}
+            {/*    <AppBar style={{position: "relative"}}>*/}
+            {/*        <Toolbar>*/}
+            {/*            <IconButton edge="start" color="inherit" onClick={this.closeLender} aria-label="close">*/}
+            {/*                <CloseIcon/>*/}
+            {/*            </IconButton>*/}
+            {/*        </Toolbar>*/}
+            {/*    </AppBar>*/}
+            {/*    <Lender init={getLenderInputs()} ref={this.lenderRef} lenderToPrograms={lenderToPrograms}*/}
+            {/*            onChange={this.props.lenderOnChange}/>*/}
+            {/*</Dialog>*/}
         </div>
         );
     }
 }
 
-export default LeftPanel;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        lenders:state.lenders,
+        lenderPrograms:state.lenderPrograms,
+        carDetails:state.carDetails
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LeftPanel);

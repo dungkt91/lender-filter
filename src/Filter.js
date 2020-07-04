@@ -7,141 +7,62 @@ import { IconButton } from '@material-ui/core';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import './Filter.css';
+import {connect} from "react-redux";
 
 class Filter extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {filters:this.props.filters, filtersInitializationHappened:{}};
-
-        for(let filter of this.props.filters){
-            if ("expand" in filter) {
-                this.state[filter["title"] + '_expand'] = filter["expand"];
-            }else{
-                this.state[filter["title"] + '_expand'] = true;
-            }
-        }
-
-        this.filterOnChange = this.filterOnChange.bind(this);
-        this.createFilter = this.createFilter.bind(this);
         this.expandOrCollapse = this.expandOrCollapse.bind(this);
     }
 
-    componentDidMount(){
-        let filtersInitializationHappened = {};
-
-        for(let filter of this.props.filters){
-            if(filter["init"]){
-                filtersInitializationHappened[filter["title"]] = true;
-            }
-        }
-
-        this.setState({filtersInitializationHappened:filtersInitializationHappened});
-    }
-
-    expandBtnOnClick(event, filterTitle) {
-        let stateKeyName = filterTitle + '_expand';
-        let newState = {};
-        newState[stateKeyName] = !this.state[stateKeyName];
-
-        this.setState(newState);
-    }
-
-    filterOnChange(event, filterTitle){
-
-        let newState = {...this.state};
-
-        for(let filter of newState.filters){
-            let isDependentList = filter["type"] == "list" && "dependent_filter" in filter && "dependent_list" in filter;
-
-            if (isDependentList){
-                let dependentFilter = filter["dependent_filter"];
-                let dependentList = filter["dependent_list"];
-
-                if (this.refsDict[dependentFilter]) {
-                    let selectedOptions = this.refsDict[dependentFilter].getValues()["selectedOptions"];
-                    let newOptions = new Set();
-
-                    for (let selectedOption of selectedOptions) {
-                        dependentList[selectedOption].forEach(newOptions.add, newOptions);
-                    }
-
-                    filter["options"] = Array.from(newOptions);
-                }
-            }
-
-            if(this.state.filtersInitializationHappened[filter["title"]]){
-                delete filter["init"];
-            }
-        }
-
-        console.log(newState);
-        this.setState(newState, this.props.onChange);
-    }
-
-    getFilterValues(){
-        let values = {};
-
-        for(let title in this.refsDict){
-            let filterType = this.state.filters.filter(filter => filter["title"]===title)[0]["type"];
-            values[title] = {
-                "type":filterType,
-                ...this.refsDict[title].getValues()
-            }
-        }
-
-        return values;
-    }
-
-    expandOrCollapse(event, filterTitle){
-        let stateName = filterTitle + '_expand';
-        let newState = {};
-
-        newState[stateName] = !this.state[stateName];
-        this.setState(newState);
-    }
-
-    createFilter(filter, filterIndex){
-        let lastFilterIndex = this.state.filters.length - 1;
-        let filterType = filter["type"];
-        let filterComponent = undefined;
-
-        if (filterType == "list"){
-            filterComponent = <ListFilter {...filter} ref={curFilter => this.refsDict[filter["title"]] = curFilter} onChange={(event) => this.filterOnChange(event, filter["title"])}/>;
-        }else if (filterType == "range"){
-            filterComponent = <RangeFilter {...filter} ref={curFilter => this.refsDict[filter["title"]] = curFilter} onChange={(event) => this.filterOnChange(event, filter["title"])}/>
-        }
-
-        return (
-            <React.Fragment>
-                <Grid item xs={12} className={"filter"}>
-                    <Grid container className={"expandable"} onClick={(event) => this.expandOrCollapse(event, filter["title"])}>
-                        <Grid item xs={10}>
-                            <span className={'filter_title'}>{filter["title"]}</span>
-                        </Grid>
-                        <Grid item xs={2} align='right'>
-                            {this.state[filter["title"] + "_expand"]?(<ExpandLess/>):(<ExpandMore />)}
-                        </Grid>
-                    </Grid>
-                    <Collapse in={this.state[filter["title"] + "_expand"]}>
-                        {filterComponent}
-                    </Collapse>
-                </Grid>
-            </React.Fragment>
-        );
+    expandOrCollapse(event){
+        this.props.expandOrCollapse(this.props.name, !this.props.expand);
     }
 
     render(){
-        this.refsDict = {};
-
         return (
-            <Grid container className={"filter_main_content"}>
-                {
-                    this.state.filters.map(this.createFilter)
-                }
-            </Grid>
+            <>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Grid container className={"expandable"} onClick={this.expandOrCollapse}>
+                            <Grid item xs={10}>
+                                <span className={'filter_title'}>{this.props.title}</span>
+                            </Grid>
+                            <Grid item xs={2} align='right'>
+                                {this.props.expand?(<ExpandLess/>):(<ExpandMore />)}
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Collapse in={this.props.expand}>
+                            {this.props.children}
+                        </Collapse>
+                    </Grid>
+                </Grid>
+            </>
         )
     }
 }
 
-export default Filter;
+const mapStateToProps = (state, ownProps) => {
+
+    return {
+        ...ownProps,
+        expand:state[ownProps.name + "_expand"]
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        expandOrCollapse: (name, state) => {
+            dispatch({
+                type:'FILTER_EXPAND_COLLAPSE',
+                name:name,
+                state:state
+            })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

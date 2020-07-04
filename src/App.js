@@ -13,6 +13,7 @@ import {
 import CarPage from "./CarPage";
 import {fetchCars, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
 import {setLenderData} from "./GlobalVariables";
+import { connect } from 'react-redux';
 
 const App = (props) => {
     const theme = useTheme();
@@ -28,13 +29,13 @@ const App = (props) => {
         mdUp:mdUp,
         lgUp:lgUp,
         xlUp:xlUp
-    }}/>
+    }} {...props}/>
 }
-
 
 class AppClass extends React.Component{
     constructor(props) {
         super(props);
+        console.log(props);
 
         this.state = {
             carJson:[],
@@ -55,6 +56,7 @@ class AppClass extends React.Component{
             setLenderData([lendersJson, lenderProgramsJson, lenderTermsJson]);
 
             this.setState({carJson:carJson, lendersJson:lendersJson, lenderTermsJson:lenderTermsJson, lenderProgramsJson:lenderProgramsJson, isLoading:false});
+            this.props.updateData(carJson, lendersJson, lenderTermsJson, lenderProgramsJson);
         });
     }
 
@@ -75,10 +77,10 @@ class AppClass extends React.Component{
             <Router basename={process.env.PUBLIC_URL}>
                 <Switch>
                     <Route path="/car">
-                        <CarPage screenSize={this.props.screenSize} />
+                        <CarPage screenSize={this.props.screenSize}/>
                     </Route>
                     <Route path="/">
-                        <HomePage screenSize={this.props.screenSize} {...this.state}/>
+                            <HomePage screenSize={this.props.screenSize} {...this.state}/>
                     </Route>
                 </Switch>
             </Router>
@@ -86,4 +88,23 @@ class AppClass extends React.Component{
     }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => {
+    return {
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        updateData: (carDetails, lenders, lenderTerms, lenderPrograms) => {
+            dispatch({
+                type:'FETCH_DATA',
+                carDetails: carDetails,
+                lenders: lenders,
+                lenderTerms:lenderTerms,
+                lenderPrograms:lenderPrograms
+            })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
