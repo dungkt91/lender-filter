@@ -1,5 +1,6 @@
 .tab.active{
-    background-color:white;
+    color:white;
+    background:linear-gradient(#3f51b5, blue, #3f51b5);
 }
 
 .tab.deactivate{
