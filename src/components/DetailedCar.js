@@ -23,6 +23,13 @@ class DetailedCar extends React.Component {
         return Utils.convertStr(`${carYear} ${carMake} ${carModel} ${carTrim}`);
     }
 
+    keyToTitle(key){
+        if (key == "total_cost")
+            return "total cost";
+
+        return key;
+    }
+
     render(){
         let carImages = this.props.details["images"];
         let displayedFields = ["title", "make", "model", "series", "style", "drive", "fuel", "mileage", "vin", "trim", "color", "total_cost"];
@@ -51,7 +58,7 @@ class DetailedCar extends React.Component {
                                             {
                                                 displayedFields.map(infoName => {
                                                     return (<TableRow>
-                                                        <TableCell>{Utils.convertStr(infoName)}</TableCell>
+                                                        <TableCell className={"car_description_value_name"}>{Utils.convertStr(this.keyToTitle(infoName))}</TableCell>
                                                         <TableCell>{this.props.details[infoName]}</TableCell>
                                                     </TableRow>);
                                                 })

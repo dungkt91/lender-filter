@@ -10,3 +10,7 @@
 .detailed_car .car_title{
     font-size:1.5rem;
 }
+
+.car_description_value_name{
+    font-weight:bold !important;
+}
