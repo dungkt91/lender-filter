@@ -188,6 +188,9 @@ const removeLenderInput = (state, action) => {
 
     newLenderInputs.splice(action.index, 1);
     newState["lenderInputs"] = newLenderInputs;
+    newState["postProcessingCarDetails"] = [...newState["postProcessingCarDetails"]];
+    updateCalculation(newState);
+    sort(newState["postProcessingCarDetails"], newState["sortOptionIndex"]);
 
     return newState;
 }
@@ -210,6 +213,7 @@ const addLender = (state, action) => {
     newState["lenderInputs"] = newLenderInputs;
     newState["postProcessingCarDetails"] = [...newState["postProcessingCarDetails"]];
     updateCalculation(newState);
+    sort(newState["postProcessingCarDetails"], newState["sortOptionIndex"]);
 
     return {
         ...newState,
@@ -704,10 +708,10 @@ const updateFilterNewState = (state, action) => {
     }
 
     newState["postProcessingCarDetails"] = postProcess(newState);
+    updateCalculation(newState);
     sort(newState["postProcessingCarDetails"], newState["sortOptionIndex"]);
 
-    if(state["lenderInputs"].length > 0)
-        updateCalculation(newState);
+
 
 
     return newState;
