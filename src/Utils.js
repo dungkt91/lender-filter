@@ -22,9 +22,27 @@ function sortImages(images){
     });
 }
 
+const getMaxProfit = (carDetail) => {
+    let maxProfit = Number.NEGATIVE_INFINITY;
+
+    if("car_calculation" in carDetail) {
+        for (let carCalculation of carDetail["car_calculation"]) {
+            let profit = carCalculation["profit"];
+
+            if (profit != "NOT_FOUND" && profit > maxProfit) {
+                maxProfit = profit;
+            }
+        }
+    }
+
+    return maxProfit;
+}
+
 const Utils = {
     convertStr:convertStr,
-    sortImages:sortImages
+    sortImages:sortImages,
+    getMaxProfit:getMaxProfit
 }
+
 
 export default Utils;

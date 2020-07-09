@@ -1,107 +1,87 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import logo from './logo.svg';
 import './App.css';
-import {useTheme} from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import "react-scroll-to-top/lib/index.css";
-import HomePage from "./HomePage";
+import LeftPanel from './components/LeftPanel';
+import CarShow from './components/CarShow';
+import Grid from '@material-ui/core/Grid';
+import {fetchCarDetails, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Service";
+import {connect} from "react-redux";
+import LenderInputModalDialog from "./components/LenderInputModalDialog";
+import {useMediaQuery, useTheme} from "@material-ui/core";
+import MenuBar from "./components/MenuBar";
+import ScrollToTop from "react-scroll-to-top";
+import HomePage from "./components/HomePage";
+import CarPage from "./components/CarPage";
 import {
     BrowserRouter as Router,
     Switch,
     Route,
     Link
 } from "react-router-dom";
-import CarPage from "./CarPage";
-import {fetchCars, fetchLenderPrograms, fetchLenders, fetchLenderTerms} from "./Api";
-import {setLenderData} from "./GlobalVariables";
-import { connect } from 'react-redux';
 
 const App = (props) => {
-    const theme = useTheme();
-    const xsUp = useMediaQuery(theme.breakpoints.up("xs"));
-    const smUp = useMediaQuery(theme.breakpoints.up("sm"));
-    const mdUp = useMediaQuery(theme.breakpoints.up("md"));
-    const lgUp = useMediaQuery(theme.breakpoints.up("lg"));
-    const xlUp = useMediaQuery(theme.breakpoints.up("xl"));
+    let theme = useTheme();
+    let mdUp = useMediaQuery(theme.breakpoints.up("md"));
+    props.updateScreenData({
+        mdUp:mdUp
+    });
 
-    return <AppClass screenSize={{
-        xsUp:xsUp,
-        smUp:smUp,
-        mdUp:mdUp,
-        lgUp:lgUp,
-        xlUp:xlUp
-    }} {...props}/>
-}
+    useEffect(() => {
+        props.loading(true);
 
-class AppClass extends React.Component{
-    constructor(props) {
-        super(props);
-        console.log(props);
+        Promise.all([fetchCarDetails(), fetchLenders(), fetchLenderTerms(), fetchLenderPrograms()]).then((result) => {
+            let carDetails = result[0];
+            let lenders = result[1];
+            let lenderTerms = result[2];
+            let lenderPrograms = result[3];
 
-        this.state = {
-            carJson:[],
-            lendersJson:[],
-            lenderTermsJson:[],
-            lenderProgramsJson:[],
-            isLoading: true
-        }
-
-        Promise.all([fetchCars(), fetchLenders(), fetchLenderTerms(), fetchLenderPrograms()]).then(responses => Promise.all(responses.map(response => response.json()))).then(jsons => {
-            let carJson = jsons[0];
-            carJson = this.convertKmToMileage(carJson);
-
-            let lendersJson = jsons[1];
-            let lenderTermsJson = jsons[2];
-            let lenderProgramsJson = jsons[3];
-
-            setLenderData([lendersJson, lenderProgramsJson, lenderTermsJson]);
-
-            this.setState({carJson:carJson, lendersJson:lendersJson, lenderTermsJson:lenderTermsJson, lenderProgramsJson:lenderProgramsJson, isLoading:false});
-            this.props.updateData(carJson, lendersJson, lenderTermsJson, lenderProgramsJson);
+            props.fetchDataFinished(carDetails, lenders, lenderTerms, lenderPrograms);
+            props.loading(false);
         });
-    }
+    }, [props.loading, props.fetchDataFinished]);
 
-    convertKmToMileage(carJson){
-        return carJson.map(car => {
-            let mileageLowerCase = car["mileage"].toLowerCase();
-
-            if(mileageLowerCase.includes('km')){
-                car["mileage"] = Math.floor(0.621371 * parseFloat(mileageLowerCase.replace("km", "")));
-            }
-
-            return car;
-        });
-    }
-
-    render(){
-        return (
-            <Router basename={process.env.PUBLIC_URL}>
-                <Switch>
-                    <Route path="/car">
-                        <CarPage screenSize={this.props.screenSize}/>
-                    </Route>
-                    <Route path="/">
-                            <HomePage screenSize={this.props.screenSize} {...this.state}/>
-                    </Route>
-                </Switch>
-            </Router>
-        )
-    }
+    return (
+        <Router basename={process.env.PUBLIC_URL}>
+            <Switch>
+                <Route path="/car">
+                    <CarPage/>
+                </Route>
+                <Route path="/">
+                    <HomePage/>
+                </Route>
+            </Switch>
+        </Router>
+    );
 }
 
 const mapStateToProps = (state, ownProps) => {
+
     return {
+
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateData: (carDetails, lenders, lenderTerms, lenderPrograms) => {
+        fetchDataFinished: (carDetails, lenders, lenderTerms, lenderPrograms) => {
             dispatch({
-                type:'FETCH_DATA',
-                carDetails: carDetails,
-                lenders: lenders,
+                type:"FETCH_DATA_FINISHED",
+                carDetails:carDetails,
+                lenders:lenders,
                 lenderTerms:lenderTerms,
                 lenderPrograms:lenderPrograms
+            })
+        },
+        loading:(value) => {
+            dispatch({
+                type:"LOADING",
+                value: value
+            })
+        },
+        updateScreenData: (value) => {
+            dispatch({
+                type:"UPDATE_SCREEN_DATA",
+                value: value
             })
         }
     }
