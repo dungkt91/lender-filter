@@ -75,7 +75,7 @@ class Car extends React.Component {
                                 ${this.props.details["total_cost"]}
                             </Grid>
                             <Grid item xs={4} className={"car_mileage"}>
-                                {this.props.details["mileage"]} mil.
+                                {this.props.details["mileage"]} KM
                             </Grid>
                             <Grid item xs={3}>
                                 Profit

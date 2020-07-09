@@ -19,7 +19,7 @@ class Filter extends React.Component {
                     <ListFilter name="model" titleTransformFunc={Utils.convertStr}/>
                 </FilterSection>
                 <FilterSection name={"mileage_filter_section"} title={"Mileage"}>
-                    <RangeFilter name="mileage" unit={"mi"} unit_position={"end"}/>
+                    <RangeFilter name="mileage" unit={"KM"} unit_position={"end"}/>
                 </FilterSection>
                 <FilterSection name={"total_cost_filter_section"} title={"Total cost"}>
                     <RangeFilter name="total_cost" unit={"$"} unit_position={"start"}/>
