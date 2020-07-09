@@ -51,7 +51,7 @@ class DetailedCar extends React.Component {
                                             {
                                                 displayedFields.map(infoName => {
                                                     return (<TableRow>
-                                                        <TableCell>{infoName}</TableCell>
+                                                        <TableCell>{Utils.convertStr(infoName)}</TableCell>
                                                         <TableCell>{this.props.details[infoName]}</TableCell>
                                                     </TableRow>);
                                                 })

@@ -41,3 +41,16 @@
     align-items: center;
     justify-content: center;
 }
+
+.car_wrapper .detailed_car:hover{
+    transform: scale(1.005);
+    box-shadow: 0 1px 5px grey;
+    cursor:pointer;
+}
+
+.car_wrapper .car:hover{
+    transform: scale(1.005);
+    box-shadow: 0 1px 5px grey;
+    cursor:pointer;
+}
+
