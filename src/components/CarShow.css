@@ -1,0 +1,43 @@
+.car_wrapper{
+    cursor:pointer;
+    user-select:none;
+}
+
+.car_show.big_screen .car_wrapper{
+    padding:10px;
+}
+
+.car_show.small_screen .car_wrapper{
+    padding: 10px 0px 10px 0px;
+}
+
+.sort_by_wrapper{
+    text-align: right;
+}
+
+.sort_by{
+    text-align: center;
+    width:150px;
+    background-color:white;
+}
+
+.item_match_count{
+    padding-left:10px;
+    padding-top:10px;
+}
+
+.view_type.active{
+    color:black;
+}
+
+.view_type.deactive{
+    color:gray;
+}
+
+.loader_wrapper{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

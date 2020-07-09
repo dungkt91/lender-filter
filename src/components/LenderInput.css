@@ -1,0 +1,19 @@
+.lender_input_buttons{
+    text-align: center;
+}
+
+.lender_input_delete_btn_wrapper{
+    text-align: right;
+}
+
+.lender_input_delete_btn{
+    color:red !important;
+    padding:0px !important;
+}
+
+.lender_input_values{
+    margin-top:20px !important;
+    border:1px solid lightgray;
+    padding:10px;
+    border-radius:5px;
+}

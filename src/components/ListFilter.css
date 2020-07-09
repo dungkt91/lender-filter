@@ -1,0 +1,10 @@
+.list_filter.aLotOfOptions{
+    overflow: auto;
+    max-height: 450px;
+}
+
+.list_filter{
+    border:1px solid lightgray;
+    padding:10px;
+    border-radius:5px;
+}

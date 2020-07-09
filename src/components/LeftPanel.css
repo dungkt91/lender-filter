@@ -1,0 +1,24 @@
+.tab.active{
+    background-color:white;
+}
+
+.tab.deactivate{
+    background-color:gray;
+}
+
+.tab{
+    border-radius:10px 10px 0px 0px !important;
+    border:1px solid lightgray !important;
+}
+
+.tab.lender{
+    margin-left:10px;
+}
+
+.filter_btn{
+    width: 100%;
+}
+
+.lender_btn{
+    width: 100%;
+}

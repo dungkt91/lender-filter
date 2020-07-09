@@ -1,0 +1,8 @@
+.detailed_car{
+    cursor:pointer;
+}
+
+.detailed_car:hover{
+    transform: scale(1.005);
+    box-shadow: 0 1px 5px grey;
+}

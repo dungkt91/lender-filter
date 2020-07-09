@@ -1,0 +1,17 @@
+.filter_section_expand_collapse_icon{
+    text-align: right;
+}
+
+.filter_section_header{
+    cursor:pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.filter_section{
+    padding-bottom:30px;
+}
+
+.filter_section_header{
+    padding-bottom: 10px;
+}

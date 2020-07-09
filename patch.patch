@@ -1,0 +1,244 @@
+Index: src/CarShow.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/CarShow.js	(revision a13c1a82fcfc5217a9f8fe3ef34d0c544c0878c5)
++++ src/CarShow.js	(date 1593796489367)
+@@ -7,7 +7,7 @@
+ import './CarShow.css';
+ import {fetchCars} from "./Api";
+ import InfiniteScroll from "react-infinite-scroller";
+-import {calculateProfitFirstInterest} from "./CarCalculation";
++import {calculateProfitFirstInterest, updateMaxProfit} from "./CarCalculation";
+ import Car from './Car.js';
+ import Select from "@material-ui/core/Select";
+ import MenuItem from "@material-ui/core/MenuItem";
+@@ -43,6 +43,8 @@
+     }
+ 
+     sortCarDetails(carDetails, sortOptionIndex){
++        console.log("sort");
++
+         switch(sortOptionIndex){
+             case 1:
+                 carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost));
+@@ -62,6 +64,12 @@
+             case 6:
+                 carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.year) - parseInt(carDetail2.year));
+                 break;
++            case 7:
++                if(this.props.lenderInputs.length > 0) {
++                    updateMaxProfit(this.props.lenderInputs, this.props.lenderData, carDetails);
++                    carDetails.sort((carDetail1, carDetail2) => this.reverseNumberSign(parseInt(carDetail1["maxProfit"]) - parseInt(carDetail2["maxProfit"])));
++                }
++                break;
+         }
+ 
+         return carDetails;
+@@ -150,6 +158,7 @@
+                             <MenuItem value={4}>Highest Mileage</MenuItem>
+                             <MenuItem value={5}>Newest Year</MenuItem>
+                             <MenuItem value={6}>Oldest Year</MenuItem>
++                            <MenuItem value={7}>Highest Profit</MenuItem>
+                         </Select>
+                     </Grid>
+                     {carDetailsAfterFilterAndSort.map((carDetail, index) => (
+Index: src/CarCalculation.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/CarCalculation.js	(revision a13c1a82fcfc5217a9f8fe3ef34d0c544c0878c5)
++++ src/CarCalculation.js	(date 1593796659600)
+@@ -86,27 +86,42 @@
+     return null;
+ }
+ 
+-export function calculateProfitFirstInterest(filterInputs, lenderData, carDetails){
+-    let calculationDetails = createCalculationDetail(-1, filterInputs, lenderData, carDetails);
+-    let interestColumnIndex = 3;
+-    let profitColumnIndex = 8;
+-    let interests = calculationDetails[interestColumnIndex].split(',');
++export function updateMaxProfit(filterInputsList, lenderData, carDetails){
++    let lenderNameToLenderIdDict = {};
++    let lenderIdToLenderNameDict = {};
++    let lenders = lenderData[0];
++    lenders.forEach(lender => {
++        lenderNameToLenderIdDict[lender.name] = lender.id;
++        lenderIdToLenderNameDict[lender.id] = lender.name;
++    });
++
++    let lenderNameAndTierNameToLenderProgram = {};
++    let lenderPrograms = lenderData[1];
++    lenderPrograms.forEach(lenderProgram => {
++        lenderNameAndTierNameToLenderProgram[lenderIdToLenderNameDict[lenderProgram.lender_id] + "_" + lenderProgram.name] = lenderProgram;
++    });
+ 
+-    if (interests.length > 0) {
+-        // Select first interest as default
+-        let firstInterest = interests[0];
++    carDetails.forEach(carDetail => {
++        let maxProfit = Number.MIN_VALUE;
+ 
+-        let calculationDetailsForFirstInterest = createCalculationDetail(firstInterest, filterInputs, lenderData, carDetails);
+-        let profit = calculationDetailsForFirstInterest[profitColumnIndex];
++        for(let filterInputs of filterInputsList){
++            let lenderName = filterInputs["lender"];
++            let tierName = filterInputs["tier"];
++            let lenderProgram = lenderNameAndTierNameToLenderProgram[lenderName + "_" + tierName];
++            let minInterest = parseFloat(lenderProgram.rate_min);
++            let result = createCalculationDetail(minInterest, filterInputs, lenderData, carDetail, lenderNameToLenderIdDict, lenderNameAndTierNameToLenderProgram);
++            let profit = result[8].replace("$", "");
+ 
+-        if (profit != 'NOT_FOUND')
+-            return profit;
+-    }
++            if(profit != 'NOT_FOUND' && parseFloat(profit) > maxProfit){
++                maxProfit = parseFloat(profit);
++            }
++        }
+ 
+-    return null;
++        carDetail["maxProfit"] = maxProfit;
++    });
+ }
+ 
+-function createCalculationDetail(selectedInterest, filterInputs, lenderData, carDetails){
++function createCalculationDetail(selectedInterest, filterInputs, lenderData, carDetails, lenderNameToLenderIdDict, lenderNameAndTierNameToLenderProgram, ){
+     console.log('createCalculationDetail()');
+     console.log(selectedInterest);
+     console.log(filterInputs);
+@@ -128,32 +143,47 @@
+     let term = 'NOT_FOUND';
+     let foundLenderTerm = null;
+     let foundLenderProgram = null;
+-    let lenderId = getLenderId(lenderName, lenders);
++    let lenderId = null;
++
++    if (lenderNameToLenderIdDict){
++        lenderId = lenderNameToLenderIdDict[lenderName];
++    }else{
++        lenderId = getLenderId(lenderName, lenders);
++    }
+     console.log('lenderId = ' + lenderId);
+ 
+     if(lenderId != null){
+-        for(let lenderProgram of lenderPrograms){
+-            if (lenderProgram.lender_id == lenderId && lenderProgram.name == tierName){
+-                foundLenderProgram = lenderProgram;
++        let lenderProgram  = null;
++
++        if (lenderNameAndTierNameToLenderProgram){
++            lenderProgram = lenderNameAndTierNameToLenderProgram[lenderName + "_" + tierName];
++        }else {
++            for(let curLenderProgram of lenderPrograms){
++                if (curLenderProgram.lender_id == lenderId && curLenderProgram.name == tierName){
++                    lenderProgram = curLenderProgram;
++                    break;
++                }
++            }
++        }
++
++        if (lenderProgram != null){
++            foundLenderProgram = lenderProgram;
+ 
+-                // Advance
+-                if(!isNaN(lenderProgram.advance)){
+-                    advance = parseFloat(lenderProgram.advance);
+-                }
++            // Advance
++            if(!isNaN(lenderProgram.advance)){
++                advance = parseFloat(lenderProgram.advance);
++            }
+ 
+-                // Interest
+-                let rateMin = parseFloat(lenderProgram.rate_min);
+-                let rateMax = parseFloat(lenderProgram.rate_max);
+-                interest = '';
++            // Interest
++            let rateMin = parseFloat(lenderProgram.rate_min);
++            let rateMax = parseFloat(lenderProgram.rate_max);
++            interest = '';
+ 
+-                for(let rate = rateMin; rate < rateMax; rate+=1){
+-                    interest += rate.toFixed(2) + ',';
+-                }
++            for(let rate = rateMin; rate < rateMax; rate+=1){
++                interest += rate.toFixed(2) + ',';
++            }
+ 
+-                interest += rateMax;
+-
+-                break;
+-            }
++            interest += rateMax;
+         }
+ 
+         let carKms = mileageToKms(parseFloat(carDetails.mileage));
+Index: src/Lender.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/Lender.js	(revision a13c1a82fcfc5217a9f8fe3ef34d0c544c0878c5)
++++ src/Lender.js	(date 1593792892128)
+@@ -198,7 +198,7 @@
+         newLenderInputs.push(lenderInput);
+         setLenderInputs(newLenderInputs);
+ 
+-        this.setState({lenderInputs:newLenderInputs});
++        this.setState({lenderInputs:newLenderInputs}, this.props.onChange);
+     }
+ 
+     render(){
+Index: src/HomePage.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/HomePage.js	(revision a13c1a82fcfc5217a9f8fe3ef34d0c544c0878c5)
++++ src/HomePage.js	(date 1593793622464)
+@@ -16,15 +16,20 @@
+ import {css} from "@emotion/core";
+ import Menubar from "./Menubar";
+ import Loader from './Loader';
+-import {getFilterValues, setFilterValues, setLenderInputs} from "./GlobalVariables";
++import {getFilterValues, getLenderData, setFilterValues, setLenderInputs, getLenderInputs} from "./GlobalVariables";
+ 
+ class HomePage extends React.Component{
+     constructor() {
+         super();
+ 
++        let lenderInputs = getLenderInputs();
++        if (lenderInputs == null)
++            lenderInputs = [];
++
+         this.leftPanelRef = React.createRef();
+         this.state = {
+-            filterValues: {}
++            filterValues: {},
++            lenderInputs: lenderInputs
+         }
+ 
+         this.filterOnChange = this.filterOnChange.bind(this);
+@@ -43,7 +48,9 @@
+         let lenderInputs = this.leftPanelRef.current.getLenderInputs();
+         console.log(lenderInputs);
+ 
+-        setLenderInputs(lenderInputs);
++        this.setState({lenderInputs:lenderInputs}, () => {
++            setLenderInputs(lenderInputs);
++        });
+     }
+ 
+     render() {
+@@ -67,7 +74,7 @@
+                             <LeftPanel init={getFilterValues()} filtersExpanded={this.props.screenSize["mdUp"]} screenSize={this.props.screenSize}ref={this.leftPanelRef} carDetails={this.props.carJson} lenders={this.props.lendersJson} lenderPrograms={this.props.lenderProgramsJson} filterOnChange={this.filterOnChange} lenderOnChange={this.lenderOnChange}/>
+                         </Grid>
+                         <Grid item xl={6} sm={9} xs={12}>
+-                            <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues}/>
++                            <CarShow carDetails={this.props.carJson} filterValues={this.state.filterValues} lenderInputs={this.state.lenderInputs} lenderData={getLenderData()}/>
+                         </Grid>
+                         </>
+                     )}
