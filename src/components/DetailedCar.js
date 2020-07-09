@@ -11,6 +11,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import CarCalculation from "./CarCalculation";
+import {connect} from "react-redux";
 
 class DetailedCar extends React.Component {
     getTitle(){
@@ -39,7 +40,7 @@ class DetailedCar extends React.Component {
                         <Grid item md={6} xs={12} className={"car_images"}>
                             <ImageGallery items={carImagesToImageGallery} showPlayButton={false}/>
                         </Grid>
-                        <Grid item md={6} xs={12} className={"car_description"}>
+                        <Grid item md={6} xs={12} className={"car_description " + (this.props.screenData["mdUp"]?"paddingLeft20Important":"")}>
                             <Grid container>
                                 <Grid item md={12} xs={12}  className={"car_title"}>
                                     {this.getTitle()}
@@ -70,4 +71,16 @@ class DetailedCar extends React.Component {
     }
 }
 
-export default DetailedCar;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        screenData:state["screenData"]
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailedCar);
