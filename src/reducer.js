@@ -469,38 +469,20 @@ const getMaxProfit = (carDetail) => {
 }
 
 const sort = (carDetails, sortOptionIndex) => {
+    let sortProfitIsPossible = false;
+    if (carDetails.length > 0){
+        let firstCarDetail = carDetails[0];
+
+        if ("car_calculation" in firstCarDetail && firstCarDetail["car_calculation"].length > 0){
+            sortProfitIsPossible = true;
+        }
+    }
+
     switch (sortOptionIndex) {
         case 0:
             break;
         case 1:
-            carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost));
-            break;
-        case 2:
-            carDetails.sort((carDetail1, carDetail2) => reverseNumberSign(parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost)));
-            break;
-        case 3:
-            carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage));
-            break;
-        case 4:
-            carDetails.sort((carDetail1, carDetail2) => reverseNumberSign(parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage)));
-            break;
-        case 5:
-            carDetails.sort((carDetail1, carDetail2) => reverseNumberSign(parseInt(carDetail1.year) - parseInt(carDetail2.year)));
-            break;
-        case 6:
-            carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.year) - parseInt(carDetail2.year));
-            break;
-        case 7:
-            let sortIsNeed = false;
-
-            if (carDetails.length > 0){
-                let firstCarDetail = carDetails[0];
-
-                if ("car_calculation" in firstCarDetail && firstCarDetail["car_calculation"].length > 0){
-                    sortIsNeed = true;
-                }
-            }
-            if (sortIsNeed){
+            if (sortProfitIsPossible){
                 carDetails.sort((carDetail1, carDetail2) => {
                     let maxProfitCarDetail1 = getMaxProfit(carDetail1);
                     let maxProfitCarDetail2 = getMaxProfit(carDetail2);
@@ -508,6 +490,34 @@ const sort = (carDetails, sortOptionIndex) => {
                     return maxProfitCarDetail2 - maxProfitCarDetail1;
                 });
             }
+            break;
+        case 2:
+            if (sortProfitIsPossible){
+                carDetails.sort((carDetail1, carDetail2) => {
+                    let maxProfitCarDetail1 = getMaxProfit(carDetail1);
+                    let maxProfitCarDetail2 = getMaxProfit(carDetail2);
+
+                    return maxProfitCarDetail1 - maxProfitCarDetail2;
+                });
+            }
+            break;
+        case 3:
+            carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost));
+            break;
+        case 4:
+            carDetails.sort((carDetail1, carDetail2) => reverseNumberSign(parseInt(carDetail1.total_cost) - parseInt(carDetail2.total_cost)));
+            break;
+        case 5:
+            carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage));
+            break;
+        case 6:
+            carDetails.sort((carDetail1, carDetail2) => reverseNumberSign(parseInt(carDetail1.mileage) - parseInt(carDetail2.mileage)));
+            break;
+        case 7:
+            carDetails.sort((carDetail1, carDetail2) => reverseNumberSign(parseInt(carDetail1.year) - parseInt(carDetail2.year)));
+            break;
+        case 8:
+            carDetails.sort((carDetail1, carDetail2) => parseInt(carDetail1.year) - parseInt(carDetail2.year));
             break;
     }
 }

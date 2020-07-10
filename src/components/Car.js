@@ -41,7 +41,11 @@ class Car extends React.Component {
 
         if(carProfit != "-"){
             if(carProfit <= 0){
-                carProfit = "-$" + -carProfit;
+                if(carProfit < 0)
+                    carProfit = "-$" + -carProfit;
+                else
+                    carProfit = "$" + carProfit;
+
                 carProfitClass = "negative";
             }else{
                 carProfit = "$" + carProfit;

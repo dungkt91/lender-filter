@@ -55,13 +55,14 @@ class CarShow extends React.Component {
                             <IconButton onClick={(event) => this.viewTypeChange(1)} className={"view_type list " + ((this.props.viewTypeIndex == 1)?"active":"deactive")}><MenuIcon /></IconButton>
                             <Select value={this.props.sortOptionIndex} className={"sort_by"} onChange={this.sortByIndexChange}>
                                 <MenuItem value={0}>Sort By</MenuItem>
-                                <MenuItem value={1}>Lowest Price</MenuItem>
-                                <MenuItem value={2}>Highest Price</MenuItem>
-                                <MenuItem value={3}>Lowest Mileage</MenuItem>
-                                <MenuItem value={4}>Highest Mileage</MenuItem>
-                                <MenuItem value={5}>Newest Year</MenuItem>
-                                <MenuItem value={6}>Oldest Year</MenuItem>
-                                <MenuItem value={7}>Highest Profit</MenuItem>
+                                <MenuItem value={1}>Most Profit</MenuItem>
+                                <MenuItem value={2}>Least Profit</MenuItem>
+                                <MenuItem value={3}>Lowest Price</MenuItem>
+                                <MenuItem value={4}>Highest Price</MenuItem>
+                                <MenuItem value={5}>Lowest Mileage</MenuItem>
+                                <MenuItem value={6}>Highest Mileage</MenuItem>
+                                <MenuItem value={7}>Newest Year</MenuItem>
+                                <MenuItem value={8}>Oldest Year</MenuItem>
                             </Select>
                         </Grid>
                     </Grid>
