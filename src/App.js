@@ -18,6 +18,7 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import "react-scroll-to-top/lib/index.css";
 
 const App = (props) => {
     let theme = useTheme();
